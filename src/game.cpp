@@ -17,6 +17,10 @@ void Game::input(WPARAM wParam, LPARAM lParam, UINT msg)
 {
     if (initialised)
     {
+        switch (msg)
+        {
+            // TODO: implement with input class
+        }
     }
 
     return;
@@ -24,7 +28,6 @@ void Game::input(WPARAM wParam, LPARAM lParam, UINT msg)
 
 void Game::initialise(HWND _hwnd)
 {
-    // Does the window handle need to be passed into the game?
     this->hwnd = _hwnd;
 
     this->graphics = new Graphics();
