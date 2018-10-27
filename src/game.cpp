@@ -16,4 +16,9 @@ Game::~Game()
 //TODO: temporarily leaving out inputHandler implementation
 void Game::input()
 {
+    if (initialised)
+    {
+    }
+
+    return;
 }

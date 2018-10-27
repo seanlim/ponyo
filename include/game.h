@@ -38,7 +38,7 @@ public:
   // TODO: not sure how I want to implement this just yet
   void input();
 
-  virtual void initilaise(HWND hwnd);
+  virtual void initialise(HWND hwnd);
   virtual void run(HWND);
   virtual void releaseAll();
   virtual void resetAll();
