@@ -3,12 +3,14 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
-#include <mmsystem.h>
+#include <Mmsystem.h>
 
 #include "graphics.h"
 // #include "input.h"
 #include "constants.h"
 #include "gameError.h"
+
+#pragma comment(lib, "winmm.lib")
 
 class Game
 {

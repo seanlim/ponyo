@@ -75,15 +75,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\graphics.cpp" />
+    <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\random.cpp" />
+    <ClCompile Include="src\spacewar.cpp" />
     <ClCompile Include="src\winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\constants.h" />
+    <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gameError.h" />
     <ClInclude Include="include\graphics.h" />
+    <ClInclude Include="include\input.h" />
     <ClInclude Include="include\random.h" />
+    <ClInclude Include="include\spacewar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

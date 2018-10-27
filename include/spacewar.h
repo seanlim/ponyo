@@ -6,15 +6,16 @@
 
 class SpaceWar : public Game
 {
-  public:
-    SpaceWar();
-    virtual ~SpaceWar();
-    void initialise(HWND hwnd);
-    void update();
-    void ai();
-    void collisions();
-    void render();
-    void releaseAll();
-    void resetAll();
+public:
+  SpaceWar();
+  virtual ~SpaceWar();
+  void initialise(HWND);
+  void update();
+  void ai();
+  void collisions();
+  void render();
+  void releaseAll();
+  void resetAll();
+  void run(HWND);
 };
 #endif

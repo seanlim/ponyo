@@ -20,9 +20,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 bool CreateMainWindow(HWND &, HINSTANCE, int);
 LRESULT WINAPI WinProc(HWND, UINT, WPARAM, LPARAM);
 
-HINSTANCE hinst;
-Graphics *graphics;
-
 Game *game = NULL;
 HWND hwnd = NULL;
 
@@ -45,8 +42,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     try
     {
-        graphics = new Graphics();
-        graphics->initialise(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+        game->initialise(hwnd);
 
         int done = 0;
         while (!done)
@@ -63,22 +59,26 @@ int WINAPI WinMain(HINSTANCE hInstance,
             }
             else
             {
-                graphics->showBackbuffer();
+                game->run(hwnd);
             }
         }
-        safeDelete(graphics);
+        safeDelete(game);
         return msg.wParam;
     }
     catch (const GameError &err)
     {
+        game->deleteAll();
+        DestroyWindow(hwnd);
         MessageBox(NULL, err.getMessage(), "Error", MB_OK);
     }
     catch (...)
     {
+        game->deleteAll();
+        DestroyWindow(hwnd);
         MessageBox(NULL, "Something is not quite right...", "Error", MB_OK);
     }
 
-    safeDelete(graphics);
+    safeDelete(game);
     return 0;
 }
 
@@ -159,6 +159,5 @@ bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow)
 
     ShowWindow(hwnd, nCmdShow);
 
-    UpdateWindow(hwnd);
     return true;
 }

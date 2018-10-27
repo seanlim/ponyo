@@ -6,7 +6,7 @@ SpaceWar::SpaceWar()
 
 SpaceWar::~SpaceWar()
 {
-    this->releaseALl();
+    this->releaseAll();
 }
 
 void SpaceWar::initialise(HWND hwnd)
@@ -42,4 +42,8 @@ void SpaceWar::resetAll()
 {
     Game::resetAll();
     return;
+}
+
+void SpaceWar::run(HWND hwnd)
+{
 }

@@ -28,7 +28,7 @@ private:
 
   HRESULT result;
   HWND hwnd;
-  COLOR_ARGB backColor = D3DCOLOR_XRGB(0, 0, 128);
+  COLOR_ARGB backColor;
   bool fullscreen;
   int width, height;
 
@@ -49,6 +49,8 @@ public:
   HRESULT showBackbuffer();
   HRESULT reset();
   HRESULT getDeviceState();
+  HRESULT beginScene();
+  HRESULT endScene();
 };
 
 #endif

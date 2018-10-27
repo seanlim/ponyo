@@ -62,3 +62,68 @@ void Game::handleLostGraphicsDevice()
         }
     }
 }
+
+void Game::renderGame()
+{
+    if (SUCCEEDED(this->graphics->beginScene()))
+    {
+        this->render();
+        this->graphics->endScene();
+    }
+
+    this->handleLostGraphicsDevice();
+
+    this->graphics->showBackbuffer();
+}
+
+void Game::run(HWND hwnd)
+{
+    if (this->graphics == NULL)
+        return;
+
+    // Calculate elapsed time since last frame
+    QueryPerformanceCounter(&timeEnd);
+    this->frameTime = (float)(timeEnd.QuadPart - timeStart.QuadPart) / (float)timeFreq.QuadPart;
+
+    if (this->frameTime < MIN_FRAME_TIME)
+    {
+        this->sleepTime = (DWORD)((MIN_FRAME_TIME - this->frameTime) * 1000);
+        timeBeginPeriod(1);
+        Sleep(this->sleepTime);
+        timeEndPeriod(1);
+        return;
+    }
+
+    if (this->frameTime > 0.0)
+        this->fps = (this->fps * 0.99f) + (0.01f / this->frameTime);
+
+    if (this->frameTime > MAX_FRAME_TIME)
+        this->frameTime = MAX_FRAME_TIME;
+
+    this->timeStart = this->timeEnd;
+
+    if (!paused)
+    {
+        this->update();
+        this->ai();
+        this->collisions();
+    }
+
+    this->renderGame();
+}
+
+void Game::releaseAll()
+{
+}
+
+void Game::resetAll()
+{
+}
+
+void Game::deleteAll()
+{
+    this->releaseAll();
+    safeDelete(this->graphics);
+
+    initialised = false;
+}
