@@ -38,10 +38,17 @@ public:
   Graphics();
   virtual ~Graphics();
 
+  LP_3D get3D() { return direct3d; }
+  LP_3DDEVICE get3DDevice() { return device3d; }
+  HDC getDC() { return GetDC(hwnd); }
+
   void setBackColor(COLOR_ARGB c);
   void releaseAll();
   void initialise(HWND hw, int width, int height, bool fullscreen);
+
   HRESULT showBackbuffer();
+  HRESULT reset();
+  HRESULT getDeviceState();
 };
 
 #endif

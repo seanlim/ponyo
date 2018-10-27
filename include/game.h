@@ -35,8 +35,7 @@ public:
   Graphics *getGraphics() { return graphics; }
 
   // Handle input
-  // TODO: not sure how I want to implement this just yet
-  void input();
+  void input(WPARAM, LPARAM, UINT);
 
   virtual void initialise(HWND hwnd);
   virtual void run(HWND);

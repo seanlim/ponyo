@@ -86,6 +86,26 @@ HRESULT Graphics::showBackbuffer()
     return result;
 }
 
+HRESULT Graphics::getDeviceState()
+{
+    this->result = E_FAIL;
+
+    if (device3d == NULL)
+        return this->result;
+
+    this->result = this->device3d->TestCooperativeLevel();
+    return result;
+}
+
+HRESULT Graphics::reset()
+{
+    result = E_FAIL;
+    this->initD3Dpp();
+    // Reset graphics device
+    this->result = this->device3d->Reset(&d3dpp);
+    return result;
+}
+
 // Destroy
 Graphics::~Graphics()
 {

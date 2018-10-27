@@ -7,6 +7,8 @@
 
 #include "graphics.h"
 #include "random.h"
+#include "game.h"
+#include "spacewar.h"
 
 bool AnotherInstance()
 {
@@ -21,6 +23,9 @@ LRESULT WINAPI WinProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE hinst;
 Graphics *graphics;
 
+Game *game = NULL;
+HWND hwnd = NULL;
+
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
@@ -30,7 +35,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
     _crtDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
     MSG msg;
-    HWND hwnd = NULL;
+
+    game = new SpaceWar;
 
     if (AnotherInstance())
         return false;
@@ -91,15 +97,12 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
-    case WM_CHAR:
-        switch (wParam)
-        {
-        case VK_SPACE:
-            graphics->setBackColor(D3DCOLOR_XRGB(randInt(0, 255), randInt(0, 255), randInt(0, 255)));
-        }
     default:
         DefWindowProc(hWnd, msg, wParam, lParam);
     }
+
+    // Send message to game
+    game->input(wParam, lParam, msg);
 }
 
 bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow)
