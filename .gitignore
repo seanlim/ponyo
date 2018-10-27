@@ -373,3 +373,5 @@ Debug
 
 
 # End of https://www.gitignore.io/api/c++,visualstudio
+
+.vscode
