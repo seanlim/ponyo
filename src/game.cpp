@@ -40,3 +40,25 @@ void Game::initialise(HWND _hwnd)
     initialised = true;
     return;
 }
+
+void Game::handleLostGraphicsDevice()
+{
+    this->hr = this->graphics->getDeviceState();
+    if (FAILED(this->hr))
+    {
+        switch (this->hr)
+        {
+        case D3DERR_DEVICELOST:
+            Sleep(100);
+            return;
+        case D3DERR_DEVICENOTRESET:
+            this->releaseAll();
+            this->hr = this->graphics->reset();
+            if (FAILED(hr))
+                return;
+            this->resetAll();
+        default:
+            return;
+        }
+    }
+}
