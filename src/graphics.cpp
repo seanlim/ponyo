@@ -6,7 +6,7 @@ Graphics::Graphics()
     this->fullscreen = false;
     this->width = GAME_WIDTH;
     this->height = GAME_HEIGHT;
-    this->backColor = SETCOLOR_ARGB(255, 0, 0, 128);
+    this->setBackColor(SETCOLOR_ARGB(255, 0, 0, 128));
 }
 
 void Graphics::initD3Dpp()
@@ -74,7 +74,7 @@ void Graphics::initialise(HWND hw, int w, int h, bool fs)
 
 void Graphics::setBackColor(COLOR_ARGB c)
 {
-    backColor = c;
+    this->backColor = c;
 }
 
 HRESULT Graphics::showBackbuffer()
@@ -111,7 +111,7 @@ HRESULT Graphics::beginScene()
     this->result = E_FAIL;
     if (this->device3d == NULL)
         return this->result;
-    this->device3d->Clear(0, NULL, D3DCLEAR_TARGET, backColor, 1.0F, 0);
+    this->device3d->Clear(0, NULL, D3DCLEAR_TARGET, this->backColor, 1.0F, 0);
     this->result = this->device3d->BeginScene();
     return this->result;
 }

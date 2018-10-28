@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 #endif
     MSG msg;
 
-    game = new SpaceWar;
+    game = new SpaceWar();
 
     if (AnotherInstance())
         return false;

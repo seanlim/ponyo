@@ -46,4 +46,6 @@ void SpaceWar::resetAll()
 
 void SpaceWar::run(HWND hwnd)
 {
+    Game::run(hwnd);
+    return;
 }
