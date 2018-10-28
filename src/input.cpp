@@ -175,7 +175,7 @@ void Input::readControllers()
 {
     for (DWORD i = 0; i < MAX_CONTROLLERS; i++)
     {
-        if (this->controllers[i].connected && XInputGetState(i, &controllers[i].state == ERROR_DEVICE_NOT_CONNECTED))
+        if (this->controllers[i].connected && XInputGetState(i, &controllers[i].state) == ERROR_DEVICE_NOT_CONNECTED)
             this->controllers[i].connected = false;
     }
 }
