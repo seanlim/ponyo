@@ -9,6 +9,8 @@
 #include "constants.h"
 #include "gameError.h"
 
+#pragma comment(lib, "xinput.lib")
+
 // High-definition mouse
 #ifndef HID_USAGE_PAGE_GENERIC
 #define HID_USAGE_PAGE_GENERIC ((USHORT)0x01)
@@ -95,7 +97,7 @@ class Input
     void clearKeyPress(UCHAR);
     void clear(UCHAR);
     bool anyKeyPressed() const;
-    void clearAll() const { clear(inputNS::KEYS_MOUSE_TEXT); }
+    void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
     void cleartextIn() { this->textIn.clear(); }
     std::string getTextIn() { return this->textIn; }
     char getCharIn() { return this->charIn; }

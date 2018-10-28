@@ -5,7 +5,7 @@ Input::Input()
     for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
     {
 
-        this->keyDown[i] = false;
+        this->keysDown[i] = false;
         this->keysPressed[i] = false;
     }
     this->newLine = true;
