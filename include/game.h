@@ -6,7 +6,7 @@
 #include <Mmsystem.h>
 
 #include "graphics.h"
-// #include "input.h"
+#include "input.h"
 #include "constants.h"
 #include "gameError.h"
 
@@ -16,6 +16,7 @@ class Game
 {
 protected:
   Graphics *graphics;
+  Input *input;
   HWND hwnd;
   HRESULT hr;
 
@@ -37,7 +38,7 @@ public:
   Graphics *getGraphics() { return graphics; }
 
   // Handle input
-  void input(WPARAM, LPARAM, UINT);
+  void handleInput(WPARAM, LPARAM, UINT);
 
   virtual void initialise(HWND hwnd);
   virtual void run(HWND);

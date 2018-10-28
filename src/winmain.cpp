@@ -102,7 +102,7 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     }
 
     // Send message to game
-    game->input(wParam, lParam, msg);
+    game->handleInput(wParam, lParam, msg);
 }
 
 bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow)
