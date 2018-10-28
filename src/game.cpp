@@ -41,23 +41,23 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
             input->setMouseLButton(true);
             input->mouseIn(lParam); // mouse position
             break;
-        case WM_LBUTTONUP:          // left mouse button up
+        case WM_LBUTTONUP: // left mouse button up
             input->setMouseLButton(false);
             input->mouseIn(lParam); // mouse position
             break;
-        case WM_MBUTTONDOWN:        // middle mouse button down
+        case WM_MBUTTONDOWN: // middle mouse button down
             input->setMouseMButton(true);
             input->mouseIn(lParam); // mouse position
             break;
-        case WM_MBUTTONUP:          // middle mouse button up
+        case WM_MBUTTONUP: // middle mouse button up
             input->setMouseMButton(false);
             input->mouseIn(lParam); // mouse position
             break;
-        case WM_RBUTTONDOWN:        // right mouse button down
+        case WM_RBUTTONDOWN: // right mouse button down
             input->setMouseRButton(true);
             input->mouseIn(lParam); // mouse position
             break;
-        case WM_RBUTTONUP:          // right mouse button up
+        case WM_RBUTTONUP: // right mouse button up
             input->setMouseRButton(false);
             input->mouseIn(lParam); // mouse position
             break;
@@ -69,7 +69,8 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
         case WM_DEVICECHANGE:
             input->checkControllers();
             break;
-        default: break;
+        default:
+            break;
         }
     }
 

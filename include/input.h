@@ -73,11 +73,11 @@ class Input
     int mouseRawX, mouseRawY;                     // high-definition mouse data
     RAWINPUTDEVICE Rid[1];                        // for high-definition mouse
     bool mouseCaptured;                           // true if mouse captured
-    bool mouseLButton;                            // true if left mouse button down
-    bool mouseMButton;                            // true if middle mouse button down
-    bool mouseRButton;                            // true if right mouse button down
-    bool mouseX1Button;                           // true if X1 mouse button down
-    bool mouseX2Button;                           // true if X2 mouse button down
+    bool mouseLButton = false;                    // true if left mouse button down
+    bool mouseMButton = false;                    // true if middle mouse button down
+    bool mouseRButton = false;                    // true if right mouse button down
+    bool mouseX1Button = false;                   // true if X1 mouse button down
+    bool mouseX2Button = false;                   // true if X2 mouse button down
     ControllerState controllers[MAX_CONTROLLERS]; // state of controllers
 
     const ControllerState *getControllerState(UINT n)

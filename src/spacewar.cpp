@@ -18,11 +18,17 @@ void SpaceWar::initialise(HWND hwnd)
 
 void SpaceWar::update()
 {
-    OutputDebugString(this->input->getTextIn().c_str());
-    OutputDebugStringW(L"\n");
     if (this->input->getTextIn() == "exit")
     {
+        PostQuitMessage(0);
     }
+
+    if ((bool)this->input->getMouseLButton())
+        this->graphics->setBackColor(SETCOLOR_ARGB(255, 128, 50, 50));
+    else if ((bool)this->input->getMouseMButton())
+        this->graphics->setBackColor(SETCOLOR_ARGB(255, 50, 50, 128));
+    else if ((bool)this->input->getMouseRButton())
+        this->graphics->setBackColor(SETCOLOR_ARGB(255, 50, 128, 50));
 }
 
 void SpaceWar::ai()
