@@ -98,11 +98,10 @@ LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         return 0;
     default:
+        // Send message to game
+        game->handleInput(wParam, lParam, msg);
         DefWindowProc(hWnd, msg, wParam, lParam);
     }
-
-    // Send message to game
-    game->handleInput(wParam, lParam, msg);
 }
 
 bool CreateMainWindow(HWND &hwnd, HINSTANCE hInstance, int nCmdShow)

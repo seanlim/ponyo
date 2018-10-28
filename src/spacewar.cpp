@@ -18,6 +18,11 @@ void SpaceWar::initialise(HWND hwnd)
 
 void SpaceWar::update()
 {
+    OutputDebugString(this->input->getTextIn().c_str());
+    OutputDebugStringW(L"\n");
+    if (this->input->getTextIn() == "exit")
+    {
+    }
 }
 
 void SpaceWar::ai()

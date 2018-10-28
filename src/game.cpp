@@ -23,38 +23,53 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN: // key down
             input->keyDown(wParam);
+            break;
         case WM_KEYUP:
         case WM_SYSKEYUP: // key up
             input->keyUp(wParam);
+            break;
         case WM_CHAR: // character entered
             input->keyIn(wParam);
+            break;
         case WM_MOUSEMOVE: // mouse moved
             input->mouseIn(lParam);
+            break;
         case WM_INPUT: // raw mouse data in
             input->mouseRawIn(lParam);
+            break;
         case WM_LBUTTONDOWN: // left mouse button down
             input->setMouseLButton(true);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_LBUTTONUP:          // left mouse button up
             input->setMouseLButton(false);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_MBUTTONDOWN:        // middle mouse button down
             input->setMouseMButton(true);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_MBUTTONUP:          // middle mouse button up
             input->setMouseMButton(false);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_RBUTTONDOWN:        // right mouse button down
             input->setMouseRButton(true);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_RBUTTONUP:          // right mouse button up
             input->setMouseRButton(false);
             input->mouseIn(lParam); // mouse position
+            break;
         case WM_XBUTTONDOWN:
         case WM_XBUTTONUP: // mouse X button down/up
             input->setMouseXButton(wParam);
             input->mouseIn(lParam); // mouse position
+            break;
+        case WM_DEVICECHANGE:
             input->checkControllers();
+            break;
+        default: break;
         }
     }
 
