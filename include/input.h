@@ -1,5 +1,4 @@
-#ifndef _INPUT_H
-#define _INPUT_H
+#pragma once
 
 #include <windows.h>
 #include <windowsX.h>
@@ -191,5 +190,3 @@ class Input
 
     void vibrateControllers(float frameTime);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _GRAPHICS_H
-#define _GRAPHICS_H
+#pragma once
 #define WIN32_LEAN_AND_MEAN
 
 #ifndef _DEBUG
@@ -52,5 +51,3 @@ public:
   HRESULT beginScene();
   HRESULT endScene();
 };
-
-#endif

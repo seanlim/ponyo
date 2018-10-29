@@ -1,8 +1,8 @@
-#ifndef _CONSTANTS_H
-#define _CONSTANTS_H
+#pragma once
 #define WIN_32_LEAN_AND_MEAN
 
 #include <windows.h>
+
 // Safely delete pointer referenced item
 #define safeDelete(ptr)   \
     {                     \
@@ -48,5 +48,3 @@ const UINT GAME_HEIGHT = 480;  // height of game in pixels
 // In this game simple constants are used for key mappings. If variables were used
 // it would be possible to save and restore key mappings from a data file.
 const byte ESC_KEY = VK_ESCAPE; // escape key
-
-#endif

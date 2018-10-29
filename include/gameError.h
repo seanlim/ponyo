@@ -1,5 +1,4 @@
-#ifndef _GAMEERROR_H // prevent multiple definitions if this
-#define _GAMEERROR_H // ..file is included in more than one place
+#pragma once
 #define WIN32_LEAN_AND_MEAN
 
 #include <string>
@@ -45,5 +44,3 @@ public:
   const char *getMessage() const throw() { return message.c_str(); }
   int getErrorCode() const throw() { return errorCode; }
 };
-
-#endif

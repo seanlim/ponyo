@@ -1,5 +1,4 @@
-#ifndef _SPACEWAR_H
-#define _SPACEWAR_H
+#pragma once
 #define WIN32_LEAN_AND_MEAN
 
 #include "game.h"
@@ -18,4 +17,3 @@ public:
   void resetAll();
   void run(HWND);
 };
-#endif
