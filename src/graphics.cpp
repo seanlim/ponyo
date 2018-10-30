@@ -46,6 +46,16 @@ void Graphics::initialise(HWND hw, int w, int h, bool fs)
 
     initD3Dpp();
 
+    if(fullscreen)
+    {
+        if(isAdapterCompatible()) 
+            // set the refresh rate with a compatible one
+            d3dpp.FullScreen_RefreshRateInHz = pMode.RefreshRate;
+        else
+            throw(GameError(gameErrorNS::FATAL_ERROR, 
+                        "The graphics device does not support the specified resolution and/or format."));
+    }
+
     // determine if graphics card supports harware texturing and lighting and vertex
     // shaders
     D3DCAPS9 caps;
@@ -54,23 +64,41 @@ void Graphics::initialise(HWND hw, int w, int h, bool fs)
     // If device doesn't support HW T&L or doesn't support 1.1 vertex
     // shaders in hardware, then switch to software vertex processing.
     if ((caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) == 0 ||
-        caps.VertexShaderVersion < D3DVS_VERSION(1, 1))
+            caps.VertexShaderVersion < D3DVS_VERSION(1, 1))
         behavior = D3DCREATE_SOFTWARE_VERTEXPROCESSING; // use software only processing
     else
         behavior = D3DCREATE_HARDWARE_VERTEXPROCESSING; // use hardware only processing
 
     //create Direct3D device
     result = direct3d->CreateDevice(
-        D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        hwnd,
-        behavior,
-        &d3dpp,
-        &device3d);
+            D3DADAPTER_DEFAULT,
+            D3DDEVTYPE_HAL,
+            hwnd,
+            behavior,
+            &d3dpp,
+            &device3d);
 
     if (FAILED(result))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating Direct3D device"));
 }
+
+bool Graphics::isAdapterCompatible()
+{
+    UINT modes = direct3d->GetAdapterModeCount(D3DADAPTER_DEFAULT, 
+            d3dpp.BackBufferFormat);
+    for(UINT i=0; i<modes; i++)
+    {
+        result = direct3d->EnumAdapterModes( D3DADAPTER_DEFAULT, 
+                d3dpp.BackBufferFormat,
+                i, &pMode);
+        if( pMode.Height == d3dpp.BackBufferHeight &&
+                pMode.Width  == d3dpp.BackBufferWidth &&
+                pMode.RefreshRate >= d3dpp.FullScreen_RefreshRateInHz)
+            return true;
+    }
+    return false;
+}
+
 
 void Graphics::setBackColor(COLOR_ARGB c)
 {
