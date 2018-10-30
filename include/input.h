@@ -8,8 +8,6 @@
 #include "constants.h"
 #include "gameError.h"
 
-#pragma comment(lib, "xinput.lib")
-
 // High-definition mouse
 #ifndef HID_USAGE_PAGE_GENERIC
 #define HID_USAGE_PAGE_GENERIC ((USHORT)0x01)

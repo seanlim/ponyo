@@ -80,6 +80,11 @@ void Graphics::initialise(HWND hw, int w, int h, bool fs)
 
     if (FAILED(result))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating Direct3D device"));
+
+    result = D3DXCreateSprite(this->device3d, &sprite);
+
+    if (FAILED(result))
+      throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating sprite"));
 }
 
 bool Graphics::isAdapterCompatible()
