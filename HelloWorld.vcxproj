@@ -80,6 +80,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\random.cpp" />
     <ClCompile Include="src\spacewar.cpp" />
+    <ClCompile Include="src\textureManager.cpp" />
     <ClCompile Include="src\winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +91,7 @@
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\random.h" />
     <ClInclude Include="include\spacewar.h" />
+    <ClInclude Include="include\textureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
