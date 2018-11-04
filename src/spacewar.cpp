@@ -13,7 +13,25 @@ void SpaceWar::initialise(HWND hwnd)
 {
     Game::initialise(hwnd);
 
-    return;
+    // load textures
+    if (!nebulaTexture.initialise(graphics, NEBULA_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising nebula texture"));
+    if (!planetTexture.initialise(graphics, PLANET_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising planet texture"));
+    // nebula
+    if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
+    nebulaImage.setX(0.0);
+    nebulaImage.setY(0.0);
+    // planet
+    if (!planetImage.initialise(graphics, 0, 0, 0, &planetTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing planet"));
+    // place planet in center of screen
+    planetImage.setX(GAME_WIDTH * 0.5f - planetImage.getWidth() * 0.5f);
+    planetImage.setY(GAME_HEIGHT * 0.5f - planetImage.getHeight() * 0.5f);
+
+    if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
+        return;
 }
 
 void SpaceWar::update()
@@ -41,16 +59,25 @@ void SpaceWar::collisions()
 
 void SpaceWar::render()
 {
+    this->graphics->spriteBegin();
+    this->nebulaImage.draw();
+    this->planetImage.draw();
+    this->graphics->spriteEnd();
 }
 
 void SpaceWar::releaseAll()
 {
+    this->planetTexture.onLostDevice();
+    this->nebulaTexture.onLostDevice();
     Game::releaseAll();
     return;
 }
 
 void SpaceWar::resetAll()
 {
+    this->planetTexture.onResetDevice();
+    this->nebulaTexture.onResetDevice();
+
     Game::resetAll();
     return;
 }

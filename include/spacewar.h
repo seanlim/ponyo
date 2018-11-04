@@ -2,9 +2,16 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "game.h"
+#include "textureManager.h"
+#include "image.h"
 
 class SpaceWar : public Game
 {
+  TextureManager planetTexture;
+  TextureManager nebulaTexture;
+  Image planetImage;
+  Image nebulaImage;
+
 public:
   SpaceWar();
   virtual ~SpaceWar();

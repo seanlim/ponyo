@@ -31,6 +31,24 @@
         }                  \
     }
 
+// Safely call onLostDevice
+#define SAFE_ON_LOST_DEVICE(ptr) \
+    {                            \
+        if (ptr)                 \
+        {                        \
+            ptr->onLostDevice(); \
+        }                        \
+    }
+// Safely call onResetDevice
+#define SAFE_ON_RESET_DEVICE(ptr) \
+    {                             \
+        if (ptr)                  \
+        {                         \
+            ptr->onResetDevice(); \
+        }                         \
+    }
+#define TRANSCOLOR SETCOLOR_ARGB(0, 255, 0, 255) // transparent color (magenta)
+
 //Constants
 const double PI = 3.14159265;
 const float FRAME_RATE = 200.0f;
@@ -48,3 +66,8 @@ const UINT GAME_HEIGHT = 480;  // height of game in pixels
 // In this game simple constants are used for key mappings. If variables were used
 // it would be possible to save and restore key mappings from a data file.
 const byte ESC_KEY = VK_ESCAPE; // escape key
+
+// image resources
+const char NEBULA_IMAGE[] = "pictures\\orion.jpg";  // photo source NASA/courtesy of nasaimages.org
+const char PLANET_IMAGE[] = "pictures\\planet.png"; // picture of planet
+const char SHIP_IMAGE[] = "pictures\\ship.png";     // spaceship

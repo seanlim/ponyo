@@ -11,27 +11,29 @@ TextureManager::TextureManager()
 
 TextureManager::~TextureManager()
 {
- safeRelease(texture);
+  safeRelease(texture);
 }
 
 bool TextureManager::initialise(Graphics *g, const char *file)
 {
-  try {
+  try
+  {
     this->graphics = g;
     this->file = file;
 
-    this->hr = graphics->loadTexture(this->file, graphicsNS::FILTER, this->width, this-> height, this->texture);
+    this->hr = graphics->loadTexture(this->file, TRANSCOLOR, this->width, this->height, this->texture);
 
     if (FAILED(hr))
     {
       safeRelease(this->texture);
       return false;
     }
-  } catch (...) 
+  }
+  catch (...)
   {
     return false;
   }
-  
+
   this->initialised = true;
   return true;
 }
@@ -47,5 +49,5 @@ void TextureManager::onResetDevice()
 {
   if (!this->initialised)
     return;
-  this->graphics->loadTexture(this->file, graphicsNS::FILTER, this->width, this->height, this->texture);
+  this->graphics->loadTexture(this->file, TRANSCOLOR, this->width, this->height, this->texture);
 }
