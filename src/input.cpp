@@ -55,7 +55,10 @@ void Input::initialise(HWND hwnd, bool capture)
 void Input::keyDown(WPARAM wParam)
 {
     if (wParam < inputNS::KEYS_ARRAY_LEN)
-        this->keysDown[wParam], this->keysPressed[wParam] = true;
+    {
+        this->keysDown[wParam] = true;
+        this->keysPressed[wParam] = true;
+    }
 }
 
 void Input::keyUp(WPARAM wParam)
@@ -89,8 +92,8 @@ bool Input::isKeyDown(UCHAR vKey) const
 {
     if (vKey < inputNS::KEYS_ARRAY_LEN)
         return this->keysDown[vKey];
-
-    return false;
+    else
+        return false;
 }
 
 bool Input::wasKeyPressed(UCHAR vKey) const

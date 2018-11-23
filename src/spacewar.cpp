@@ -18,35 +18,64 @@ void SpaceWar::initialise(HWND hwnd)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising nebula texture"));
     if (!planetTexture.initialise(graphics, PLANET_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising planet texture"));
-    // nebula
+    if (!spaceShipTexture.initialise(graphics, SHIP_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising spaceship texture"));
+
     if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
     nebulaImage.setX(0.0);
     nebulaImage.setY(0.0);
-    // planet
+
     if (!planetImage.initialise(graphics, 0, 0, 0, &planetTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing planet"));
-    // place planet in center of screen
     planetImage.setX(GAME_WIDTH * 0.5f - planetImage.getWidth() * 0.5f);
     planetImage.setY(GAME_HEIGHT * 0.5f - planetImage.getHeight() * 0.5f);
 
     if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
         return;
+
+    // Animated sprite
+    if (!spaceShipImage.initialise(graphics, 32, 32, 2, &spaceShipTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing spaceship"));
+
+    spaceShipImage.setX(GAME_WIDTH / 4);
+    spaceShipImage.setY(GAME_HEIGHT / 4);
+
+    spaceShipImage.setFrames(0, 3);
+    spaceShipImage.setCurrentFrame(0);
+    spaceShipImage.setFrameDelay(0.2f);
+    spaceShipImage.setDegrees(45.0f);
 }
 
 void SpaceWar::update()
 {
-    if (this->input->getTextIn() == "exit")
+    if (input->isKeyDown(VK_RIGHT))
     {
-        PostQuitMessage(0);
+        spaceShipImage.setX(spaceShipImage.getX() + frameTime * 100.0f);
+        if (spaceShipImage.getX() > GAME_WIDTH)
+            spaceShipImage.setX((float)-spaceShipImage.getWidth());
+    }
+    if (input->isKeyDown(VK_LEFT))
+    {
+        spaceShipImage.setX(spaceShipImage.getX() - frameTime * 100.0f);
+        if (spaceShipImage.getX() < -spaceShipImage.getWidth())
+            spaceShipImage.setX((float)GAME_WIDTH);
+    }
+    if (input->isKeyDown(VK_UP))
+    {
+        spaceShipImage.setY(spaceShipImage.getY() - frameTime * 100.0f);
+        if (spaceShipImage.getY() < -spaceShipImage.getHeight())
+            spaceShipImage.setY((float)GAME_HEIGHT);
+    }
+    if (input->isKeyDown(VK_DOWN))
+    {
+        spaceShipImage.setY(spaceShipImage.getY() + frameTime * 100.0f);
+        if (spaceShipImage.getY() > GAME_HEIGHT)
+            spaceShipImage.setY((float)-spaceShipImage.getHeight());
     }
 
-    if ((bool)this->input->getMouseLButton())
-        this->graphics->setBackColor(SETCOLOR_ARGB(255, 128, 50, 50));
-    else if ((bool)this->input->getMouseMButton())
-        this->graphics->setBackColor(SETCOLOR_ARGB(255, 50, 50, 128));
-    else if ((bool)this->input->getMouseRButton())
-        this->graphics->setBackColor(SETCOLOR_ARGB(255, 50, 128, 50));
+    // need to update ship with frameTime to swap frames (animate)
+    spaceShipImage.update(frameTime);
 }
 
 void SpaceWar::ai()
@@ -62,6 +91,7 @@ void SpaceWar::render()
     this->graphics->spriteBegin();
     this->nebulaImage.draw();
     this->planetImage.draw();
+    this->spaceShipImage.draw();
     this->graphics->spriteEnd();
 }
 
@@ -69,6 +99,7 @@ void SpaceWar::releaseAll()
 {
     this->planetTexture.onLostDevice();
     this->nebulaTexture.onLostDevice();
+    this->spaceShipTexture.onLostDevice();
     Game::releaseAll();
     return;
 }
@@ -77,6 +108,7 @@ void SpaceWar::resetAll()
 {
     this->planetTexture.onResetDevice();
     this->nebulaTexture.onResetDevice();
+    this->spaceShipTexture.onResetDevice();
 
     Game::resetAll();
     return;

@@ -9,8 +9,11 @@ class SpaceWar : public Game
 {
   TextureManager planetTexture;
   TextureManager nebulaTexture;
+  TextureManager spaceShipTexture;
+
   Image planetImage;
   Image nebulaImage;
+  Image spaceShipImage;
 
 public:
   SpaceWar();
