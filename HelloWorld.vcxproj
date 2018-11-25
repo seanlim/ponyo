@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\constants.h" />
+    <ClInclude Include="core\entity.h" />
     <ClInclude Include="core\game.h" />
     <ClInclude Include="core\gameError.h" />
     <ClInclude Include="core\graphics.h" />
@@ -22,6 +23,7 @@
     <ClInclude Include="src\spacewar.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\entity.cpp" />
     <ClCompile Include="core\game.cpp" />
     <ClCompile Include="core\graphics.cpp" />
     <ClCompile Include="core\image.cpp" />

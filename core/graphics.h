@@ -13,6 +13,7 @@
 #define LP_3D LPDIRECT3D9
 #define LP_TEXTURE LPDIRECT3DTEXTURE9
 #define LP_SPRITE LPD3DXSPRITE
+#define VECTOR2 D3DXVECTOR2
 
 // Colors
 #define COLOR_ARGB DWORD
@@ -104,6 +105,14 @@ public:
   HRESULT endScene();
   HRESULT loadTexture(const char *, COLOR_ARGB, UINT &, UINT &, LP_TEXTURE &);
   void Graphics::drawSprite(const SpriteData &, COLOR_ARGB color = graphicsNS::WHITE);
+
+  static float Vector2Length(const VECTOR2 *v) { return D3DXVec2Length(v); }
+
+  static float Vector2Dot(const VECTOR2 *v1, const VECTOR2 *v2) { return D3DXVec2Dot(v1, v2); }
+
+  static void Vector2Normalize(VECTOR2 *v) { D3DXVec2Normalize(v, v); }
+
+  static VECTOR2 *Vector2Transform(VECTOR2 *v, D3DXMATRIX *m) { return D3DXVec2TransformCoord(v, v, m); }
 
   void spriteBegin()
   {

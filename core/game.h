@@ -33,6 +33,7 @@ public:
   virtual ~Game();
 
   Graphics *getGraphics() { return graphics; }
+  Input *getInput() { return input; }
 
   // Handle input
   void handleInput(WPARAM, LPARAM, UINT);
