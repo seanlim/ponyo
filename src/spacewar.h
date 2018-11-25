@@ -15,6 +15,8 @@ class SpaceWar : public Game
   Image nebulaImage;
   Image spaceShipImage;
 
+  float shipVelocity = 1.0f;
+
 public:
   SpaceWar();
   virtual ~SpaceWar();

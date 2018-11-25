@@ -51,16 +51,24 @@ void SpaceWar::update()
 {
     if (input->isKeyDown(VK_RIGHT))
     {
-        spaceShipImage.setX(spaceShipImage.getX() + frameTime * 100.0f);
-        if (spaceShipImage.getX() > GAME_WIDTH)
-            spaceShipImage.setX((float)-spaceShipImage.getWidth());
+        shipVelocity += 1.0f;
     }
+
     if (input->isKeyDown(VK_LEFT))
     {
-        spaceShipImage.setX(spaceShipImage.getX() - frameTime * 100.0f);
-        if (spaceShipImage.getX() < -spaceShipImage.getWidth())
-            spaceShipImage.setX((float)GAME_WIDTH);
+        shipVelocity -= 1.0f;
     }
+
+    spaceShipImage.setX(spaceShipImage.getX() + frameTime * shipVelocity);
+    if (spaceShipImage.getX() > GAME_WIDTH)
+    {
+        spaceShipImage.setX(0.0);
+    }
+    else if (spaceShipImage.getX() < -spaceShipImage.getWidth())
+    {
+        spaceShipImage.setX(GAME_WIDTH);
+    }
+
     if (input->isKeyDown(VK_UP))
     {
         spaceShipImage.setY(spaceShipImage.getY() - frameTime * 100.0f);
