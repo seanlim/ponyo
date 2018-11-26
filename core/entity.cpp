@@ -83,12 +83,6 @@ bool Entity::collidesWith(Entity &ent, VECTOR2 &collisionVector)
   return false;
 }
 
-//=============================================================================
-// Circular collision detection method
-// Called by collision(), default collision detection method
-// Post: returns true if collision, false otherwise
-//       sets collisionVector if collision
-//=============================================================================
 bool Entity::collideCircle(Entity &ent, VECTOR2 &collisionVector)
 {
   // difference between centers
@@ -110,12 +104,6 @@ bool Entity::collideCircle(Entity &ent, VECTOR2 &collisionVector)
   return false; // not colliding
 }
 
-//=============================================================================
-// Axis aligned bounding box collision detection method
-// Called by collision()
-// Post: returns true if collision, false otherwise
-//       sets collisionVector if collision
-//=============================================================================
 bool Entity::collideBox(Entity &ent, VECTOR2 &collisionVector)
 {
   // if either entity is not active then no collision may occcur
@@ -136,15 +124,6 @@ bool Entity::collideBox(Entity &ent, VECTOR2 &collisionVector)
   return true;
 }
 
-//=============================================================================
-// Rotated Box collision detection method
-// Called by collision()
-// Post: returns true if collision, false otherwise
-//       sets collisionVector if collision
-// Uses Separating Axis Test to detect collision.
-// The separating axis test:
-//   Two boxes are not colliding if their projections onto a line do not overlap.
-//=============================================================================
 bool Entity::collideRotatedBox(Entity &ent, VECTOR2 &collisionVector)
 {
   computeRotatedBox();     // prepare rotated box
@@ -158,11 +137,6 @@ bool Entity::collideRotatedBox(Entity &ent, VECTOR2 &collisionVector)
   return false;
 }
 
-//=============================================================================
-// Projects other box onto this edge01 and edge03.
-// Called by collideRotatedBox()
-// Post: returns true if projections overlap, false otherwise
-//=============================================================================
 bool Entity::projectionsOverlap(Entity &ent)
 {
   float projection, min01, max01, min03, max03;
@@ -204,25 +178,6 @@ bool Entity::projectionsOverlap(Entity &ent)
   return true; // projections overlap
 }
 
-//=============================================================================
-// Rotated Box and Circle collision detection method
-// Called by collision()
-// Uses separating axis test on edges of box and radius of circle.
-// If the circle center is outside the lines extended from the collision box
-// edges (also known as the Voronoi region) then the nearest box corner is checked
-// for collision using a distance check.
-// The nearest corner is determined from the overlap tests.
-//
-//   Voronoi0 |   | Voronoi1
-//         ---0---1---
-//            |   |
-//         ---3---2---
-//   Voronoi3 |   | Voronoi2
-//
-// Pre: This entity must be box and other entity (ent) must be circle.
-// Post: returns true if collision, false otherwise
-//       sets collisionVector if collision
-//=============================================================================
 bool Entity::collideRotatedBoxCircle(Entity &ent, VECTOR2 &collisionVector)
 {
   float min01, min03, max01, max03, center01, center03;
@@ -260,12 +215,6 @@ bool Entity::collideRotatedBoxCircle(Entity &ent, VECTOR2 &collisionVector)
   return true;
 }
 
-//=============================================================================
-// The box corner is checked for collision with circle using a distance check.
-// Called by collideRotatedBoxCircle()
-// Post: returns true if collision, false otherwise
-//       sets collisionVector if collision
-//=============================================================================
 bool Entity::collideCornerCircle(VECTOR2 corner, Entity &ent, VECTOR2 &collisionVector)
 {
   distSquared = corner - *ent.getCenter();       // corner - circle
@@ -286,12 +235,6 @@ bool Entity::collideCornerCircle(VECTOR2 corner, Entity &ent, VECTOR2 &collision
   return false;
 }
 
-//=============================================================================
-// Compute corners of rotated box, projection edges and min and max projections
-// 0---1  corner numbers
-// |   |
-// 3---2
-//=============================================================================
 void Entity::computeRotatedBox()
 {
   if (rotatedBoxReady)
@@ -341,10 +284,6 @@ void Entity::computeRotatedBox()
   rotatedBoxReady = true;
 }
 
-//=============================================================================
-// Is this Entity outside the specified rectangle
-// Post: returns true if outside rect, false otherwise
-//=============================================================================
 bool Entity::outsideRect(RECT rect)
 {
   if (spriteData.x + spriteData.width * getScale() < rect.left ||
@@ -355,18 +294,10 @@ bool Entity::outsideRect(RECT rect)
   return false;
 }
 
-//=============================================================================
-// damage
-// This entity has been damaged by a weapon.
-// Override this function in the inheriting class.
-//=============================================================================
 void Entity::damage(int weapon)
 {
 }
 
-//=============================================================================
-// Entity bounces after collision with another entity
-//=============================================================================
 void Entity::bounce(VECTOR2 &collisionVector, Entity &ent)
 {
   VECTOR2 Vdiff = ent.getVelocity() - velocity;
@@ -389,13 +320,6 @@ void Entity::bounce(VECTOR2 &collisionVector, Entity &ent)
     deltaV += ((massRatio * cUVdotVdiff) * cUV);
 }
 
-//=============================================================================
-// Force of gravity on this entity from other entity
-// Adds the gravitational force to the velocity vector of this entity
-// force = GRAVITY * m1 * m2 / r*r
-//                    2              2
-//  r*r  =   (Ax - Bx)   +  (Ay - By)
-//=============================================================================
 void Entity::gravityForce(Entity *ent, float frameTime)
 {
   // if either entity is not active then no gravity effect
