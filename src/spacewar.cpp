@@ -14,76 +14,45 @@ void SpaceWar::initialise(HWND hwnd)
     Game::initialise(hwnd);
 
     // load textures
+    if (!gameTexture.initialise(graphics, TEXTURES_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising game texture"));
     if (!nebulaTexture.initialise(graphics, NEBULA_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising nebula texture"));
-    if (!planetTexture.initialise(graphics, PLANET_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising planet texture"));
-    if (!spaceShipTexture.initialise(graphics, SHIP_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising spaceship texture"));
-
     if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
     nebulaImage.setX(0.0);
     nebulaImage.setY(0.0);
 
-    if (!planetImage.initialise(graphics, 0, 0, 0, &planetTexture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing planet"));
-    planetImage.setX(GAME_WIDTH * 0.5f - planetImage.getWidth() * 0.5f);
-    planetImage.setY(GAME_HEIGHT * 0.5f - planetImage.getHeight() * 0.5f);
-
     if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
         return;
 
-    // Animated sprite
-    if (!spaceShipImage.initialise(graphics, 32, 32, 2, &spaceShipTexture))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing spaceship"));
+    if (!planet.initialise(this, planetNS::WIDTH, planetNS::HEIGHT, 2, &gameTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising planet"));
+    // ship1
+    if (!ship1.initialise(this, shipNS::WIDTH, shipNS::HEIGHT, shipNS::TEXTURE_COLS, &gameTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship1"));
+    ship1.setFrames(shipNS::SHIP1_START_FRAME, shipNS::SHIP1_END_FRAME);
+    ship1.setCurrentFrame(shipNS::SHIP1_START_FRAME);
+    ship1.setX(GAME_WIDTH / 4);
+    ship1.setY(GAME_HEIGHT / 4);
+    ship1.setVelocity(VECTOR2(shipNS::SPEED, -shipNS::SPEED)); // VECTOR2(X, Y)
+    // ship2
+    if (!ship2.initialise(this, shipNS::WIDTH, shipNS::HEIGHT, shipNS::TEXTURE_COLS, &gameTexture))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing ship2"));
+    ship2.setFrames(shipNS::SHIP2_START_FRAME, shipNS::SHIP2_END_FRAME);
+    ship2.setCurrentFrame(shipNS::SHIP2_START_FRAME);
+    ship2.setX(GAME_WIDTH - GAME_WIDTH / 4);
+    ship2.setY(GAME_HEIGHT / 4);
+    ship2.setVelocity(VECTOR2(-shipNS::SPEED, -shipNS::SPEED)); // VECTOR2(X, Y)
 
-    spaceShipImage.setX(GAME_WIDTH / 4);
-    spaceShipImage.setY(GAME_HEIGHT / 4);
-
-    spaceShipImage.setFrames(0, 3);
-    spaceShipImage.setCurrentFrame(0);
-    spaceShipImage.setFrameDelay(0.2f);
-    spaceShipImage.setDegrees(45.0f);
+    return;
 }
 
 void SpaceWar::update()
 {
-    if (input->isKeyDown(VK_RIGHT))
-    {
-        shipVelocity += 1.0f;
-    }
-
-    if (input->isKeyDown(VK_LEFT))
-    {
-        shipVelocity -= 1.0f;
-    }
-
-    spaceShipImage.setX(spaceShipImage.getX() + frameTime * shipVelocity);
-    if (spaceShipImage.getX() > GAME_WIDTH)
-    {
-        spaceShipImage.setX(0.0);
-    }
-    else if (spaceShipImage.getX() < -spaceShipImage.getWidth())
-    {
-        spaceShipImage.setX(GAME_WIDTH);
-    }
-
-    if (input->isKeyDown(VK_UP))
-    {
-        spaceShipImage.setY(spaceShipImage.getY() - frameTime * 100.0f);
-        if (spaceShipImage.getY() < -spaceShipImage.getHeight())
-            spaceShipImage.setY((float)GAME_HEIGHT);
-    }
-    if (input->isKeyDown(VK_DOWN))
-    {
-        spaceShipImage.setY(spaceShipImage.getY() + frameTime * 100.0f);
-        if (spaceShipImage.getY() > GAME_HEIGHT)
-            spaceShipImage.setY((float)-spaceShipImage.getHeight());
-    }
-
-    // need to update ship with frameTime to swap frames (animate)
-    spaceShipImage.update(frameTime);
+    planet.update(frameTime);
+    ship1.update(frameTime);
+    ship2.update(frameTime);
 }
 
 void SpaceWar::ai()
@@ -92,38 +61,54 @@ void SpaceWar::ai()
 
 void SpaceWar::collisions()
 {
+    VECTOR2 collisionVector;
+    // if collision between ship and planet
+    if (ship1.collidesWith(planet, collisionVector))
+    {
+        // bounce off planet
+        ship1.bounce(collisionVector, planet);
+        ship1.damage(PLANET);
+    }
+    if (ship2.collidesWith(planet, collisionVector))
+    {
+        // bounce off planet
+        ship2.bounce(collisionVector, planet);
+        ship2.damage(PLANET);
+    }
+    // if collision between ships
+    if (ship1.collidesWith(ship2, collisionVector))
+    {
+        // bounce off ship
+        ship1.bounce(collisionVector, ship2);
+        ship1.damage(SHIP);
+        // change the direction of the collisionVector for ship2
+        ship2.bounce(collisionVector * -1, ship1);
+        ship2.damage(SHIP);
+    }
 }
 
 void SpaceWar::render()
 {
     this->graphics->spriteBegin();
     this->nebulaImage.draw();
-    this->planetImage.draw();
-    this->spaceShipImage.draw();
+    this->planet.draw();
+    this->ship1.draw();
+    this->ship2.draw();
     this->graphics->spriteEnd();
 }
 
 void SpaceWar::releaseAll()
 {
-    this->planetTexture.onLostDevice();
     this->nebulaTexture.onLostDevice();
-    this->spaceShipTexture.onLostDevice();
+    this->gameTexture.onLostDevice();
     Game::releaseAll();
     return;
 }
 
 void SpaceWar::resetAll()
 {
-    this->planetTexture.onResetDevice();
     this->nebulaTexture.onResetDevice();
-    this->spaceShipTexture.onResetDevice();
-
+    this->gameTexture.onLostDevice();
     Game::resetAll();
-    return;
-}
-
-void SpaceWar::run(HWND hwnd)
-{
-    Game::run(hwnd);
     return;
 }

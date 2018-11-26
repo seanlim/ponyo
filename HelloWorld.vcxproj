@@ -20,6 +20,8 @@
     <ClInclude Include="core\io\input.h" />
     <ClInclude Include="core\math\random.h" />
     <ClInclude Include="core\textureManager.h" />
+    <ClInclude Include="src\planet.h" />
+    <ClInclude Include="src\ship.h" />
     <ClInclude Include="src\spacewar.h" />
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +33,8 @@
     <ClCompile Include="core\math\random.cpp" />
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\textureManager.cpp" />
+    <ClCompile Include="src\planet.cpp" />
+    <ClCompile Include="src\ship.cpp" />
     <ClCompile Include="src\spacewar.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

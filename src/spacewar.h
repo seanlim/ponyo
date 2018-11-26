@@ -4,18 +4,16 @@
 #include "game.h"
 #include "textureManager.h"
 #include "image.h"
+#include "planet.h"
+#include "ship.h"
 
 class SpaceWar : public Game
 {
-  TextureManager planetTexture;
   TextureManager nebulaTexture;
-  TextureManager spaceShipTexture;
-
-  Image planetImage;
+  TextureManager gameTexture;
+  Planet planet;
+  Ship ship1, ship2;
   Image nebulaImage;
-  Image spaceShipImage;
-
-  float shipVelocity = 1.0f;
 
 public:
   SpaceWar();
@@ -27,5 +25,4 @@ public:
   void render();
   void releaseAll();
   void resetAll();
-  void run(HWND);
 };

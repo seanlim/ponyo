@@ -45,6 +45,12 @@
     <ClInclude Include="core\entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\planet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ship.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\io\input.cpp">
@@ -72,6 +78,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\planet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

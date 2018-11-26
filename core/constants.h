@@ -64,6 +64,12 @@ const UINT GAME_HEIGHT = 480;  // height of game in pixels
 const byte ESC_KEY = VK_ESCAPE; // escape key
 
 // image resources
-const char NEBULA_IMAGE[] = "pictures\\orion.jpg";  // photo source NASA/courtesy of nasaimages.org
-const char PLANET_IMAGE[] = "pictures\\planet.png"; // picture of planet
-const char SHIP_IMAGE[] = "pictures\\ship.png";     // spaceship
+const char NEBULA_IMAGE[] = "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org
+const char TEXTURES_IMAGE[] = "pictures\\textures.png";
+
+enum WEAPON
+{
+    TORPEDO,
+    SHIP,
+    PLANET
+};
