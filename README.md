@@ -6,7 +6,7 @@ Ponyo is a 2D C++ game engine built on DirectX.
 
 Main engine code resides in `core/`.
 
-## Spacewars
+## Spacewar
 
 Driver game to test engine in `src/`
 
