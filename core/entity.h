@@ -28,7 +28,7 @@ protected:
   // edge specifies the collision box relative to the center of the entity.
   // left and top are typically negative numbers
   RECT edge;
-  VECTOR3 corners[4];
+  VECTOR2 corners[4];
   VECTOR2 edge01, edge03;
   float edge01Min, edge01Max, edge03Min, edge03Max;
   VECTOR2 velocity;
