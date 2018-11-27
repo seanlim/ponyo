@@ -79,7 +79,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Sean Lim\Desktop\ponyo\src;C:\Users\Sean Lim\Desktop\ponyo\core\os;C:\Users\Sean Lim\Desktop\ponyo\core\math;C:\Users\Sean Lim\Desktop\ponyo\core\io;C:\Users\Sean Lim\Desktop\ponyo\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -93,7 +93,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Sean Lim\Desktop\ponyo\src;C:\Users\Sean Lim\Desktop\ponyo\core\os;C:\Users\Sean Lim\Desktop\ponyo\core\math;C:\Users\Sean Lim\Desktop\ponyo\core\io;C:\Users\Sean Lim\Desktop\ponyo\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
