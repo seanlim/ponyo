@@ -12,5 +12,8 @@ Driver game to test engine in `src/`
 
 ## TODO
 
+- Better input
 - ECS
+- Event system
 - Audio
+- Text
