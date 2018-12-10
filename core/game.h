@@ -8,6 +8,14 @@
 #include "input.h"
 #include "constants.h"
 #include "gameError.h"
+#include "text.h"
+
+namespace gameNS
+{
+const char FONT[] = "Courier New";
+const int POINT_SIZE = 20;
+const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
+} // namespace gameNS
 
 class Game
 {
@@ -24,6 +32,8 @@ protected:
 
   float frameTime;
   float fps;
+  Text gameText;
+  bool showFps;
   DWORD sleepTime; // Sleep in between frames
   bool paused;
   bool initialised;

@@ -6,6 +6,8 @@ Game::Game()
     this->graphics = NULL;
     this->input = new Input();
     this->paused = false;
+    fps = 100;
+    showFps = false;
 }
 
 Game::~Game()
@@ -90,7 +92,14 @@ void Game::initialise(HWND _hwnd)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initialising high res timer"));
     QueryPerformanceCounter(&timeStart);
 
+    // Init font
+    if (gameText.initialise(graphics, gameNS::POINT_SIZE, false, false, gameNS::FONT) == false)
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Failed to initialise fps font."));
+
+    gameText.setFontColor(gameNS::FONT_COLOR);
+
     initialised = true;
+    showFps = true;
     return;
 }
 
@@ -118,9 +127,19 @@ void Game::handleLostGraphicsDevice()
 
 void Game::renderGame()
 {
+    const int BUF_SIZE = 20;
+    static char buffer[BUF_SIZE];
+
     if (SUCCEEDED(this->graphics->beginScene()))
     {
         this->render();
+        graphics->spriteBegin();
+        if (showFps)
+        {
+            _snprintf_s(buffer, BUF_SIZE, "fps %d", (int)fps);
+            gameText.print(buffer, GAME_WIDTH - 200, GAME_HEIGHT - gameNS::POINT_SIZE, DT_RIGHT);
+        }
+        graphics->spriteEnd();
         this->graphics->endScene();
     }
 

@@ -13,6 +13,7 @@
 #define LP_3D LPDIRECT3D9
 #define LP_TEXTURE LPDIRECT3DTEXTURE9
 #define LP_SPRITE LPD3DXSPRITE
+#define LP_DXFONT LPD3DXFONT
 #define VECTOR2 D3DXVECTOR2
 
 // Colors
@@ -88,9 +89,11 @@ public:
   Graphics();
   virtual ~Graphics();
 
+  // Getters
   LP_3D get3D() { return direct3d; }
   LP_3DDEVICE get3DDevice() { return device3d; }
   HDC getDC() { return GetDC(hwnd); }
+  LP_SPRITE getSprite() { return sprite; }
 
   void setBackColor(COLOR_ARGB c);
   void releaseAll();
