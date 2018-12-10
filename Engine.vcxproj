@@ -19,6 +19,7 @@
     <ClInclude Include="core\image.h" />
     <ClInclude Include="core\io\input.h" />
     <ClInclude Include="core\math\random.h" />
+    <ClInclude Include="core\text.h" />
     <ClInclude Include="core\textureManager.h" />
     <ClInclude Include="src\planet.h" />
     <ClInclude Include="src\ship.h" />
@@ -32,6 +33,7 @@
     <ClCompile Include="core\io\input.cpp" />
     <ClCompile Include="core\math\random.cpp" />
     <ClCompile Include="core\os\winmain.cpp" />
+    <ClCompile Include="core\text.cpp" />
     <ClCompile Include="core\textureManager.cpp" />
     <ClCompile Include="src\planet.cpp" />
     <ClCompile Include="src\ship.cpp" />
