@@ -7,7 +7,6 @@ Game::Game()
     this->input = new Input();
     this->paused = false;
     fps = 100;
-    showFps = false;
 }
 
 Game::~Game()
@@ -99,7 +98,6 @@ void Game::initialise(HWND _hwnd)
     gameText.setFontColor(gameNS::FONT_COLOR);
 
     initialised = true;
-    showFps = true;
     return;
 }
 
@@ -136,7 +134,7 @@ void Game::renderGame()
         graphics->spriteBegin();
         if (showFps)
         {
-            _snprintf_s(buffer, BUF_SIZE, "fps %d", (int)fps);
+            _snprintf_s(buffer, BUF_SIZE, "%d FPS", (int)fps);
             gameText.print(buffer, GAME_WIDTH - 200, GAME_HEIGHT - gameNS::POINT_SIZE, DT_RIGHT);
         }
         graphics->spriteEnd();
@@ -173,6 +171,9 @@ void Game::run(HWND hwnd)
         this->frameTime = MAX_FRAME_TIME;
 
     this->timeStart = this->timeEnd;
+
+    if (input->wasKeyPressed(VK_F3))
+        showFps = !showFps;
 
     if (!paused)
     {

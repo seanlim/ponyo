@@ -33,7 +33,7 @@ protected:
   float frameTime;
   float fps;
   Text gameText;
-  bool showFps;
+  bool showFps = false;
   DWORD sleepTime; // Sleep in between frames
   bool paused;
   bool initialised;
