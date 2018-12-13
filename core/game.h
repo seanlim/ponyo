@@ -12,7 +12,7 @@
 
 namespace gameNS
 {
-const char FONT[] = "Courier New";
+const char FONT[] = "Arial";
 const int POINT_SIZE = 20;
 const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
 } // namespace gameNS

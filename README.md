@@ -14,6 +14,4 @@ Driver game to test engine in `src/`
 
 - Better input
 - ECS
-- Event system
-- Audio
-- Text
+- Event system adapter
