@@ -1,4 +1,4 @@
-# Ponyo Engine
+![](https://dw9to29mmj727.cloudfront.net/promo/2016/5536-Ghibli_SeriesHeaders_Ponyo_2000x800_v2.jpg)
 
 Ponyo is a 2D C++ game engine built on DirectX.
 
