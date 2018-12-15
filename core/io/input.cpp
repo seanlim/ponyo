@@ -66,7 +66,50 @@ void Input::initialise(HWND hwnd, bool capture)
 void Input::pollKeys()
 {
     // Update state and buffer
-    keyboardStateBuffer = keyboardState
+    keyboardStateBuffer = keyboardState;
+    for (int i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
+        keyboardState[i] = isPressed(i);
+
+    // Update bindings
+    bool isActive = false;
+    activeKeyMap.clear();
+
+    for (auto x : keyMap)
+    {
+        isActive = true;
+        for (auto y : x.second->chord)
+        {
+            if (getKeyboardKeyState(y.keyCode) != y.keyState)
+            {
+                isActive = false;
+                break;
+            }
+        }
+
+        if (isActive)
+            activeKeyMap.insert(std::pair<GameCommands, GameCommand *>(x.first, x.second));
+    }
+}
+
+const KeyState Input::getKeyboardKeyState(const unsigned int keyCode) const
+{
+    const int curr = keyboardState[keyCode];
+    const int prev = keyboardStateBuffer[keyCode];
+
+    if (prev == 1)
+    {
+        if (curr == 1)
+            return KeyState::Pressed;
+        else
+            return KeyState::JustReleased;
+    }
+    else
+    {
+        if (curr == 1)
+            return KeyState::JustPressed;
+        else
+            return KeyState::Released;
+    }
 }
 
 // void Input::keyDown(WPARAM wParam)
@@ -105,60 +148,60 @@ void Input::pollKeys()
 //     this->newLine = (char)wParam == '/r';
 // }
 
-bool Input::isKeyDown(UCHAR vKey) const
-{
-    if (vKey < inputNS::KEYS_ARRAY_LEN)
-        return this->keysDown[vKey];
-    else
-        return false;
-}
+// bool Input::isKeyDown(UCHAR vKey) const
+// {
+//     if (vKey < inputNS::KEYS_ARRAY_LEN)
+//         return this->keysDown[vKey];
+//     else
+//         return false;
+// }
 
-bool Input::wasKeyPressed(UCHAR vKey) const
-{
-    if (vKey < inputNS::KEYS_ARRAY_LEN)
-        return this->keysPressed[vKey];
-    return false;
-}
+// bool Input::wasKeyPressed(UCHAR vKey) const
+// {
+//     if (vKey < inputNS::KEYS_ARRAY_LEN)
+//         return this->keysPressed[vKey];
+//     return false;
+// }
 
-bool Input::anyKeyPressed() const
-{
-    for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
-    {
-        if (this->keysPressed[i])
-            return true;
-    }
-    return false;
-}
+// bool Input::anyKeyPressed() const
+// {
+//     for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
+//     {
+//         if (this->keysPressed[i])
+//             return true;
+//     }
+//     return false;
+// }
 
-void Input::clearKeyPress(UCHAR vKey)
-{
-    if (vKey < inputNS::KEYS_ARRAY_LEN)
-        this->keysPressed[vKey] = false;
-}
+// void Input::clearKeyPress(UCHAR vKey)
+// {
+//     if (vKey < inputNS::KEYS_ARRAY_LEN)
+//         this->keysPressed[vKey] = false;
+// }
 
-void Input::clear(UCHAR vKey)
-{
-    using namespace inputNS;
+// void Input::clear(UCHAR vKey)
+// {
+//     using namespace inputNS;
 
-    if (vKey & KEYS_DOWN)
-    {
-        for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
-            this->keysDown[i] = false;
-    }
-    if (vKey & KEYS_PRESSED)
-    {
-        for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
-            this->keysPressed[i] = false;
-    }
-    if (vKey & MOUSE)
-    {
-        this->mouseX, this->mouseY, this->mouseRawX, this->mouseRawY = 0;
-    }
-    if (vKey & TEXT_IN)
-    {
-        this->cleartextIn();
-    }
-}
+//     if (vKey & KEYS_DOWN)
+//     {
+//         for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
+//             this->keysDown[i] = false;
+//     }
+//     if (vKey & KEYS_PRESSED)
+//     {
+//         for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
+//             this->keysPressed[i] = false;
+//     }
+//     if (vKey & MOUSE)
+//     {
+//         this->mouseX, this->mouseY, this->mouseRawX, this->mouseRawY = 0;
+//     }
+//     if (vKey & TEXT_IN)
+//     {
+//         this->cleartextIn();
+//     }
+// }
 
 void Input::mouseIn(LPARAM lParam)
 {

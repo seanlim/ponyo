@@ -6,7 +6,7 @@
 #include <XInput.h>
 #include <unordered_map>
 #include <vector>
-#import <array>
+#include <array>
 
 #include "constants.h"
 #include "gameError.h"
@@ -96,12 +96,15 @@ struct GameCommand
     GameCommand(std::string name, const KeyBinding &keyBinding);
     GameCommand(std::string name, const std::vector<KeyBinding> &chord);
     ~GameCommand(){};
+
+    friend class Input;
 };
 
 class Input
 {
   private:
     std::unordered_map<GameCommands, GameCommand *> keyMap;
+    std::unordered_map<GameCommands, GameCommand *> activeKeyMap;
     std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
     std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
     std::string textIn;
@@ -121,20 +124,21 @@ class Input
     {
         return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
     }
+    const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
+    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
 
   public:
     Input();
     virtual ~Input();
     void initialise(HWND, bool);
-    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
     // void keyDown(WPARAM);
     // void keyUp(WPARAM);
     // void keyIn(WPARAM);
-    bool isKeyDown(UCHAR) const;
-    bool wasKeyPressed(UCHAR) const;
-    void clearKeyPress(UCHAR);
+    // bool isKeyDown(UCHAR) const;
+    // bool wasKeyPressed(UCHAR) const;
+    // void clearKeyPress(UCHAR);
     void clear(UCHAR);
-    bool anyKeyPressed() const;
+    // bool anyKeyPressed() const;
     void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
     void cleartextIn() { this->textIn.clear(); }
     std::string getTextIn() { return this->textIn; }
