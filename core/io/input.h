@@ -100,7 +100,7 @@ struct GameCommand
     {
         chord.push_back(keyBinding);
     };
-    GameCommand(std::string name, const std::vector<KeyBinding> &chord) : name(name), chord(chord) {};
+    GameCommand(std::string name, const std::vector<KeyBinding> &chord) : name(name), chord(chord){};
     ~GameCommand(){};
 
     friend class Input;
@@ -110,7 +110,6 @@ class Input
 {
   private:
     std::unordered_map<GameCommands, GameCommand *> keyMap;
-    std::unordered_map<GameCommands, GameCommand *> activeKeyMap;
     std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
     std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
     std::string textIn;
@@ -137,6 +136,7 @@ class Input
     virtual ~Input();
     void initialise(HWND, bool);
     inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
+    std::unordered_map<GameCommands, GameCommand *> activeKeyMap;
     // void keyDown(WPARAM);
     // void keyUp(WPARAM);
     // void keyIn(WPARAM);

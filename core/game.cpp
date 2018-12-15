@@ -172,8 +172,18 @@ void Game::run(HWND hwnd)
 
     this->timeStart = this->timeEnd;
 
-    if (input->isPressed(VK_F3))
-        showFps = !showFps;
+    for (auto x : input->activeKeyMap)
+    {
+        switch (x.first)
+        {
+        case GameCommands::showFPS:
+            Game::showFps = !Game::showFps;
+            break;
+        case GameCommands::Quit:
+            OutputDebugString("Quit the game\n");
+            break;
+        }
+    }
 
     if (!paused)
     {
