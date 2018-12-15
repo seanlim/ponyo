@@ -18,6 +18,17 @@ Input::Input()
 
     for (int i = 0; i < MAX_CONTROLLERS; i++)
         this->controllers[i].vibrateTimeLeft, this->controllers[i].vibrateTimeRight = 0;
+
+    // Set default keymap
+    keyMap.clear();
+
+    // Define chord for quit
+    std::vector<KeyBinding> quitChord;
+    quitChord.push_back(KeyBinding(VK_SHIFT, KeyState::Pressed));
+    quitChord.push_back(KeyBinding(VK_ESCAPE, KeyState::JustPressed));
+
+    keyMap[GameCommands::Quit] = new GameCommand("Quit", quitChord);
+    keyMap[GameCommands::showFPS] = new GameCommand("Toggle FPS", VK_F2, KeyState::JustPressed);
 }
 
 Input::~Input()
@@ -52,41 +63,47 @@ void Input::initialise(HWND hwnd, bool capture)
     }
 }
 
-void Input::keyDown(WPARAM wParam)
+void Input::pollKeys()
 {
-    if (wParam < inputNS::KEYS_ARRAY_LEN)
-    {
-        this->keysDown[wParam] = true;
-        this->keysPressed[wParam] = true;
-    }
+    // Update state and buffer
+    keyboardStateBuffer = keyboardState
 }
 
-void Input::keyUp(WPARAM wParam)
-{
-    if (wParam < inputNS::KEYS_ARRAY_LEN)
-        this->keysDown[wParam] = false;
-}
+// void Input::keyDown(WPARAM wParam)
+// {
+//     if (wParam < inputNS::KEYS_ARRAY_LEN)
+//     {
+//         this->keysDown[wParam] = true;
+//         this->keysPressed[wParam] = true;
+//     }
+// }
 
-void Input::keyIn(WPARAM wParam)
-{
-    if (this->newLine)
-    {
-        this->textIn.clear();
-        this->newLine = false;
-    }
+// void Input::keyUp(WPARAM wParam)
+// {
+//     if (wParam < inputNS::KEYS_ARRAY_LEN)
+//         this->keysDown[wParam] = false;
+// }
 
-    if (wParam == '\b' && this->textIn.length() > 0)
-    {
-        this->textIn.erase(this->textIn.size() - 1);
-    }
-    else
-    {
-        this->textIn += wParam;
-        this->charIn = wParam;
-    }
+// void Input::keyIn(WPARAM wParam)
+// {
+//     if (this->newLine)
+//     {
+//         this->textIn.clear();
+//         this->newLine = false;
+//     }
 
-    this->newLine = (char)wParam == '/r';
-}
+//     if (wParam == '\b' && this->textIn.length() > 0)
+//     {
+//         this->textIn.erase(this->textIn.size() - 1);
+//     }
+//     else
+//     {
+//         this->textIn += wParam;
+//         this->charIn = wParam;
+//     }
+
+//     this->newLine = (char)wParam == '/r';
+// }
 
 bool Input::isKeyDown(UCHAR vKey) const
 {

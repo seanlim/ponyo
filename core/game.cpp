@@ -21,17 +21,17 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
     {
         switch (msg)
         {
-        case WM_KEYDOWN:
-        case WM_SYSKEYDOWN: // key down
-            input->keyDown(wParam);
-            break;
-        case WM_KEYUP:
-        case WM_SYSKEYUP: // key up
-            input->keyUp(wParam);
-            break;
-        case WM_CHAR: // character entered
-            input->keyIn(wParam);
-            break;
+        // case WM_KEYDOWN:
+        // case WM_SYSKEYDOWN: // key down
+        //     input->keyDown(wParam);
+        //     break;
+        // case WM_KEYUP:
+        // case WM_SYSKEYUP: // key up
+        //     input->keyUp(wParam);
+        //     break;
+        // case WM_CHAR: // character entered
+        //     input->keyIn(wParam);
+        //     break;
         case WM_MOUSEMOVE: // mouse moved
             input->mouseIn(lParam);
             break;
@@ -186,6 +186,7 @@ void Game::run(HWND hwnd)
     this->renderGame();
 
     this->input->readControllers();
+    this->input->pollKeys();
 
     // Clear input after all key checks are done
     this->input->clear(inputNS::KEYS_PRESSED);

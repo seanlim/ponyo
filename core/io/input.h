@@ -4,6 +4,9 @@
 #include <windowsX.h>
 #include <string>
 #include <XInput.h>
+#include <unordered_map>
+#include <vector>
+#import <array>
 
 #include "constants.h"
 #include "gameError.h"
@@ -58,25 +61,62 @@ struct ControllerState
     bool connected;
 };
 
+enum KeyState
+{
+    Released,
+    JustReleased,
+    Pressed,
+    JustPressed
+};
+
+struct KeyBinding
+{
+  private:
+    unsigned int keyCode;
+    KeyState keyState;
+
+  public:
+    KeyBinding();
+    KeyBinding(unsigned int keyCode, KeyState keyState);
+    ~KeyBinding(){};
+
+    friend struct GameCommand;
+    friend class Input;
+};
+
+struct GameCommand
+{
+  private:
+    std::string name;
+    std::vector<KeyBinding> chord;
+
+  public:
+    GameCommand();
+    GameCommand(std::string name, const unsigned int keyCode, const KeyState keyState);
+    GameCommand(std::string name, const KeyBinding &keyBinding);
+    GameCommand(std::string name, const std::vector<KeyBinding> &chord);
+    ~GameCommand(){};
+};
+
 class Input
 {
   private:
-    bool keysDown[inputNS::KEYS_ARRAY_LEN];       // true if specified key is down
-    bool keysPressed[inputNS::KEYS_ARRAY_LEN];    // true if specified key was pressed
-    std::string textIn;                           // user entered text
-    char charIn;                                  // last character entered
-    bool newLine;                                 // true on start of new line
-    int mouseX, mouseY;                           // mouse screen coordinates
-    int mouseRawX, mouseRawY;                     // high-definition mouse data
-    RAWINPUTDEVICE Rid[1];                        // for high-definition mouse
-    bool mouseCaptured;                           // true if mouse captured
-    bool mouseLButton = false;                    // true if left mouse button down
-    bool mouseMButton = false;                    // true if middle mouse button down
-    bool mouseRButton = false;                    // true if right mouse button down
-    bool mouseX1Button = false;                   // true if X1 mouse button down
-    bool mouseX2Button = false;                   // true if X2 mouse button down
-    ControllerState controllers[MAX_CONTROLLERS]; // state of controllers
-
+    std::unordered_map<GameCommands, GameCommand *> keyMap;
+    std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
+    std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
+    std::string textIn;
+    char charIn;
+    bool newLine;
+    int mouseX, mouseY;
+    int mouseRawX, mouseRawY;
+    RAWINPUTDEVICE Rid[1];
+    bool mouseCaptured;
+    bool mouseLButton = false;
+    bool mouseMButton = false;
+    bool mouseRButton = false;
+    bool mouseX1Button = false;
+    bool mouseX2Button = false;
+    ControllerState controllers[MAX_CONTROLLERS];
     const ControllerState *getControllerState(UINT n)
     {
         return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
@@ -86,9 +126,10 @@ class Input
     Input();
     virtual ~Input();
     void initialise(HWND, bool);
-    void keyDown(WPARAM);
-    void keyUp(WPARAM);
-    void keyIn(WPARAM);
+    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
+    // void keyDown(WPARAM);
+    // void keyUp(WPARAM);
+    // void keyIn(WPARAM);
     bool isKeyDown(UCHAR) const;
     bool wasKeyPressed(UCHAR) const;
     void clearKeyPress(UCHAR);
@@ -126,6 +167,7 @@ class Input
 
     void checkControllers();
     void readControllers();
+    void pollKeys();
 
     const WORD getGamepadButtons(UINT n)
     {

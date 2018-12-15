@@ -67,6 +67,12 @@ const byte ESC_KEY = VK_ESCAPE; // escape key
 const char NEBULA_IMAGE[] = "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org
 const char TEXTURES_IMAGE[] = "pictures\\textures.png";
 
+enum GameCommands
+{
+    Quit,
+    showFPS
+};
+
 enum WEAPON
 {
     TORPEDO,
