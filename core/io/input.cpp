@@ -2,12 +2,12 @@
 
 Input::Input()
 {
-    for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
-    {
+    // for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
+    // {
 
-        this->keysDown[i] = false;
-        this->keysPressed[i] = false;
-    }
+    //     this->keysDown[i] = false;
+    //     this->keysPressed[i] = false;
+    // }
     this->newLine = true;
     this->textIn = "";
     this->charIn = 0;
@@ -65,6 +65,7 @@ void Input::initialise(HWND hwnd, bool capture)
 
 void Input::pollKeys()
 {
+
     // Update state and buffer
     keyboardStateBuffer = keyboardState;
     for (int i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)

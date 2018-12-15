@@ -172,7 +172,7 @@ void Game::run(HWND hwnd)
 
     this->timeStart = this->timeEnd;
 
-    if (input->wasKeyPressed(VK_F3))
+    if (input->isPressed(VK_F3))
         showFps = !showFps;
 
     if (!paused)
@@ -189,7 +189,7 @@ void Game::run(HWND hwnd)
     this->input->pollKeys();
 
     // Clear input after all key checks are done
-    this->input->clear(inputNS::KEYS_PRESSED);
+    // this->input->clear(inputNS::KEYS_PRESSED);
 }
 
 void Game::releaseAll()

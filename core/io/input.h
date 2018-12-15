@@ -76,8 +76,8 @@ struct KeyBinding
     KeyState keyState;
 
   public:
-    KeyBinding();
-    KeyBinding(unsigned int keyCode, KeyState keyState);
+    KeyBinding() : keyCode(0), keyState(KeyState::JustReleased){};
+    KeyBinding(unsigned int keyCode, KeyState keyState) : keyCode(keyCode), keyState(keyState){};
     ~KeyBinding(){};
 
     friend struct GameCommand;
@@ -91,10 +91,16 @@ struct GameCommand
     std::vector<KeyBinding> chord;
 
   public:
-    GameCommand();
-    GameCommand(std::string name, const unsigned int keyCode, const KeyState keyState);
-    GameCommand(std::string name, const KeyBinding &keyBinding);
-    GameCommand(std::string name, const std::vector<KeyBinding> &chord);
+    GameCommand() : name(""), chord(0){};
+    GameCommand(std::string name, const unsigned int keyCode, const KeyState keyState) : name(name)
+    {
+        chord.push_back(KeyBinding(keyCode, keyState));
+    };
+    GameCommand(std::string name, const KeyBinding &keyBinding) : name(name)
+    {
+        chord.push_back(keyBinding);
+    };
+    GameCommand(std::string name, const std::vector<KeyBinding> &chord) : name(name), chord(chord) {};
     ~GameCommand(){};
 
     friend class Input;
@@ -125,21 +131,21 @@ class Input
         return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
     }
     const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
-    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
 
   public:
     Input();
     virtual ~Input();
     void initialise(HWND, bool);
+    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
     // void keyDown(WPARAM);
     // void keyUp(WPARAM);
     // void keyIn(WPARAM);
     // bool isKeyDown(UCHAR) const;
     // bool wasKeyPressed(UCHAR) const;
     // void clearKeyPress(UCHAR);
-    void clear(UCHAR);
+    // void clear(UCHAR);
     // bool anyKeyPressed() const;
-    void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
+    // void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
     void cleartextIn() { this->textIn.clear(); }
     std::string getTextIn() { return this->textIn; }
     char getCharIn() { return this->charIn; }
