@@ -2,15 +2,6 @@
 
 Input::Input()
 {
-    // for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
-    // {
-
-    //     this->keysDown[i] = false;
-    //     this->keysPressed[i] = false;
-    // }
-    this->newLine = true;
-    this->textIn = "";
-    this->charIn = 0;
 
     this->mouseX, this->mouseY, this->mouseRawX, this->mouseRawY = 0;
 
@@ -65,7 +56,6 @@ void Input::initialise(HWND hwnd, bool capture)
 
 void Input::pollKeys()
 {
-
     // Update state and buffer
     keyboardStateBuffer = keyboardState;
     for (int i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
@@ -113,96 +103,14 @@ const KeyState Input::getKeyboardKeyState(const unsigned int keyCode) const
     }
 }
 
-// void Input::keyDown(WPARAM wParam)
-// {
-//     if (wParam < inputNS::KEYS_ARRAY_LEN)
-//     {
-//         this->keysDown[wParam] = true;
-//         this->keysPressed[wParam] = true;
-//     }
-// }
-
-// void Input::keyUp(WPARAM wParam)
-// {
-//     if (wParam < inputNS::KEYS_ARRAY_LEN)
-//         this->keysDown[wParam] = false;
-// }
-
-// void Input::keyIn(WPARAM wParam)
-// {
-//     if (this->newLine)
-//     {
-//         this->textIn.clear();
-//         this->newLine = false;
-//     }
-
-//     if (wParam == '\b' && this->textIn.length() > 0)
-//     {
-//         this->textIn.erase(this->textIn.size() - 1);
-//     }
-//     else
-//     {
-//         this->textIn += wParam;
-//         this->charIn = wParam;
-//     }
-
-//     this->newLine = (char)wParam == '/r';
-// }
-
-// bool Input::isKeyDown(UCHAR vKey) const
-// {
-//     if (vKey < inputNS::KEYS_ARRAY_LEN)
-//         return this->keysDown[vKey];
-//     else
-//         return false;
-// }
-
-// bool Input::wasKeyPressed(UCHAR vKey) const
-// {
-//     if (vKey < inputNS::KEYS_ARRAY_LEN)
-//         return this->keysPressed[vKey];
-//     return false;
-// }
-
-// bool Input::anyKeyPressed() const
-// {
-//     for (size_t i = 0; i < inputNS::KEYS_ARRAY_LEN; i++)
-//     {
-//         if (this->keysPressed[i])
-//             return true;
-//     }
-//     return false;
-// }
-
-// void Input::clearKeyPress(UCHAR vKey)
-// {
-//     if (vKey < inputNS::KEYS_ARRAY_LEN)
-//         this->keysPressed[vKey] = false;
-// }
-
-// void Input::clear(UCHAR vKey)
-// {
-//     using namespace inputNS;
-
-//     if (vKey & KEYS_DOWN)
-//     {
-//         for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
-//             this->keysDown[i] = false;
-//     }
-//     if (vKey & KEYS_PRESSED)
-//     {
-//         for (size_t i = 0; i < KEYS_ARRAY_LEN; i++)
-//             this->keysPressed[i] = false;
-//     }
-//     if (vKey & MOUSE)
-//     {
-//         this->mouseX, this->mouseY, this->mouseRawX, this->mouseRawY = 0;
-//     }
-//     if (vKey & TEXT_IN)
-//     {
-//         this->cleartextIn();
-//     }
-// }
+std::vector<GameCommands> Input::getActiveGameCommands()
+{
+    std::vector<GameCommands> activeGameCommands;
+    activeGameCommands.reserve(activeKeyMap.size());
+    for (auto x : activeKeyMap)
+        activeGameCommands.push_back(x.first);
+    return activeGameCommands;
+}
 
 void Input::mouseIn(LPARAM lParam)
 {

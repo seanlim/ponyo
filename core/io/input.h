@@ -1,12 +1,14 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
 #include <windowsX.h>
-#include <string>
+
 #include <XInput.h>
+#include <array>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <array>
 
 #include "constants.h"
 #include "gameError.h"
@@ -52,191 +54,182 @@ const DWORD GAMEPAD_B = 0x2000;
 const DWORD GAMEPAD_X = 0x4000;
 const DWORD GAMEPAD_Y = 0x8000;
 
-struct ControllerState
-{
-    XINPUT_STATE state;
-    XINPUT_VIBRATION vibration;
-    float vibrateTimeLeft;
-    float vibrateTimeRight;
-    bool connected;
+struct ControllerState {
+  XINPUT_STATE state;
+  XINPUT_VIBRATION vibration;
+  float vibrateTimeLeft;
+  float vibrateTimeRight;
+  bool connected;
 };
 
-enum KeyState
-{
-    Released,
-    JustReleased,
-    Pressed,
-    JustPressed
+enum KeyState { Released, JustReleased, Pressed, JustPressed };
+
+struct KeyBinding {
+private:
+  unsigned int keyCode;
+  KeyState keyState;
+
+public:
+  KeyBinding() : keyCode(0), keyState(KeyState::JustReleased){};
+  KeyBinding(unsigned int keyCode, KeyState keyState)
+      : keyCode(keyCode), keyState(keyState){};
+  ~KeyBinding(){};
+
+  friend struct GameCommand;
+  friend class Input;
 };
 
-struct KeyBinding
-{
-  private:
-    unsigned int keyCode;
-    KeyState keyState;
+struct GameCommand {
+private:
+  std::string name;
+  std::vector<KeyBinding> chord;
 
-  public:
-    KeyBinding() : keyCode(0), keyState(KeyState::JustReleased){};
-    KeyBinding(unsigned int keyCode, KeyState keyState) : keyCode(keyCode), keyState(keyState){};
-    ~KeyBinding(){};
+public:
+  GameCommand() : name(""), chord(0){};
+  GameCommand(std::string name, const unsigned int keyCode,
+              const KeyState keyState)
+      : name(name)
+  {
+    chord.push_back(KeyBinding(keyCode, keyState));
+  };
+  GameCommand(std::string name, const KeyBinding& keyBinding) : name(name)
+  {
+    chord.push_back(keyBinding);
+  };
+  GameCommand(std::string name, const std::vector<KeyBinding>& chord)
+      : name(name), chord(chord){};
+  ~GameCommand(){};
 
-    friend struct GameCommand;
-    friend class Input;
-};
-
-struct GameCommand
-{
-  private:
-    std::string name;
-    std::vector<KeyBinding> chord;
-
-  public:
-    GameCommand() : name(""), chord(0){};
-    GameCommand(std::string name, const unsigned int keyCode, const KeyState keyState) : name(name)
-    {
-        chord.push_back(KeyBinding(keyCode, keyState));
-    };
-    GameCommand(std::string name, const KeyBinding &keyBinding) : name(name)
-    {
-        chord.push_back(keyBinding);
-    };
-    GameCommand(std::string name, const std::vector<KeyBinding> &chord) : name(name), chord(chord){};
-    ~GameCommand(){};
-
-    friend class Input;
+  friend class Input;
 };
 
 class Input
 {
-  private:
-    std::unordered_map<GameCommands, GameCommand *> keyMap;
-    std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
-    std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
-    std::string textIn;
-    char charIn;
-    bool newLine;
-    int mouseX, mouseY;
-    int mouseRawX, mouseRawY;
-    RAWINPUTDEVICE Rid[1];
-    bool mouseCaptured;
-    bool mouseLButton = false;
-    bool mouseMButton = false;
-    bool mouseRButton = false;
-    bool mouseX1Button = false;
-    bool mouseX2Button = false;
-    ControllerState controllers[MAX_CONTROLLERS];
-    const ControllerState *getControllerState(UINT n)
-    {
-        return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
-    }
-    const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
+private:
+  // Keyboard
+  std::unordered_map<GameCommands, GameCommand*> keyMap;
+  std::unordered_map<GameCommands, GameCommand*> activeKeyMap;
+  std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
+  std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
+  inline const bool isPressed(int keyCode) const
+  {
+    return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0;
+  };
 
-  public:
-    Input();
-    virtual ~Input();
-    void initialise(HWND, bool);
-    inline const bool isPressed(int keyCode) const { return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0; };
-    std::unordered_map<GameCommands, GameCommand *> activeKeyMap;
-    // void keyDown(WPARAM);
-    // void keyUp(WPARAM);
-    // void keyIn(WPARAM);
-    // bool isKeyDown(UCHAR) const;
-    // bool wasKeyPressed(UCHAR) const;
-    // void clearKeyPress(UCHAR);
-    // void clear(UCHAR);
-    // bool anyKeyPressed() const;
-    // void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
-    void cleartextIn() { this->textIn.clear(); }
-    std::string getTextIn() { return this->textIn; }
-    char getCharIn() { return this->charIn; }
+  // Mouse
+  int mouseX, mouseY;
+  int mouseRawX, mouseRawY;
+  RAWINPUTDEVICE Rid[1];
+  bool mouseCaptured;
+  bool mouseLButton = false;
+  bool mouseMButton = false;
+  bool mouseRButton = false;
+  bool mouseX1Button = false;
+  bool mouseX2Button = false;
 
-    void mouseIn(LPARAM);
-    void mouseRawIn(LPARAM);
+  // Controllers
+  ControllerState controllers[MAX_CONTROLLERS];
+  const ControllerState* getControllerState(UINT n)
+  {
+    return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
+  }
 
-    void setMouseLButton(bool b) { this->mouseLButton = b; }
-    void setMouseMButton(bool b) { this->mouseMButton = b; }
-    void setMouseRButton(bool b) { this->mouseRButton = b; }
+public:
+  Input();
+  virtual ~Input();
+  void initialise(HWND, bool);
 
-    void setMouseXButton(WPARAM wParam)
-    {
-        this->mouseX1Button = (bool)(wParam & MK_XBUTTON1);
-        this->mouseX2Button = (bool)(wParam & MK_XBUTTON2);
-    }
+  // Keyboard
+  void pollKeys();
+  const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
+  std::vector<GameCommands> getActiveGameCommands();
 
-    int getMouseX() const { return this->mouseX; }
-    int getMouseY() const { return this->mouseY; }
+  // Mouse
+  void mouseIn(LPARAM);
+  void mouseRawIn(LPARAM);
 
-    int getMouseRawX() const { return this->mouseRawX; }
-    int getMouseRawY() const { return this->mouseRawY; }
+  void setMouseLButton(bool b) { this->mouseLButton = b; }
+  void setMouseMButton(bool b) { this->mouseMButton = b; }
+  void setMouseRButton(bool b) { this->mouseRButton = b; }
 
-    bool getMouseLButton() const { return mouseLButton; }
-    bool getMouseMButton() const { return mouseMButton; }
-    bool getMouseRButton() const { return mouseRButton; }
-    bool getMouseX1Button() const { return mouseX1Button; }
-    bool getMouseX2Button() const { return mouseX2Button; }
+  void setMouseXButton(WPARAM wParam)
+  {
+    this->mouseX1Button = (bool)(wParam & MK_XBUTTON1);
+    this->mouseX2Button = (bool)(wParam & MK_XBUTTON2);
+  }
 
-    void checkControllers();
-    void readControllers();
-    void pollKeys();
+  int getMouseX() const { return this->mouseX; }
+  int getMouseY() const { return this->mouseY; }
 
-    const WORD getGamepadButtons(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.wButtons;
-    }
+  int getMouseRawX() const { return this->mouseRawX; }
+  int getMouseRawY() const { return this->mouseRawY; }
 
-    // Match button bit pattern
-    bool getGamepadButtonState(UINT n, DWORD bitPattern)
-    {
-        return (this->getGamepadButtons(n) & bitPattern) != 0;
-    }
+  bool getMouseLButton() const { return mouseLButton; }
+  bool getMouseMButton() const { return mouseMButton; }
+  bool getMouseRButton() const { return mouseRButton; }
+  bool getMouseX1Button() const { return mouseX1Button; }
+  bool getMouseX2Button() const { return mouseX2Button; }
 
-    BYTE getGamepadLeftTrigger(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.bLeftTrigger;
-    }
+  // Controllers/Gamepad
+  void checkControllers();
+  void readControllers();
 
-    BYTE getGamepadRightTrigger(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.bRightTrigger;
-    }
+  const WORD getGamepadButtons(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.wButtons;
+  }
 
-    SHORT getGamePadThumbLX(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbLX;
-    }
+  // Match button bit pattern
+  bool getGamepadButtonState(UINT n, DWORD bitPattern)
+  {
+    return (this->getGamepadButtons(n) & bitPattern) != 0;
+  }
 
-    SHORT getGamePadThumbLY(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbLY;
-    }
+  BYTE getGamepadLeftTrigger(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.bLeftTrigger;
+  }
 
-    SHORT getGamePadThumbRX(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbRX;
-    }
+  BYTE getGamepadRightTrigger(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.bRightTrigger;
+  }
 
-    SHORT getGamePadThumbRY(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbRY;
-    }
+  SHORT getGamePadThumbLX(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbLX;
+  }
 
-    // Gamepad vibrate
-    // left: low freq, right: high freq
-    void gamePadVibrateLeft(UINT n, WORD speed, float sec)
-    {
-        if (n > MAX_CONTROLLERS - 1)
-            n = MAX_CONTROLLERS - 1;
-        this->controllers[n].vibration.wLeftMotorSpeed = speed;
-        this->controllers[n].vibrateTimeLeft = sec;
-    }
+  SHORT getGamePadThumbLY(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbLY;
+  }
 
-    void gamePadVibrateRight(UINT n, WORD speed, float sec)
-    {
-        if (n > MAX_CONTROLLERS - 1)
-            n = MAX_CONTROLLERS - 1;
-        this->controllers[n].vibration.wRightMotorSpeed = speed;
-        this->controllers[n].vibrateTimeRight = sec;
-    }
+  SHORT getGamePadThumbRX(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbRX;
+  }
 
-    void vibrateControllers(float frameTime);
+  SHORT getGamePadThumbRY(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbRY;
+  }
+
+  // Gamepad vibrate
+  // left: low freq, right: high freq
+  void gamePadVibrateLeft(UINT n, WORD speed, float sec)
+  {
+    if (n > MAX_CONTROLLERS - 1) n = MAX_CONTROLLERS - 1;
+    this->controllers[n].vibration.wLeftMotorSpeed = speed;
+    this->controllers[n].vibrateTimeLeft = sec;
+  }
+
+  void gamePadVibrateRight(UINT n, WORD speed, float sec)
+  {
+    if (n > MAX_CONTROLLERS - 1) n = MAX_CONTROLLERS - 1;
+    this->controllers[n].vibration.wRightMotorSpeed = speed;
+    this->controllers[n].vibrateTimeRight = sec;
+  }
+
+  void vibrateControllers(float frameTime);
 };
