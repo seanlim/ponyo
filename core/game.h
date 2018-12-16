@@ -1,13 +1,15 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
+// clang-format off
 #include <windows.h>
 #include <Mmsystem.h>
+// clang-format on
 
-#include "graphics.h"
-#include "input.h"
 #include "constants.h"
 #include "gameError.h"
+#include "graphics.h"
+#include "input.h"
 #include "text.h"
 
 namespace gameNS
@@ -20,8 +22,8 @@ const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
 class Game
 {
 protected:
-  Graphics *graphics;
-  Input *input;
+  Graphics* graphics;
+  Input* input;
   HWND hwnd;
   HRESULT hr;
 
@@ -42,8 +44,8 @@ public:
   Game();
   virtual ~Game();
 
-  Graphics *getGraphics() { return graphics; }
-  Input *getInput() { return input; }
+  Graphics* getGraphics() { return graphics; }
+  Input* getInput() { return input; }
 
   // Handle input
   void handleInput(WPARAM, LPARAM, UINT);

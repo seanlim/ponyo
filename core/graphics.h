@@ -3,10 +3,10 @@
 
 #define D3D_DEBUG_INFO
 
-#include <d3d9.h>
-#include <d3dx9.h>
 #include "constants.h"
 #include "gameError.h"
+#include <d3d9.h>
+#include <d3dx9.h>
 
 // DirectX
 #define LP_3DDEVICE LPDIRECT3DDEVICE9
@@ -18,8 +18,9 @@
 
 // Colors
 #define COLOR_ARGB DWORD
-#define SETCOLOR_ARGB(a, r, g, b) \
-  ((COLOR_ARGB)((((a)&0xff) << 24) | (((r)&0xff) << 16) | (((g)&0xff) << 8) | ((b)&0xff)))
+#define SETCOLOR_ARGB(a, r, g, b)                                              \
+  ((COLOR_ARGB)((((a)&0xff) << 24) | (((r)&0xff) << 16) | (((g)&0xff) << 8) |  \
+                ((b)&0xff)))
 
 namespace graphicsNS
 {
@@ -41,21 +42,18 @@ const COLOR_ARGB CYAN = D3DCOLOR_ARGB(255, 0, 255, 255);
 const COLOR_ARGB LIME = D3DCOLOR_ARGB(255, 0, 255, 0);
 const COLOR_ARGB BLUE = D3DCOLOR_ARGB(255, 0, 0, 255);
 const COLOR_ARGB BLACK = D3DCOLOR_ARGB(255, 0, 0, 0);
-const COLOR_ARGB FILTER = D3DCOLOR_ARGB(0, 0, 0, 0);          // use to specify drawing with colorFilter
-const COLOR_ARGB ALPHA25 = D3DCOLOR_ARGB(64, 255, 255, 255);  // AND with color to get 25% alpha
-const COLOR_ARGB ALPHA50 = D3DCOLOR_ARGB(128, 255, 255, 255); // AND with color to get 50% alpha
-const COLOR_ARGB BACK_COLOR = NAVY;                           // background color of game
+const COLOR_ARGB FILTER =
+    D3DCOLOR_ARGB(0, 0, 0, 0); // use to specify drawing with colorFilter
+const COLOR_ARGB ALPHA25 =
+    D3DCOLOR_ARGB(64, 255, 255, 255); // AND with color to get 25% alpha
+const COLOR_ARGB ALPHA50 =
+    D3DCOLOR_ARGB(128, 255, 255, 255); // AND with color to get 50% alpha
+const COLOR_ARGB BACK_COLOR = NAVY;    // background color of game
 
-enum DISPLAY_MODE
-{
-  TOGGLE,
-  FULLSCREEN,
-  WINDOW
-};
+enum DISPLAY_MODE { TOGGLE, FULLSCREEN, WINDOW };
 } // namespace graphicsNS
 
-struct SpriteData
-{
+struct SpriteData {
   int width;  // width of sprite in pixels
   int height; // height of sprite in pixels
   float x;    // screen location (top left corner of sprite)
@@ -106,24 +104,25 @@ public:
   HRESULT beginScene();
 
   HRESULT endScene();
-  HRESULT loadTexture(const char *, COLOR_ARGB, UINT &, UINT &, LP_TEXTURE &);
-  void Graphics::drawSprite(const SpriteData &, COLOR_ARGB color = graphicsNS::WHITE);
+  HRESULT loadTexture(const char*, COLOR_ARGB, UINT&, UINT&, LP_TEXTURE&);
+  void Graphics::drawSprite(const SpriteData&,
+                            COLOR_ARGB color = graphicsNS::WHITE);
 
-  static float Vector2Length(const VECTOR2 *v) { return D3DXVec2Length(v); }
+  static float Vector2Length(const VECTOR2* v) { return D3DXVec2Length(v); }
 
-  static float Vector2Dot(const VECTOR2 *v1, const VECTOR2 *v2) { return D3DXVec2Dot(v1, v2); }
-
-  static void Vector2Normalize(VECTOR2 *v) { D3DXVec2Normalize(v, v); }
-
-  static VECTOR2 *Vector2Transform(VECTOR2 *v, D3DXMATRIX *m) { return D3DXVec2TransformCoord(v, v, m); }
-
-  void spriteBegin()
+  static float Vector2Dot(const VECTOR2* v1, const VECTOR2* v2)
   {
-    sprite->Begin(D3DXSPRITE_ALPHABLEND);
+    return D3DXVec2Dot(v1, v2);
   }
 
-  void spriteEnd()
+  static void Vector2Normalize(VECTOR2* v) { D3DXVec2Normalize(v, v); }
+
+  static VECTOR2* Vector2Transform(VECTOR2* v, D3DXMATRIX* m)
   {
-    sprite->End();
+    return D3DXVec2TransformCoord(v, v, m);
   }
+
+  void spriteBegin() { sprite->Begin(D3DXSPRITE_ALPHABLEND); }
+
+  void spriteEnd() { sprite->End(); }
 };

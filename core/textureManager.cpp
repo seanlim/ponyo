@@ -9,28 +9,22 @@ TextureManager::TextureManager()
   this->initialised = false;
 }
 
-TextureManager::~TextureManager()
-{
-  safeRelease(texture);
-}
+TextureManager::~TextureManager() { safeRelease(texture); }
 
-bool TextureManager::initialise(Graphics *g, const char *file)
+bool TextureManager::initialise(Graphics* g, const char* file)
 {
-  try
-  {
+  try {
     this->graphics = g;
     this->file = file;
 
-    this->hr = graphics->loadTexture(this->file, TRANSCOLOR, this->width, this->height, this->texture);
+    this->hr = graphics->loadTexture(this->file, TRANSCOLOR, this->width,
+                                     this->height, this->texture);
 
-    if (FAILED(hr))
-    {
+    if (FAILED(hr)) {
       safeRelease(this->texture);
       return false;
     }
-  }
-  catch (...)
-  {
+  } catch (...) {
     return false;
   }
 
@@ -40,14 +34,13 @@ bool TextureManager::initialise(Graphics *g, const char *file)
 
 void TextureManager::onLostDevice()
 {
-  if (!this->initialised)
-    return;
+  if (!this->initialised) return;
   safeRelease(this->texture);
 }
 
 void TextureManager::onResetDevice()
 {
-  if (!this->initialised)
-    return;
-  this->graphics->loadTexture(this->file, TRANSCOLOR, this->width, this->height, this->texture);
+  if (!this->initialised) return;
+  this->graphics->loadTexture(this->file, TRANSCOLOR, this->width, this->height,
+                              this->texture);
 }

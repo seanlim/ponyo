@@ -1,19 +1,14 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
+#include "constants.h"
+#include "game.h"
 #include "image.h"
 #include "input.h"
-#include "game.h"
 
 namespace entityNS
 {
-enum COLLISION_TYPE
-{
-  NONE,
-  CIRCLE,
-  BOX,
-  ORIENTED_BOX
-};
+enum COLLISION_TYPE { NONE, CIRCLE, BOX, ORIENTED_BOX };
 const float GRAVITY = 6.67428e-11f;
 } // namespace entityNS
 
@@ -38,30 +33,31 @@ protected:
   float rr;
   float force;
   float gravity;
-  Input *input;
+  Input* input;
   HRESULT hr;
   bool active;
   bool rotatedBoxReady;
   // Circular collision detection
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideCircle(Entity &ent, VECTOR2 &collisionVector);
+  virtual bool collideCircle(Entity& ent, VECTOR2& collisionVector);
   // Axis aligned box collision detection
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideBox(Entity &ent, VECTOR2 &collisionVector);
+  virtual bool collideBox(Entity& ent, VECTOR2& collisionVector);
   // Separating axis collision detection between boxes
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideRotatedBox(Entity &ent, VECTOR2 &collisionVector);
+  virtual bool collideRotatedBox(Entity& ent, VECTOR2& collisionVector);
   // Separating axis collision detection between box and circle
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideRotatedBoxCircle(Entity &ent, VECTOR2 &collisionVector);
+  virtual bool collideRotatedBoxCircle(Entity& ent, VECTOR2& collisionVector);
   // Separating axis collision detection helper functions
   void computeRotatedBox();
-  bool projectionsOverlap(Entity &ent);
-  bool collideCornerCircle(VECTOR2 corner, Entity &ent, VECTOR2 &collisionVector);
+  bool projectionsOverlap(Entity& ent);
+  bool collideCornerCircle(VECTOR2 corner, Entity& ent,
+                           VECTOR2& collisionVector);
 
 public:
   Entity();
@@ -70,7 +66,7 @@ public:
   // Getters
 
   // Return center of scaled Entity as screen x,y.
-  virtual const VECTOR2 *getCenter()
+  virtual const VECTOR2* getCenter()
   {
     center = VECTOR2(getCenterX(), getCenterY());
     return &center;
@@ -80,13 +76,12 @@ public:
   virtual float getRadius() const { return radius; }
 
   // Return RECT structure used for BOX and ROTATED_BOX collision detection.
-  virtual const RECT &getEdge() const { return edge; }
+  virtual const RECT& getEdge() const { return edge; }
 
   // Return corner c of ROTATED_BOX
-  virtual const VECTOR2 *getCorner(UINT c) const
+  virtual const VECTOR2* getCorner(UINT c) const
   {
-    if (c >= 4)
-      c = 0;
+    if (c >= 4) c = 0;
     return &corners[c];
   }
 
@@ -128,20 +123,20 @@ public:
   // frameTime is used to regulate the speed of movement and animation
   virtual void update(float frameTime);
 
-  virtual bool initialise(Game *game, int width, int height, int nCols,
-                          TextureManager *textureManager);
+  virtual bool initialise(Game* game, int width, int height, int nCols,
+                          TextureManager* textureManager);
 
   virtual void activate();
 
-  virtual void ai(float frameTime, Entity &ent);
+  virtual void ai(float frameTime, Entity& ent);
 
   virtual bool outsideRect(RECT rect);
 
-  virtual bool collidesWith(Entity &ent, VECTOR2 &collisionVector);
+  virtual bool collidesWith(Entity& ent, VECTOR2& collisionVector);
 
   virtual void damage(int weapon);
 
-  void bounce(VECTOR2 &collisionVector, Entity &ent);
+  void bounce(VECTOR2& collisionVector, Entity& ent);
 
-  void gravityForce(Entity *other, float frameTime);
+  void gravityForce(Entity* other, float frameTime);
 };

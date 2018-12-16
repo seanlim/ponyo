@@ -1,9 +1,14 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
 #include <windowsX.h>
-#include <string>
+
 #include <XInput.h>
+#include <array>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "constants.h"
 #include "gameError.h"
@@ -49,142 +54,180 @@ const DWORD GAMEPAD_B = 0x2000;
 const DWORD GAMEPAD_X = 0x4000;
 const DWORD GAMEPAD_Y = 0x8000;
 
-struct ControllerState
-{
-    XINPUT_STATE state;
-    XINPUT_VIBRATION vibration;
-    float vibrateTimeLeft;
-    float vibrateTimeRight;
-    bool connected;
+struct ControllerState {
+  XINPUT_STATE state;
+  XINPUT_VIBRATION vibration;
+  float vibrateTimeLeft;
+  float vibrateTimeRight;
+  bool connected;
+};
+
+enum KeyState { Released, JustReleased, Pressed, JustPressed };
+
+struct KeyBinding {
+private:
+  unsigned int keyCode;
+  KeyState keyState;
+
+public:
+  KeyBinding() : keyCode(0), keyState(KeyState::JustReleased){};
+  KeyBinding(unsigned int keyCode, KeyState keyState)
+      : keyCode(keyCode), keyState(keyState){};
+  ~KeyBinding(){};
+
+  friend struct GameCommand;
+  friend class Input;
+};
+
+struct GameCommand {
+private:
+  std::string name;
+  std::vector<KeyBinding> chord;
+
+public:
+  GameCommand() : name(""), chord(0){};
+  GameCommand(std::string name, const unsigned int keyCode,
+              const KeyState keyState)
+      : name(name)
+  {
+    chord.push_back(KeyBinding(keyCode, keyState));
+  };
+  GameCommand(std::string name, const KeyBinding& keyBinding) : name(name)
+  {
+    chord.push_back(keyBinding);
+  };
+  GameCommand(std::string name, const std::vector<KeyBinding>& chord)
+      : name(name), chord(chord){};
+  ~GameCommand(){};
+
+  friend class Input;
 };
 
 class Input
 {
-  private:
-    bool keysDown[inputNS::KEYS_ARRAY_LEN];       // true if specified key is down
-    bool keysPressed[inputNS::KEYS_ARRAY_LEN];    // true if specified key was pressed
-    std::string textIn;                           // user entered text
-    char charIn;                                  // last character entered
-    bool newLine;                                 // true on start of new line
-    int mouseX, mouseY;                           // mouse screen coordinates
-    int mouseRawX, mouseRawY;                     // high-definition mouse data
-    RAWINPUTDEVICE Rid[1];                        // for high-definition mouse
-    bool mouseCaptured;                           // true if mouse captured
-    bool mouseLButton = false;                    // true if left mouse button down
-    bool mouseMButton = false;                    // true if middle mouse button down
-    bool mouseRButton = false;                    // true if right mouse button down
-    bool mouseX1Button = false;                   // true if X1 mouse button down
-    bool mouseX2Button = false;                   // true if X2 mouse button down
-    ControllerState controllers[MAX_CONTROLLERS]; // state of controllers
+private:
+  // Keyboard
+  std::unordered_map<GameCommands, GameCommand*> keyMap;
+  std::unordered_map<GameCommands, GameCommand*> activeKeyMap;
+  std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardState;
+  std::array<BYTE, inputNS::KEYS_ARRAY_LEN> keyboardStateBuffer;
+  inline const bool isPressed(int keyCode) const
+  {
+    return (GetAsyncKeyState(keyCode) & 0x8000) ? 1 : 0;
+  };
 
-    const ControllerState *getControllerState(UINT n)
-    {
-        return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
-    }
+  // Mouse
+  int mouseX, mouseY;
+  int mouseRawX, mouseRawY;
+  RAWINPUTDEVICE Rid[1];
+  bool mouseCaptured;
+  bool mouseLButton = false;
+  bool mouseMButton = false;
+  bool mouseRButton = false;
+  bool mouseX1Button = false;
+  bool mouseX2Button = false;
 
-  public:
-    Input();
-    virtual ~Input();
-    void initialise(HWND, bool);
-    void keyDown(WPARAM);
-    void keyUp(WPARAM);
-    void keyIn(WPARAM);
-    bool isKeyDown(UCHAR) const;
-    bool wasKeyPressed(UCHAR) const;
-    void clearKeyPress(UCHAR);
-    void clear(UCHAR);
-    bool anyKeyPressed() const;
-    void clearAll() { clear(inputNS::KEYS_MOUSE_TEXT); }
-    void cleartextIn() { this->textIn.clear(); }
-    std::string getTextIn() { return this->textIn; }
-    char getCharIn() { return this->charIn; }
+  // Controllers
+  ControllerState controllers[MAX_CONTROLLERS];
+  const ControllerState* getControllerState(UINT n)
+  {
+    return &controllers[(n > MAX_CONTROLLERS - 1) ? MAX_CONTROLLERS - 1 : n];
+  }
 
-    void mouseIn(LPARAM);
-    void mouseRawIn(LPARAM);
+public:
+  Input();
+  virtual ~Input();
+  void initialise(HWND, bool);
 
-    void setMouseLButton(bool b) { this->mouseLButton = b; }
-    void setMouseMButton(bool b) { this->mouseMButton = b; }
-    void setMouseRButton(bool b) { this->mouseRButton = b; }
+  // Keyboard
+  void pollKeys();
+  const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
+  std::vector<GameCommands> getActiveGameCommands();
 
-    void setMouseXButton(WPARAM wParam)
-    {
-        this->mouseX1Button = (bool)(wParam & MK_XBUTTON1);
-        this->mouseX2Button = (bool)(wParam & MK_XBUTTON2);
-    }
+  // Mouse
+  void mouseIn(LPARAM);
+  void mouseRawIn(LPARAM);
 
-    int getMouseX() const { return this->mouseX; }
-    int getMouseY() const { return this->mouseY; }
+  void setMouseLButton(bool b) { this->mouseLButton = b; }
+  void setMouseMButton(bool b) { this->mouseMButton = b; }
+  void setMouseRButton(bool b) { this->mouseRButton = b; }
 
-    int getMouseRawX() const { return this->mouseRawX; }
-    int getMouseRawY() const { return this->mouseRawY; }
+  void setMouseXButton(WPARAM wParam)
+  {
+    this->mouseX1Button = (bool)(wParam & MK_XBUTTON1);
+    this->mouseX2Button = (bool)(wParam & MK_XBUTTON2);
+  }
 
-    bool getMouseLButton() const { return mouseLButton; }
-    bool getMouseMButton() const { return mouseMButton; }
-    bool getMouseRButton() const { return mouseRButton; }
-    bool getMouseX1Button() const { return mouseX1Button; }
-    bool getMouseX2Button() const { return mouseX2Button; }
+  int getMouseX() const { return this->mouseX; }
+  int getMouseY() const { return this->mouseY; }
 
-    void checkControllers();
-    void readControllers();
+  int getMouseRawX() const { return this->mouseRawX; }
+  int getMouseRawY() const { return this->mouseRawY; }
 
-    const WORD getGamepadButtons(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.wButtons;
-    }
+  bool getMouseLButton() const { return mouseLButton; }
+  bool getMouseMButton() const { return mouseMButton; }
+  bool getMouseRButton() const { return mouseRButton; }
+  bool getMouseX1Button() const { return mouseX1Button; }
+  bool getMouseX2Button() const { return mouseX2Button; }
 
-    // Match button bit pattern
-    bool getGamepadButtonState(UINT n, DWORD bitPattern)
-    {
-        return (this->getGamepadButtons(n) & bitPattern) != 0;
-    }
+  void checkControllers();
+  void readControllers();
 
-    BYTE getGamepadLeftTrigger(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.bLeftTrigger;
-    }
+  const WORD getGamepadButtons(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.wButtons;
+  }
 
-    BYTE getGamepadRightTrigger(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.bRightTrigger;
-    }
+  bool getGamepadButtonState(UINT n, DWORD bitPattern)
+  {
+    return (this->getGamepadButtons(n) & bitPattern) != 0;
+  }
 
-    SHORT getGamePadThumbLX(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbLX;
-    }
+  BYTE getGamepadLeftTrigger(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.bLeftTrigger;
+  }
 
-    SHORT getGamePadThumbLY(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbLY;
-    }
+  BYTE getGamepadRightTrigger(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.bRightTrigger;
+  }
 
-    SHORT getGamePadThumbRX(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbRX;
-    }
+  SHORT getGamePadThumbLX(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbLX;
+  }
 
-    SHORT getGamePadThumbRY(UINT n)
-    {
-        return (*this->getControllerState(n)).state.Gamepad.sThumbRY;
-    }
+  SHORT getGamePadThumbLY(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbLY;
+  }
 
-    // Gamepad vibrate
-    // left: low freq, right: high freq
-    void gamePadVibrateLeft(UINT n, WORD speed, float sec)
-    {
-        if (n > MAX_CONTROLLERS - 1)
-            n = MAX_CONTROLLERS - 1;
-        this->controllers[n].vibration.wLeftMotorSpeed = speed;
-        this->controllers[n].vibrateTimeLeft = sec;
-    }
+  SHORT getGamePadThumbRX(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbRX;
+  }
 
-    void gamePadVibrateRight(UINT n, WORD speed, float sec)
-    {
-        if (n > MAX_CONTROLLERS - 1)
-            n = MAX_CONTROLLERS - 1;
-        this->controllers[n].vibration.wRightMotorSpeed = speed;
-        this->controllers[n].vibrateTimeRight = sec;
-    }
+  SHORT getGamePadThumbRY(UINT n)
+  {
+    return (*this->getControllerState(n)).state.Gamepad.sThumbRY;
+  }
 
-    void vibrateControllers(float frameTime);
+  // Gamepad vibrate
+  // left: low freq, right: high freq
+  void gamePadVibrateLeft(UINT n, WORD speed, float sec)
+  {
+    if (n > MAX_CONTROLLERS - 1) n = MAX_CONTROLLERS - 1;
+    this->controllers[n].vibration.wLeftMotorSpeed = speed;
+    this->controllers[n].vibrateTimeLeft = sec;
+  }
+
+  void gamePadVibrateRight(UINT n, WORD speed, float sec)
+  {
+    if (n > MAX_CONTROLLERS - 1) n = MAX_CONTROLLERS - 1;
+    this->controllers[n].vibration.wRightMotorSpeed = speed;
+    this->controllers[n].vibrateTimeRight = sec;
+  }
+
+  void vibrateControllers(float frameTime);
 };

@@ -1,8 +1,8 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include "graphics.h"
 #include "constants.h"
+#include "graphics.h"
 
 class TextureManager
 {
@@ -10,8 +10,8 @@ private:
   UINT width;         // width of texture in pixels
   UINT height;        // height of texture in pixels
   LP_TEXTURE texture; // pointer to texture
-  const char *file;   // name of file
-  Graphics *graphics; // save pointer to graphics
+  const char* file;   // name of file
+  Graphics* graphics; // save pointer to graphics
   bool initialised;   // true when successfully initialized
   HRESULT hr;         // standard return type
 
@@ -31,7 +31,7 @@ public:
   // Pre: *g points to Graphics object
   //      *file points to name of texture file to load
   // Post: The texture file is loaded
-  virtual bool initialise(Graphics *g, const char *file);
+  virtual bool initialise(Graphics* g, const char* file);
 
   // Release resources
   virtual void onLostDevice();

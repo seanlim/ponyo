@@ -1,14 +1,14 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include "textureManager.h"
 #include "constants.h"
+#include "textureManager.h"
 
 class Image
 {
 protected:
-  Graphics *graphics;
-  TextureManager *textureManager;
+  Graphics* graphics;
+  TextureManager* textureManager;
   SpriteData spriteData;  // obtains the data required to draw the image by
   COLOR_ARGB colorFilter; // applied as a color filter (use WHITE for no change)
   int cols;               // number of cols (1 to n) in multi-frame sprite
@@ -26,7 +26,7 @@ public:
   // virtual ~Image();
 
   // Return reference to SpriteData structure.
-  const virtual SpriteData &getSpriteInfo() { return spriteData; }
+  const virtual SpriteData& getSpriteInfo() { return spriteData; }
 
   // Return visible parameter.
   virtual bool getVisible() { return visible; }
@@ -47,10 +47,16 @@ public:
   virtual int getHeight() { return spriteData.height; }
 
   // Return center X.
-  virtual float getCenterX() { return spriteData.x + spriteData.width / 2 * getScale(); }
+  virtual float getCenterX()
+  {
+    return spriteData.x + spriteData.width / 2 * getScale();
+  }
 
   // Return center Y.
-  virtual float getCenterY() { return spriteData.y + spriteData.height / 2 * getScale(); }
+  virtual float getCenterY()
+  {
+    return spriteData.y + spriteData.height / 2 * getScale();
+  }
 
   // Return rotation angle in degrees.
   virtual float getDegrees() { return spriteData.angle * (180.0f / (float)PI); }
@@ -90,7 +96,10 @@ public:
 
   // Set rotation angle in degrees.
   // 0 degrees is up. Angles progress clockwise.
-  virtual void setDegrees(float deg) { spriteData.angle = deg * ((float)PI / 180.0f); }
+  virtual void setDegrees(float deg)
+  {
+    spriteData.angle = deg * ((float)PI / 180.0f);
+  }
 
   // Set rotation angle in radians.
   // 0 radians is up. Angles progress clockwise.
@@ -128,12 +137,13 @@ public:
   virtual void setColorFilter(COLOR_ARGB color) { colorFilter = color; }
 
   // Set TextureManager
-  virtual void setTextureManager(TextureManager *textureM)
+  virtual void setTextureManager(TextureManager* textureM)
   {
     textureManager = textureM;
   }
 
-  virtual bool initialise(Graphics *g, int width, int height, int ncols, TextureManager *textureM);
+  virtual bool initialise(Graphics* g, int width, int height, int ncols,
+                          TextureManager* textureM);
 
   // Flip image horizontally (mirror)
   virtual void flipHorizontal(bool flip) { spriteData.flipHorizontal = flip; }
@@ -145,7 +155,10 @@ public:
   virtual void draw(COLOR_ARGB color = graphicsNS::WHITE);
 
   //   The current SpriteData.rect is used to select the texture.
-  virtual void draw(SpriteData sd, COLOR_ARGB color = graphicsNS::WHITE); // draw with SpriteData using color as filter
+  virtual void
+  draw(SpriteData sd,
+       COLOR_ARGB color =
+           graphicsNS::WHITE); // draw with SpriteData using color as filter
 
   // Update the animation. frameTime is used to regulate the speed.
   virtual void update(float frameTime);
