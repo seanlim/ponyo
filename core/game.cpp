@@ -19,51 +19,40 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
 {
   if (this->initialised) {
     switch (msg) {
-    // case WM_KEYDOWN:
-    // case WM_SYSKEYDOWN: // key down
-    //     input->keyDown(wParam);
-    //     break;
-    // case WM_KEYUP:
-    // case WM_SYSKEYUP: // key up
-    //     input->keyUp(wParam);
-    //     break;
-    // case WM_CHAR: // character entered
-    //     input->keyIn(wParam);
-    //     break;
-    case WM_MOUSEMOVE: // mouse moved
+    case WM_MOUSEMOVE:
       input->mouseIn(lParam);
       break;
-    case WM_INPUT: // raw mouse data in
+    case WM_INPUT:
       input->mouseRawIn(lParam);
       break;
-    case WM_LBUTTONDOWN: // left mouse button down
+    case WM_LBUTTONDOWN:
       input->setMouseLButton(true);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
-    case WM_LBUTTONUP: // left mouse button up
+    case WM_LBUTTONUP:
       input->setMouseLButton(false);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
-    case WM_MBUTTONDOWN: // middle mouse button down
+    case WM_MBUTTONDOWN:
       input->setMouseMButton(true);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
-    case WM_MBUTTONUP: // middle mouse button up
+    case WM_MBUTTONUP:
       input->setMouseMButton(false);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
-    case WM_RBUTTONDOWN: // right mouse button down
+    case WM_RBUTTONDOWN:
       input->setMouseRButton(true);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
-    case WM_RBUTTONUP: // right mouse button up
+    case WM_RBUTTONUP:
       input->setMouseRButton(false);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
     case WM_XBUTTONDOWN:
-    case WM_XBUTTONUP: // mouse X button down/up
+    case WM_XBUTTONUP:
       input->setMouseXButton(wParam);
-      input->mouseIn(lParam); // mouse position
+      input->mouseIn(lParam);
       break;
     case WM_DEVICECHANGE:
       input->checkControllers();
@@ -189,9 +178,6 @@ void Game::run(HWND hwnd)
 
   this->input->readControllers();
   this->input->pollKeys();
-
-  // Clear input after all key checks are done
-  // this->input->clear(inputNS::KEYS_PRESSED);
 }
 
 void Game::releaseAll() {}

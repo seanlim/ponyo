@@ -170,7 +170,6 @@ public:
   bool getMouseX1Button() const { return mouseX1Button; }
   bool getMouseX2Button() const { return mouseX2Button; }
 
-  // Controllers/Gamepad
   void checkControllers();
   void readControllers();
 
@@ -179,7 +178,6 @@ public:
     return (*this->getControllerState(n)).state.Gamepad.wButtons;
   }
 
-  // Match button bit pattern
   bool getGamepadButtonState(UINT n, DWORD bitPattern)
   {
     return (this->getGamepadButtons(n) & bitPattern) != 0;
