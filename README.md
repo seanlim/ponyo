@@ -4,7 +4,7 @@ Ponyo is a 2D C++ game engine built on DirectX.
 
 ## Core engine
 
-Main engine code resides in `core/`.
+Main engine code resides in `core/`. Some built-in commands are `SHIFT` + `ESC` to quit, and `F2` to toggle debug info.
 
 ## Spacewar
 
