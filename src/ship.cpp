@@ -6,7 +6,8 @@ Ship::Ship() : Entity()
   spriteData.height = shipNS::HEIGHT;
   spriteData.x = shipNS::X; // location on screen
   spriteData.y = shipNS::Y;
-  spriteData.rect.bottom = shipNS::HEIGHT; // rectangle to select parts of an image
+  spriteData.rect.bottom =
+      shipNS::HEIGHT; // rectangle to select parts of an image
   spriteData.rect.right = shipNS::WIDTH;
   velocity.x = 0; // velocity X
   velocity.y = 0; // velocity Y
@@ -20,8 +21,8 @@ Ship::Ship() : Entity()
   collisionType = entityNS::CIRCLE;
 }
 
-bool Ship::initialise(Game *game, int width, int height, int ncols,
-                      TextureManager *textureManager)
+bool Ship::initialise(Game* game, int width, int height, int ncols,
+                      TextureManager* textureManager)
 {
   shield.initialise(game->getGraphics(), width, height, ncols, textureManager);
   shield.setFrames(shipNS::SHIELD_START_FRAME, shipNS::SHIELD_END_FRAME);
@@ -51,34 +52,28 @@ void Ship::update(float frameTime)
   {
     spriteData.x = GAME_WIDTH - shipNS::WIDTH; // position at right screen edge
     velocity.x = -velocity.x;                  // reverse X direction
-  }
-  else if (spriteData.x < 0) // else if hit left screen edge
+  } else if (spriteData.x < 0)                 // else if hit left screen edge
   {
     spriteData.x = 0;         // position at left screen edge
     velocity.x = -velocity.x; // reverse X direction
   }
   if (spriteData.y > GAME_HEIGHT - shipNS::HEIGHT) // if hit bottom screen edge
   {
-    spriteData.y = GAME_HEIGHT - shipNS::HEIGHT; // position at bottom screen edge
-    velocity.y = -velocity.y;                    // reverse Y direction
-  }
-  else if (spriteData.y < 0) // else if hit top screen edge
+    spriteData.y =
+        GAME_HEIGHT - shipNS::HEIGHT; // position at bottom screen edge
+    velocity.y = -velocity.y;         // reverse Y direction
+  } else if (spriteData.y < 0)        // else if hit top screen edge
   {
     spriteData.y = 0;         // position at top screen edge
     velocity.y = -velocity.y; // reverse Y direction
   }
-  if (shieldOn)
-  {
+  if (shieldOn) {
     shield.update(frameTime);
-    if (shield.getAnimationComplete())
-    {
+    if (shield.getAnimationComplete()) {
       shieldOn = false;
       shield.setAnimationComplete(false);
     }
   }
 }
 
-void Ship::damage(WEAPON weapon)
-{
-  shieldOn = true;
-}
+void Ship::damage(WEAPON weapon) { shieldOn = true; }

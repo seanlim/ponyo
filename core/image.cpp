@@ -28,23 +28,20 @@ Image::Image()
 
 // Image::~Image() {}
 
-bool Image::initialise(Graphics *g, int width, int height, int ncols, TextureManager *textureM)
+bool Image::initialise(Graphics* g, int width, int height, int ncols,
+                       TextureManager* textureM)
 {
-  try
-  {
+  try {
     graphics = g;
     textureManager = textureM;
 
     spriteData.texture = textureManager->getTexture();
-    if (width == 0)
-      width = textureManager->getWidth();
+    if (width == 0) width = textureManager->getWidth();
     spriteData.width = width;
-    if (height == 0)
-      height = textureManager->getHeight();
+    if (height == 0) height = textureManager->getHeight();
     spriteData.height = height;
     cols = ncols;
-    if (cols == 0)
-      cols = 1;
+    if (cols == 0) cols = 1;
 
     // configure spriteData.rect to draw currentFrame
     spriteData.rect.left = (currentFrame % cols) * spriteData.width;
@@ -53,9 +50,7 @@ bool Image::initialise(Graphics *g, int width, int height, int ncols, TextureMan
     spriteData.rect.top = (currentFrame / cols) * spriteData.height;
     // bottom edge + 1
     spriteData.rect.bottom = spriteData.rect.top + spriteData.height;
-  }
-  catch (...)
-  {
+  } catch (...) {
     return false;
   }
   initialised = true;
@@ -64,8 +59,7 @@ bool Image::initialise(Graphics *g, int width, int height, int ncols, TextureMan
 
 void Image::draw(COLOR_ARGB color)
 {
-  if (!this->visible || this->graphics == NULL)
-    return;
+  if (!this->visible || this->graphics == NULL) return;
 
   this->spriteData.texture = this->textureManager->getTexture();
   if (color == graphicsNS::FILTER)
@@ -76,8 +70,7 @@ void Image::draw(COLOR_ARGB color)
 
 void Image::draw(SpriteData sd, COLOR_ARGB color)
 {
-  if (!visible || graphics == NULL)
-    return;
+  if (!visible || graphics == NULL) return;
   sd.rect = spriteData.rect;
   sd.texture = textureManager->getTexture();
 
@@ -89,21 +82,16 @@ void Image::draw(SpriteData sd, COLOR_ARGB color)
 
 void Image::update(float frameTime)
 {
-  if (this->endFrame - this->startFrame > 0)
-  {
+  if (this->endFrame - this->startFrame > 0) {
     this->animTimer += frameTime;
-    if (this->animTimer > this->frameDelay)
-    {
+    if (this->animTimer > this->frameDelay) {
       this->animTimer -= this->frameDelay;
       this->currentFrame++;
-      if (this->currentFrame < this->startFrame || this->currentFrame > this->endFrame)
-      {
-        if (loop)
-        {
+      if (this->currentFrame < this->startFrame ||
+          this->currentFrame > this->endFrame) {
+        if (loop) {
           this->currentFrame = this->startFrame;
-        }
-        else
-        {
+        } else {
           this->currentFrame = this->endFrame;
           this->animComplete = true;
         }
@@ -115,8 +103,7 @@ void Image::update(float frameTime)
 
 void Image::setCurrentFrame(int c)
 {
-  if (c >= 0)
-  {
+  if (c >= 0) {
     currentFrame = c;
     animComplete = false;
     setRect();

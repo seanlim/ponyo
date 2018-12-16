@@ -2,13 +2,12 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "game.h"
-#include "textureManager.h"
 #include "image.h"
 #include "planet.h"
 #include "ship.h"
+#include "textureManager.h"
 
-class SpaceWar : public Game
-{
+class SpaceWar : public Game {
   TextureManager nebulaTexture;
   TextureManager gameTexture;
   Planet planet;

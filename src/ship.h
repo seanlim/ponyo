@@ -1,8 +1,8 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include "entity.h"
 #include "constants.h"
+#include "entity.h"
 
 namespace shipNS
 {
@@ -32,7 +32,8 @@ class Ship : public Entity
 public:
   Ship();
   virtual void draw();
-  virtual bool initialise(Game *game, int width, int height, int nCols, TextureManager *textureManager);
+  virtual bool initialise(Game* game, int width, int height, int nCols,
+                          TextureManager* textureManager);
   void update(float frameTime);
   void damage(WEAPON);
 };
