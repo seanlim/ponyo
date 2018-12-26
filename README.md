@@ -29,7 +29,7 @@ To get the key state in the current frame, use the `getKeyboardKeyState` getter 
 
 The input class keeps a map of `GameCommands` to `GameCommand` pointers. A game command can be created like such:
 
-```
+```cpp
 // Assign GameCommands in the Input Constructor
 keyMap[GameCommands::showFPS] =
       new GameCommand("Toggle FPS", VK_F2, KeyState::JustPressed);
