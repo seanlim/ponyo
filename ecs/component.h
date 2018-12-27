@@ -51,6 +51,6 @@ const unsigned int Component<T>::id(BaseComponent::nextID());
 
 template <typename T> const size_t Component<T>::size(sizeof(T));
 
-struct ExampleComponent : public Component<ExampleComponent> {
-  float x, y;
-};
+// struct ExampleComponent : public Component<ExampleComponent> {
+//   float x, y;
+// };
