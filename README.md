@@ -45,6 +45,10 @@ keyMap[GameCommands::showFPS] =
 
 The `getActiveGameCommands` getter of `Input` returns a vector of currently active GameCommands. From this, actions can be dispatched from a simple loop.
 
+## ECS Support
+
+ECS implementation in `ecs/`.
+
 ## Spacewar
 
 Driver game to test engine in `src/`
