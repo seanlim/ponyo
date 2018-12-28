@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 #include <vector>
 
 #define ENTITY_NULL_HANDLE nullptr;
@@ -12,8 +13,32 @@ typedef unsigned int (*ComponentCreateFunction)(
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 struct BaseComponent {
-  static unsigned int nextID();
+public:
+  static unsigned int registerComponentType(ComponentCreateFunction createFn,
+                                            ComponentFreeFunction freeFn,
+                                            size_t size);
+
   EntityHook entity = ENTITY_NULL_HANDLE; // Blind reference to attached entity
+
+  // Sugar for getters
+  inline static ComponentCreateFunction getTypeCreateFunction(unsigned int id)
+  {
+    return std::get<0>(componentTypes[id]);
+  }
+
+  inline static ComponentFreeFunction getTypeFreeFunction(unsigned int id)
+  {
+    return std::get<1>(componentTypes[id]);
+  }
+  inline static size_t getTypeSize(unsigned int id)
+  {
+    return std::get<2>(componentTypes[id]);
+  }
+
+private:
+  static std::vector<
+      std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
+      componentTypes;
 };
 
 // Recurring template
@@ -46,10 +71,11 @@ const ComponentCreateFunction Component<T>::create(CreateComponent<T>);
 template <typename T>
 const ComponentFreeFunction Component<T>::free(FreeComponent<T>);
 
-template <typename T>
-const unsigned int Component<T>::id(BaseComponent::nextID());
-
 template <typename T> const size_t Component<T>::size(sizeof(T));
+
+template <typename T>
+const unsigned int Component<T>::id(BaseComponent::registerComponentType(
+    CreateComponent<T>, FreeComponent<T>, sizeof(T)));
 
 // struct ExampleComponent : public Component<ExampleComponent> {
 //   float x, y;

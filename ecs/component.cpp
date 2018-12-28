@@ -1,5 +1,15 @@
 #include "component.h"
 
-static unsigned int componentID = 0;
+std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
+    BaseComponent::componentTypes;
 
-unsigned int BaseComponent::nextID() { return componentID++; }
+unsigned int
+BaseComponent::registerComponentType(ComponentCreateFunction createFn,
+                                     ComponentFreeFunction freeFn, size_t size)
+{
+  unsigned int componentID = componentTypes.size();
+  componentTypes.push_back(
+      std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>(
+          createFn, freeFn, size));
+  return componentID;
+}

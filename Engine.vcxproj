@@ -22,6 +22,7 @@
     <ClInclude Include="core\text.h" />
     <ClInclude Include="core\textureManager.h" />
     <ClInclude Include="ecs\component.h" />
+    <ClInclude Include="ecs\system.h" />
     <ClInclude Include="src\planet.h" />
     <ClInclude Include="src\ship.h" />
     <ClInclude Include="src\spacewar.h" />
