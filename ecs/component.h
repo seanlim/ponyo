@@ -8,9 +8,14 @@
 typedef void* EntityHook;
 
 struct BaseComponent;
+
 typedef unsigned int (*ComponentCreateFunction)(
     std::vector<unsigned int>& memory, EntityHook entity, BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
+
+// Global store for base components
+std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
+    BaseComponent::componentTypes;
 
 struct BaseComponent {
 public:
@@ -40,6 +45,17 @@ private:
       std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
       componentTypes;
 };
+
+unsigned int
+BaseComponent::registerComponentType(ComponentCreateFunction createFn,
+                                     ComponentFreeFunction freeFn, size_t size)
+{
+  unsigned int componentID = componentTypes.size();
+  componentTypes.push_back(
+      std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>(
+          createFn, freeFn, size));
+  return componentID;
+}
 
 // Recurring template
 template <typename T> struct Component : BaseComponent {
