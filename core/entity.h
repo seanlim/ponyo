@@ -1,7 +1,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include "constants.h"
+#include "common.h"
 #include "game.h"
 #include "image.h"
 #include "input.h"

@@ -3,7 +3,7 @@
 
 #define D3D_DEBUG_INFO
 
-#include "constants.h"
+#include "common.h"
 #include "gameError.h"
 #include <d3d9.h>
 #include <d3dx9.h>

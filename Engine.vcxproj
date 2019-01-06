@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\constants.h" />
+    <ClInclude Include="core\common.h" />
     <ClInclude Include="core\data-structures\array.h" />
     <ClInclude Include="core\entity.h" />
     <ClInclude Include="core\game.h" />
@@ -23,7 +23,6 @@
     <ClInclude Include="core\text.h" />
     <ClInclude Include="core\textureManager.h" />
     <ClInclude Include="ecs\component.h" />
-    <ClInclude Include="ecs\ecs.h" />
     <ClInclude Include="ecs\system.h" />
     <ClInclude Include="src\planet.h" />
     <ClInclude Include="src\ship.h" />
@@ -39,7 +38,6 @@
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\text.cpp" />
     <ClCompile Include="core\textureManager.cpp" />
-    <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="src\planet.cpp" />
     <ClCompile Include="src\ship.cpp" />
     <ClCompile Include="src\spacewar.cpp" />

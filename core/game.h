@@ -6,7 +6,7 @@
 #include <Mmsystem.h>
 // clang-format on
 
-#include "constants.h"
+#include "common.h"
 #include "gameError.h"
 #include "graphics.h"
 #include "input.h"

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <windows.h>
 
-#include "constants.h"
+#include "common.h"
 #include "game.h"
 #include "graphics.h"
 #include "random.h"

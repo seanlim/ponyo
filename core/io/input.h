@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "constants.h"
+#include "common.h"
 #include "gameError.h"
 
 // High-definition mouse
