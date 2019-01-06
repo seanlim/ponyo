@@ -13,10 +13,6 @@ typedef unsigned int (*ComponentCreateFunction)(Array<unsigned int>& memory,
                                                 BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
-// Global store for base components
-Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
-    BaseComponent::componentTypes;
-
 struct BaseComponent {
 public:
   static unsigned int registerComponentType(ComponentCreateFunction createFn,
@@ -45,6 +41,10 @@ private:
       std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
       componentTypes;
 };
+
+// Global store for base components
+Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
+    BaseComponent::componentTypes;
 
 unsigned int
 BaseComponent::registerComponentType(ComponentCreateFunction createFn,
