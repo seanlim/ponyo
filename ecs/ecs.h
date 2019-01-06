@@ -1,5 +1,6 @@
 #pragma once
 
+#include "array.h"
 #include "component.h"
 #include "system.h"
 #include <map>
@@ -26,25 +27,24 @@ public:
   void removeSystem(System& system);
 
 private:
-  std::vector<System*> systems;
-  std::map<unsigned int, std::vector<unsigned int>> components;
-  std::vector<std::pair<unsigned int,
-                        std::vector<std::pair<unsigned int, unsigned int>*>>>
+  Array<System*> systems;
+  std::map<unsigned int, Array<unsigned int>> components;
+  Array<std::pair<unsigned int, Array<std::pair<unsigned int, unsigned int>>>*>
       entities;
 
   // Inline methods for entities
-  inline std::pair<unsigned int,
-                   std::vector<std::pair<unsigned int, unsigned int>>>*
+  inline std::pair<unsigned int, Array<std::pair<unsigned int, unsigned int>>>*
   hookEntity(EntityHook hook)
   {
-    return (std::pair<unsigned int,
-                      std::vector<std::pair<unsigned int, unsigned int>>>*)hook;
+    return (
+        std::pair<unsigned int, Array<std::pair<unsigned int, unsigned int>>>*)
+        hook;
   }
   inline unsigned int hookToEntityIndex(EntityHook hook)
   {
     return hookEntity(hook)->first;
   }
-  inline std::vector<std::pair<unsigned int, unsigned int>>&
+  inline Array<std::pair<unsigned int, unsigned int>>&
   hookToEntity(EntityHook hook)
   {
     return hookEntity(hook)->second;

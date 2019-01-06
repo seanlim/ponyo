@@ -1,20 +1,20 @@
 #pragma once
 
+#include "array.h"
 #include <tuple>
-#include <vector>
 
 #define ENTITY_NULL_HANDLE nullptr;
 
 typedef void* EntityHook;
 
 struct BaseComponent;
-
-typedef unsigned int (*ComponentCreateFunction)(
-    std::vector<unsigned int>& memory, EntityHook entity, BaseComponent* comp);
+typedef unsigned int (*ComponentCreateFunction)(Array<unsigned int>& memory,
+                                                EntityHook entity,
+                                                BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 // Global store for base components
-std::vector<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
+Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
     BaseComponent::componentTypes;
 
 struct BaseComponent {
@@ -41,7 +41,7 @@ public:
   }
 
 private:
-  static std::vector<
+  static Array<
       std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
       componentTypes;
 };
@@ -66,8 +66,8 @@ template <typename T> struct Component : BaseComponent {
 };
 
 template <typename Component>
-unsigned int CreateComponent(std::vector<unsigned int>& memory,
-                             EntityHook entity, BaseComponent* comp)
+unsigned int CreateComponent(Array<unsigned int>& memory, EntityHook entity,
+                             BaseComponent* comp)
 {
   unsigned int index = memory.size();
   memory.resize(index + Component::size);

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\constants.h" />
+    <ClInclude Include="core\data-structures\array.h" />
     <ClInclude Include="core\entity.h" />
     <ClInclude Include="core\game.h" />
     <ClInclude Include="core\gameError.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\text.cpp" />
     <ClCompile Include="core\textureManager.cpp" />
+    <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="src\planet.cpp" />
     <ClCompile Include="src\ship.cpp" />
     <ClCompile Include="src\spacewar.cpp" />
@@ -84,7 +86,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -98,7 +100,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
