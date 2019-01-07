@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="core\common.h" />
     <ClInclude Include="core\data-structures\array.h" />
+    <ClInclude Include="core\data-structures\map.h" />
     <ClInclude Include="core\entity.h" />
     <ClInclude Include="core\game.h" />
     <ClInclude Include="core\gameError.h" />

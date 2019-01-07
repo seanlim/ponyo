@@ -56,4 +56,4 @@ public:
 
 private:
   Array<System*> systems;
-}
+};
