@@ -156,10 +156,78 @@ void ECS::updateSystems(SystemList& systems, float delta)
   }
 }
 
+// Returns index of component type with the least instances
+unsigned int
+ECS::getLeastCommonComponentID(const Array<unsigned int>& componentTypes,
+                               const Array<unsigned int>& componentFlags)
+{
+  unsigned int minSize = (unsigned int)-1;
+  unsigned int minIndex = (unsigned int)-1;
+
+  for (int i = 0; i < componentTypes.size(); i++) {
+
+    if ((componentFlags[i] & System::FLAG_OPTIONAL) != 0) continue;
+
+    size_t typeSize = BaseComponent::getTypeSize(componentTypes[i]);
+    unsigned int s = components[componentTypes[i]].size() / typeSize;
+    if (s <= minSize) {
+      minSize = s;
+      minIndex = i;
+    }
+  }
+
+  return minIndex;
+}
+
 void ECS::updateComplexSystem(unsigned int index, SystemList& system,
                               float delta,
                               const Array<unsigned int>& componentTypes,
                               Array<BaseComponent*>& componentParam,
                               Array<Array<unsigned int>*>& componentArrays)
 {
+
+  const Array<unsigned int>& componentFlags =
+      systems[index]->getComponentFlags();
+
+  componentParam.resize(std::max(componentParam.size(), componentTypes.size()));
+  componentArrays.resize(
+      std::max(componentArrays.size(), componentTypes.size()));
+
+  for (int i = 0; i < componentTypes.size(); i++)
+    componentArrays[i] = &components[componentTypes[i]];
+
+  // Get index of component type that has the smallest colleciton of components
+  unsigned int minSizeIndex =
+      getLeastCommonComponentID(componentTypes, componentFlags);
+
+  size_t typeSize = BaseComponent::getTypeSize(componentTypes[minSizeIndex]);
+  Array<unsigned int>& smallestComponentCollection =
+      *componentArrays[minSizeIndex];
+
+  for (int i = 0; i < smallestComponentCollection.size(); i += typeSize) {
+    componentParam[minSizeIndex] =
+        (BaseComponent*)&smallestComponentCollection[i];
+
+    Array<ComponentReference>& entityComponents =
+        componentsFrom(componentParam[minSizeIndex]->entity);
+
+    bool isValid = true;
+
+    for (int j = 0; j < componentTypes.size(); j++) {
+      if (j == minSizeIndex) continue;
+
+      // TODO: getComponentInternal may not return the correct component in this
+      // case
+      componentParam[j] =
+          getComponentInternal(entityComponents, componentTypes[j]);
+
+      if (componentParam[j] == nullptr &&
+          (componentFlags[j] & System::FLAG_OPTIONAL) == 0) {
+        isValid = false;
+        break;
+      }
+    }
+
+    if (isValid) systems[index]->updateComponents(delta, &componentParam[0]);
+  }
 }

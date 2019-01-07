@@ -4,6 +4,7 @@
 #include "component.h"
 #include "map.h"
 #include "system.h"
+#include <algorithm>
 
 // pair (Component id, Component index)
 typedef std::pair<unsigned int, unsigned int> ComponentReference;
