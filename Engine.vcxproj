@@ -40,6 +40,7 @@
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\text.cpp" />
     <ClCompile Include="core\textureManager.cpp" />
+    <ClCompile Include="ecs\component.cpp" />
     <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="src\planet.cpp" />
     <ClCompile Include="src\ship.cpp" />
@@ -87,7 +88,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)ecs;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -101,7 +102,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)core\data-structures;$(SolutionDir)src;$(SolutionDir)core\os;$(SolutionDir)core\math;$(SolutionDir)core\io;$(SolutionDir)ecs;$(SolutionDir)core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -8,8 +8,8 @@
 
 // pair (Component id, Component index)
 typedef std::pair<unsigned int, unsigned int> ComponentReference;
-// pair (Entity id, components)
-typedef std::pair<unsigned int, Array<ComponentReference>> Entity;
+// pair (ECSEntity id, components)
+typedef std::pair<unsigned int, Array<ComponentReference>> ECSEntity;
 
 class ECS
 {
@@ -54,10 +54,10 @@ private:
   Array<System*> systems;
   // Map component id to concrete components
   Map<unsigned int, Array<unsigned int>> components;
-  Array<Entity*> entities;
+  Array<ECSEntity*> entities;
 
   // Inline helpers
-  inline Entity* entityFrom(EntityHook hook) { return (Entity*)hook; }
+  inline ECSEntity* entityFrom(EntityHook hook) { return (ECSEntity*)hook; }
   inline unsigned int entityIDFrom(EntityHook hook)
   {
     return entityFrom(hook)->first;

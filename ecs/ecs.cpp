@@ -21,7 +21,7 @@ EntityHook ECS::makeEntity(BaseComponent* component,
                            const unsigned int* componentIDs,
                            size_t numComponents)
 {
-  Entity* newEntity = new Entity();
+  ECSEntity* newEntity = new ECSEntity();
   EntityHook hook = (EntityHook)newEntity;
 
   // Set ID

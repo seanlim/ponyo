@@ -42,25 +42,10 @@ private:
       componentTypes;
 };
 
-// Global store for base components
-Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
-    BaseComponent::componentTypes;
-
-unsigned int
-BaseComponent::registerComponentType(ComponentCreateFunction createFn,
-                                     ComponentFreeFunction freeFn, size_t size)
-{
-  unsigned int componentID = componentTypes.size();
-  componentTypes.push_back(
-      std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>(
-          createFn, freeFn, size));
-  return componentID;
-}
-
 // Recurring template
 template <typename T> struct Component : BaseComponent {
-  static const ComponentCreateFunction create;
-  static const ComponentFreeFunction free;
+  static const ComponentCreateFunction createFunction;
+  static const ComponentFreeFunction freeFunction;
   static const unsigned int id;
   static const size_t size;
 };
@@ -83,9 +68,9 @@ template <typename Component> void FreeComponent(BaseComponent* comp)
 }
 
 template <typename T>
-const ComponentCreateFunction Component<T>::create(CreateComponent<T>);
+const ComponentCreateFunction Component<T>::createFunction(CreateComponent<T>);
 template <typename T>
-const ComponentFreeFunction Component<T>::free(FreeComponent<T>);
+const ComponentFreeFunction Component<T>::freeFunction(FreeComponent<T>);
 
 template <typename T> const size_t Component<T>::size(sizeof(T));
 
