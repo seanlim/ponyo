@@ -61,17 +61,16 @@ void ECS::addComponentInternal(EntityHook hook,
   entityComponents.push_back(newComponent);
 }
 
-void ECS::deleteComponent(unsigned int componentType, unsigned int componentID)
+void ECS::deleteComponent(unsigned int componentID, unsigned int index)
 {
-  Array<unsigned int>& componentInstances = components[componentType];
+  Array<unsigned int>& componentInstances = components[componentID];
   ComponentFreeFunction freeFn =
-      BaseComponent::getTypeFreeFunction(componentType);
-  size_t typeSize = BaseComponent::getTypeSize(componentType);
+      BaseComponent::getTypeFreeFunction(componentID);
+  size_t typeSize = BaseComponent::getTypeSize(componentID);
 
   unsigned int srcIndex = componentInstances.size() - typeSize;
 
-  BaseComponent* destComponent =
-      (BaseComponent*)&componentInstances[componentID];
+  BaseComponent* destComponent = (BaseComponent*)&componentInstances[index];
   BaseComponent* sourceComponent =
       (BaseComponent*)&componentInstances[srcIndex];
 
@@ -104,11 +103,11 @@ void ECS::deleteComponent(unsigned int componentType, unsigned int componentID)
 }
 
 // Delete component in entity
-bool ECS::removeComponentInternal(EntityHook hook, unsigned int componentID)
+bool ECS::removeComponentInternal(EntityHook hook, unsigned int index)
 {
   Array<ComponentReference>& entityComponents = componentsFrom(hook);
   for (int i = 0; i < entityComponents.size(); i++) {
-    if (componentID == entityComponents[i].first) {
+    if (index == entityComponents[i].first) {
       deleteComponent(entityComponents[i].first, entityComponents[i].second);
       unsigned int srcIndex = entityComponents.size() - 1;
       unsigned int destIndex = i;
@@ -118,4 +117,19 @@ bool ECS::removeComponentInternal(EntityHook hook, unsigned int componentID)
     }
   }
   return false;
+}
+
+BaseComponent*
+ECS::getComponentInternal(Array<ComponentReference>& entityComponents,
+                          unsigned int componentID)
+{
+  for (int i = 0; i < entityComponents.size(); i++) {
+    if (componentID == entityComponents[i].first) {
+      // Access component collection and get collection at index (from component
+      // ref)
+      return (
+          BaseComponent*)&components[componentID][entityComponents[i].second];
+    }
+  }
+  return nullptr;
 }
