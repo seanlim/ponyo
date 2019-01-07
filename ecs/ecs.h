@@ -5,7 +5,7 @@
 #include "map.h"
 #include "system.h"
 
-// pair (Component type, Component id)
+// pair (Component id, Component index)
 typedef std::pair<unsigned int, unsigned int> ComponentReference;
 // pair (Entity id, components)
 typedef std::pair<unsigned int, Array<ComponentReference>> Entity;
@@ -25,7 +25,7 @@ public:
   template <class Component>
   void addComponent(EntityHook hook, Component* component)
   {
-    addComponentInternal(hook, componentsFrom(hook), Component::ID, component);
+    addComponentInternal(hook, componentsFrom(hook), Component::id, component);
 
     // TODO: Notify listeners
   }
@@ -33,30 +33,29 @@ public:
   template <class Component> void removeComponent(EntityHook hook)
   {
     // TODO: Notify listeners
-    return removeComponentInternal(hook, Component::ID);
+    return removeComponentInternal(hook, Component::id);
   }
 
-  template <class Component> void getComponent(EntityHook hook)
+  template <class Component> Component* getComponent(EntityHook hook)
   {
-    return (Component*)getComponentInternal(
-        componentsFrom(hook), components[Component::ID], Component::ID);
+    return (Component*)getComponentInternal(componentsFrom(hook),
+                                            Component::id);
   }
 
   BaseComponent* getComponentByType(EntityHook hook, unsigned int componentID)
   {
-    return getComponentInternal(componentsFrom(hook), components[componentID],
-                                componentID);
+    return getComponentInternal(componentsFrom(hook), componentID);
   }
   // Systems
   void updateSystems(SystemList& systems, float delta);
 
 private:
   Array<System*> systems;
-  // map (Component type, Component id)
+  // Map component id to concrete components
   Map<unsigned int, Array<unsigned int>> components;
   Array<Entity*> entities;
 
-  // Inline methods for entities
+  // Inline helpers
   inline Entity* entityFrom(EntityHook hook) { return (Entity*)hook; }
   inline unsigned int entityIDFrom(EntityHook hook)
   {
@@ -68,13 +67,13 @@ private:
   }
 
   void deleteComponent(unsigned int componentID, unsigned int index);
-  bool removeComponentInternal(EntityHook hook, unsigned int componentID);
+  bool removeComponentInternal(EntityHook hook, unsigned int index);
   void addComponentInternal(EntityHook hook,
                             Array<ComponentReference>& entityComponents,
                             unsigned int componentID, BaseComponent* component);
   BaseComponent*
   getComponentInternal(Array<ComponentReference>& entityComponents,
-                       Array<unsigned int>& array, unsigned int componentID);
+                       unsigned int componentID);
 
   // Complex systems are systems that have more than one component
   void updateComplexSystem(unsigned int index, SystemList& system, float delta,
