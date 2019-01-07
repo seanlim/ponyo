@@ -133,3 +133,33 @@ ECS::getComponentInternal(Array<ComponentReference>& entityComponents,
   }
   return nullptr;
 }
+
+void ECS::updateSystems(SystemList& systems, float delta)
+{
+  Array<BaseComponent*> componentParam;
+  Array<Array<unsigned int>*> componentArrays;
+
+  for (int i = 0; i < systems.size(); i++) {
+    const Array<unsigned int>& componentTypes = systems[i]->getComponentTypes();
+    if (componentTypes.size() == 1) {
+      size_t typeSize = BaseComponent::getTypeSize(componentTypes[0]);
+      Array<unsigned int>& concreteComponents = components[componentTypes[0]];
+      for (int j = 0; j < concreteComponents.size(); j += typeSize) {
+        BaseComponent* component = (BaseComponent*)&concreteComponents[j];
+        systems[i]->updateComponents(delta, &component);
+      }
+    } else if (componentTypes.size() > 1) {
+      // More than one component type
+      updateComplexSystem(i, systems, delta, componentTypes, componentParam,
+                          componentArrays);
+    }
+  }
+}
+
+void ECS::updateComplexSystem(unsigned int index, SystemList& system,
+                              float delta,
+                              const Array<unsigned int>& componentTypes,
+                              Array<BaseComponent*>& componentParam,
+                              Array<Array<unsigned int>*>& componentArrays)
+{
+}
