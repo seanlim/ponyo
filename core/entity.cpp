@@ -40,7 +40,7 @@ void Entity::update(float frameTime)
 
 void Entity::ai(float frameTime, Entity& ent) {}
 
-bool Entity::collidesWith(Entity& ent, VECTOR2& collisionVector)
+bool Entity::collidesWith(Entity& ent, Vec2& collisionVector)
 {
   if (!active || !ent.getActive()) return false;
 
@@ -61,7 +61,7 @@ bool Entity::collidesWith(Entity& ent, VECTOR2& collisionVector)
   return false;
 }
 
-bool Entity::collideCircle(Entity& ent, VECTOR2& collisionVector)
+bool Entity::collideCircle(Entity& ent, Vec2& collisionVector)
 {
   distSquared = *getCenter() - *ent.getCenter();
   distSquared.x = distSquared.x * distSquared.x;
@@ -77,7 +77,7 @@ bool Entity::collideCircle(Entity& ent, VECTOR2& collisionVector)
   return false;
 }
 
-bool Entity::collideBox(Entity& ent, VECTOR2& collisionVector)
+bool Entity::collideBox(Entity& ent, Vec2& collisionVector)
 {
   if (!active || !ent.getActive()) return false;
 
@@ -97,7 +97,7 @@ bool Entity::collideBox(Entity& ent, VECTOR2& collisionVector)
   return true;
 }
 
-bool Entity::collideRotatedBox(Entity& ent, VECTOR2& collisionVector)
+bool Entity::collideRotatedBox(Entity& ent, Vec2& collisionVector)
 {
   computeRotatedBox();
   ent.computeRotatedBox();
@@ -139,7 +139,7 @@ bool Entity::projectionsOverlap(Entity& ent)
   return true;
 }
 
-bool Entity::collideRotatedBoxCircle(Entity& ent, VECTOR2& collisionVector)
+bool Entity::collideRotatedBoxCircle(Entity& ent, Vec2& collisionVector)
 {
   float min01, min03, max01, max03, center01, center03;
 
@@ -168,8 +168,8 @@ bool Entity::collideRotatedBoxCircle(Entity& ent, VECTOR2& collisionVector)
   return true;
 }
 
-bool Entity::collideCornerCircle(VECTOR2 corner, Entity& ent,
-                                 VECTOR2& collisionVector)
+bool Entity::collideCornerCircle(Vec2 corner, Entity& ent,
+                                 Vec2& collisionVector)
 {
   distSquared = corner - *ent.getCenter();
   distSquared.x = distSquared.x * distSquared.x;
@@ -190,10 +190,10 @@ void Entity::computeRotatedBox()
   if (rotatedBoxReady) return;
   float projection;
 
-  VECTOR2 rotatedX(cos(spriteData.angle), sin(spriteData.angle));
-  VECTOR2 rotatedY(-sin(spriteData.angle), cos(spriteData.angle));
+  Vec2 rotatedX(cos(spriteData.angle), sin(spriteData.angle));
+  Vec2 rotatedY(-sin(spriteData.angle), cos(spriteData.angle));
 
-  const VECTOR2* center = getCenter();
+  const Vec2* center = getCenter();
   corners[0] = *center + rotatedX * ((float)edge.left * getScale()) +
                rotatedY * ((float)edge.top * getScale());
   corners[1] = *center + rotatedX * ((float)edge.right * getScale()) +
@@ -203,9 +203,9 @@ void Entity::computeRotatedBox()
   corners[3] = *center + rotatedX * ((float)edge.left * getScale()) +
                rotatedY * ((float)edge.bottom * getScale());
 
-  edge01 = VECTOR2(corners[1].x - corners[0].x, corners[1].y - corners[0].y);
+  edge01 = Vec2(corners[1].x - corners[0].x, corners[1].y - corners[0].y);
   graphics->Vector2Normalize(&edge01);
-  edge03 = VECTOR2(corners[3].x - corners[0].x, corners[3].y - corners[0].y);
+  edge03 = Vec2(corners[3].x - corners[0].x, corners[3].y - corners[0].y);
   graphics->Vector2Normalize(&edge03);
 
   projection = graphics->Vector2Dot(&edge01, &corners[0]);
@@ -242,10 +242,10 @@ bool Entity::outsideRect(RECT rect)
 
 void Entity::damage(int weapon) {}
 
-void Entity::bounce(VECTOR2& collisionVector, Entity& ent)
+void Entity::bounce(Vec2& collisionVector, Entity& ent)
 {
-  VECTOR2 Vdiff = ent.getVelocity() - velocity;
-  VECTOR2 cUV = collisionVector;
+  Vec2 Vdiff = ent.getVelocity() - velocity;
+  Vec2 cUV = collisionVector;
   Graphics::Vector2Normalize(&cUV);
   float cUVdotVdiff = Graphics::Vector2Dot(&cUV, &Vdiff);
   float massRatio = 2.0f;
@@ -267,7 +267,7 @@ void Entity::gravityForce(Entity* ent, float frameTime)
        pow((ent->getCenterY() - getCenterY()), 2);
   force = gravity * ent->getMass() * mass / rr;
 
-  VECTOR2 gravityV(ent->getCenterX() - getCenterX(),
+  Vec2 gravityV(ent->getCenterX() - getCenterX(),
                    ent->getCenterY() - getCenterY());
   Graphics::Vector2Normalize(&gravityV);
   gravityV *= force * frameTime;

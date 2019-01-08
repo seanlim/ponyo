@@ -16,18 +16,18 @@ class Entity : public Image
 {
 protected:
   entityNS::COLLISION_TYPE collisionType;
-  VECTOR2 center;
+  Vec2 center;
   float radius;
-  VECTOR2 distSquared;
+  Vec2 distSquared;
   float sumRadiiSquared;
   // edge specifies the collision box relative to the center of the entity.
   // left and top are typically negative numbers
   RECT edge;
-  VECTOR2 corners[4];
-  VECTOR2 edge01, edge03;
+  Vec2 corners[4];
+  Vec2 edge01, edge03;
   float edge01Min, edge01Max, edge03Min, edge03Max;
-  VECTOR2 velocity;
-  VECTOR2 deltaV;
+  Vec2 velocity;
+  Vec2 deltaV;
   float mass;
   float health;
   float rr;
@@ -40,24 +40,24 @@ protected:
   // Circular collision detection
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideCircle(Entity& ent, VECTOR2& collisionVector);
+  virtual bool collideCircle(Entity& ent, Vec2& collisionVector);
   // Axis aligned box collision detection
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideBox(Entity& ent, VECTOR2& collisionVector);
+  virtual bool collideBox(Entity& ent, Vec2& collisionVector);
   // Separating axis collision detection between boxes
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideRotatedBox(Entity& ent, VECTOR2& collisionVector);
+  virtual bool collideRotatedBox(Entity& ent, Vec2& collisionVector);
   // Separating axis collision detection between box and circle
   // Pre: &ent = Other entity
   // Post: &collisionVector contains collision vector
-  virtual bool collideRotatedBoxCircle(Entity& ent, VECTOR2& collisionVector);
+  virtual bool collideRotatedBoxCircle(Entity& ent, Vec2& collisionVector);
   // Separating axis collision detection helper functions
   void computeRotatedBox();
   bool projectionsOverlap(Entity& ent);
-  bool collideCornerCircle(VECTOR2 corner, Entity& ent,
-                           VECTOR2& collisionVector);
+  bool collideCornerCircle(Vec2 corner, Entity& ent,
+                           Vec2& collisionVector);
 
 public:
   Entity();
@@ -66,9 +66,9 @@ public:
   // Getters
 
   // Return center of scaled Entity as screen x,y.
-  virtual const VECTOR2* getCenter()
+  virtual const Vec2* getCenter()
   {
-    center = VECTOR2(getCenterX(), getCenterY());
+    center = Vec2(getCenterX(), getCenterY());
     return &center;
   }
 
@@ -79,14 +79,14 @@ public:
   virtual const RECT& getEdge() const { return edge; }
 
   // Return corner c of ROTATED_BOX
-  virtual const VECTOR2* getCorner(UINT c) const
+  virtual const Vec2* getCorner(UINT c) const
   {
     if (c >= 4) c = 0;
     return &corners[c];
   }
 
   // Return velocity vector.
-  virtual const VECTOR2 getVelocity() const { return velocity; }
+  virtual const Vec2 getVelocity() const { return velocity; }
 
   // Return active.
   virtual bool getActive() const { return active; }
@@ -104,10 +104,10 @@ public:
   virtual entityNS::COLLISION_TYPE getCollisionType() { return collisionType; }
 
   // Setters
-  virtual void setVelocity(VECTOR2 v) { velocity = v; }
+  virtual void setVelocity(Vec2 v) { velocity = v; }
 
   // Set delta velocity. Added to velocity in update().
-  virtual void setDeltaV(VECTOR2 dv) { deltaV = dv; }
+  virtual void setDeltaV(Vec2 dv) { deltaV = dv; }
 
   virtual void setActive(bool a) { active = a; }
 
@@ -132,11 +132,11 @@ public:
 
   virtual bool outsideRect(RECT rect);
 
-  virtual bool collidesWith(Entity& ent, VECTOR2& collisionVector);
+  virtual bool collidesWith(Entity& ent, Vec2& collisionVector);
 
   virtual void damage(int weapon);
 
-  void bounce(VECTOR2& collisionVector, Entity& ent);
+  void bounce(Vec2& collisionVector, Entity& ent);
 
   void gravityForce(Entity* other, float frameTime);
 };

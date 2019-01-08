@@ -33,7 +33,7 @@ void SpaceWar::initialise(HWND hwnd)
   ship1.setCurrentFrame(shipNS::SHIP1_START_FRAME);
   ship1.setX(GAME_WIDTH / 4);
   ship1.setY(GAME_HEIGHT / 4);
-  ship1.setVelocity(VECTOR2(shipNS::SPEED, -shipNS::SPEED)); // VECTOR2(X, Y)
+  ship1.setVelocity(Vec2(shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
   // ship2
   if (!ship2.initialise(this, shipNS::WIDTH, shipNS::HEIGHT,
                         shipNS::TEXTURE_COLS, &gameTexture))
@@ -42,7 +42,7 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setCurrentFrame(shipNS::SHIP2_START_FRAME);
   ship2.setX(GAME_WIDTH - GAME_WIDTH / 4);
   ship2.setY(GAME_HEIGHT / 4);
-  ship2.setVelocity(VECTOR2(-shipNS::SPEED, -shipNS::SPEED)); // VECTOR2(X, Y)
+  ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
 
   return;
 }
@@ -58,7 +58,7 @@ void SpaceWar::ai() {}
 
 void SpaceWar::collisions()
 {
-  VECTOR2 collisionVector;
+  Vec2 collisionVector;
   // if collision between ship and planet
   if (ship1.collidesWith(planet, collisionVector)) {
     // bounce off planet
