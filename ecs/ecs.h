@@ -51,8 +51,16 @@ public:
   ~ECS();
 
   // Entities
-  EntityHook makeEntity(BaseComponent* component,
+  EntityHook makeEntity(BaseComponent** entityComponents,
                         const unsigned int* componentIDs, size_t numComponents);
+
+  template <class Component> EntityHook makeEntity(Component& c1)
+  {
+    BaseComponent* components[] = {(BaseComponent*)&c1};
+    unsigned int componentIDs[] = {Component::id};
+    return makeEntity(components, componentIDs, 1);
+  }
+
   void removeEntity(EntityHook hook);
 
   // Components

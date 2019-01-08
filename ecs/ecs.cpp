@@ -17,12 +17,17 @@ ECS::~ECS()
   for (int i = 0; i < entities.size(); i++) delete entities[i];
 }
 
-EntityHook ECS::makeEntity(BaseComponent* component,
+EntityHook ECS::makeEntity(BaseComponent** entityComponents,
                            const unsigned int* componentIDs,
                            size_t numComponents)
 {
   ECSEntity* newEntity = new ECSEntity();
   EntityHook hook = (EntityHook)newEntity;
+
+  for (int i = 0; i < numComponents; i++) {
+    addComponentInternal(hook, newEntity->second, componentIDs[i],
+                         entityComponents[i]);
+  }
 
   // Set ID
   newEntity->first = entities.size();
