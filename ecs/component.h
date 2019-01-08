@@ -27,22 +27,21 @@ public:
   // Sugar for getters
   inline static ComponentCreateFunction getTypeCreateFunction(unsigned int id)
   {
-    return std::get<0>(componentTypes[id]);
+    return std::get<0>((*componentTypes)[id]);
   }
 
   inline static ComponentFreeFunction getTypeFreeFunction(unsigned int id)
   {
-    return std::get<1>(componentTypes[id]);
+    return std::get<1>((*componentTypes)[id]);
   }
   inline static size_t getTypeSize(unsigned int id)
   {
-    return std::get<2>(componentTypes[id]);
+    return std::get<2>((*componentTypes)[id]);
   }
 
 private:
-  static Array<
-      std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
-      componentTypes;
+  static Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction,
+                          size_t>>* componentTypes;
 };
 
 template <typename T> struct Component : BaseComponent {
