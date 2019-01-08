@@ -11,6 +11,39 @@ typedef std::pair<unsigned int, unsigned int> ComponentReference;
 // pair (ECSEntity id, components)
 typedef std::pair<unsigned int, Array<ComponentReference>> ECSEntity;
 
+class ECSListener
+{
+public:
+  virtual void onMakeEntity(EntityHook hook) {}
+  virtual void onRemoveEntity(EntityHook hook) {}
+  virtual void onAddComponent(EntityHook hook, unsigned int id) {}
+  virtual void onRemoveComponent(EntityHook hook, unsigned int id) {}
+
+  const Array<unsigned int>& getComponentIDs() { return componentIDs; }
+  inline bool shouldNotifyOnAllComponentOperations()
+  {
+    return notifyOnAllComponentOperations;
+  }
+  inline bool shouldNotifyOnAllEntityOperations()
+  {
+    return notifyOnAllEntityOperations;
+  }
+
+protected:
+  void setNotificationSettings(bool shouldNotifyOnAllComponentOperations,
+                               bool shouldNotifyOnAllEntityOperations)
+  {
+    notifyOnAllComponentOperations = shouldNotifyOnAllComponentOperations;
+    notifyOnAllEntityOperations = shouldNotifyOnAllEntityOperations;
+  }
+
+  void addComponentID(unsigned int id) { componentIDs.push_back(id); }
+
+private:
+  Array<unsigned int> componentIDs;
+  bool notifyOnAllComponentOperations = false;
+  bool notifyOnAllEntityOperations = false;
+};
 class ECS
 {
 public:
@@ -52,11 +85,11 @@ public:
 
 private:
   Array<System*> systems;
-  // Map component id to concrete components
+  // (Component id, concrete components)
   Map<unsigned int, Array<unsigned int>> components;
   Array<ECSEntity*> entities;
 
-  // Inline helpers
+  // Inline entity hook helpers
   inline ECSEntity* entityFrom(EntityHook hook) { return (ECSEntity*)hook; }
   inline unsigned int entityIDFrom(EntityHook hook)
   {
@@ -76,12 +109,12 @@ private:
   getComponentInternal(Array<ComponentReference>& entityComponents,
                        unsigned int componentID);
 
-  // Complex systems are systems that have more than one component
   void updateComplexSystem(unsigned int index, SystemList& system, float delta,
                            const Array<unsigned int>& componentTypes,
                            Array<BaseComponent*>& componentParam,
                            Array<Array<unsigned int>*>& componentArrays);
   unsigned int
+
   getLeastCommonComponentID(const Array<unsigned int>& componentTypes,
                             const Array<unsigned int>& componentFlags);
 };

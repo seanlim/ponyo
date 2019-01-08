@@ -139,6 +139,7 @@ void ECS::updateSystems(SystemList& systems, float delta)
   Array<BaseComponent*> componentParam;
   Array<Array<unsigned int>*> componentArrays;
 
+  // Iterate through all systems
   for (int i = 0; i < systems.size(); i++) {
     const Array<unsigned int>& componentTypes = systems[i]->getComponentTypes();
     if (componentTypes.size() == 1) {
@@ -193,13 +194,13 @@ void ECS::updateComplexSystem(unsigned int index, SystemList& system,
   componentArrays.resize(
       std::max(componentArrays.size(), componentTypes.size()));
 
+  // Get collections of compnents
   for (int i = 0; i < componentTypes.size(); i++)
     componentArrays[i] = &components[componentTypes[i]];
 
   // Get index of component type that has the smallest colleciton of components
   unsigned int minSizeIndex =
       getLeastCommonComponentID(componentTypes, componentFlags);
-
   size_t typeSize = BaseComponent::getTypeSize(componentTypes[minSizeIndex]);
   Array<unsigned int>& smallestComponentCollection =
       *componentArrays[minSizeIndex];
