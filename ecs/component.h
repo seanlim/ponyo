@@ -7,7 +7,9 @@
 
 typedef void* EntityHook;
 
-struct BaseComponent;
+struct BaseComponent; // Forward definition of BaseComponent
+
+// Create and free function pointers
 typedef unsigned int (*ComponentCreateFunction)(Array<unsigned int>& memory,
                                                 EntityHook entity,
                                                 BaseComponent* comp);
@@ -15,6 +17,7 @@ typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 struct BaseComponent {
 public:
+  // Add component type
   static unsigned int registerComponentType(ComponentCreateFunction createFn,
                                             ComponentFreeFunction freeFn,
                                             size_t size);
@@ -42,7 +45,6 @@ private:
       componentTypes;
 };
 
-// Recurring template
 template <typename T> struct Component : BaseComponent {
   static const ComponentCreateFunction createFunction;
   static const ComponentFreeFunction freeFunction;

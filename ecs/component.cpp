@@ -1,6 +1,5 @@
 #include "component.h"
 
-// Global store for base components
 Array<std::tuple<ComponentCreateFunction, ComponentFreeFunction, size_t>>
     BaseComponent::componentTypes;
 
