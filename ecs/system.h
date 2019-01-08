@@ -22,6 +22,13 @@ public:
     return false;
   }
 
+protected:
+  void addComponentType(unsigned int componentID, unsigned int flag = 0)
+  {
+    componentTypes.push_back(componentID);
+    componentFlags.push_back(flag);
+  }
+
 private:
   Array<unsigned int> componentTypes;
   Array<unsigned int> componentFlags;
