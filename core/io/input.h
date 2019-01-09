@@ -66,12 +66,12 @@ enum KeyState { Released, JustReleased, Pressed, JustPressed };
 
 struct KeyBinding {
 private:
-  unsigned int keyCode;
+  uint32 keyCode;
   KeyState keyState;
 
 public:
   KeyBinding() : keyCode(0), keyState(KeyState::JustReleased){};
-  KeyBinding(unsigned int keyCode, KeyState keyState)
+  KeyBinding(uint32 keyCode, KeyState keyState)
       : keyCode(keyCode), keyState(keyState){};
   ~KeyBinding(){};
 
@@ -86,8 +86,7 @@ private:
 
 public:
   GameCommand() : name(""), chord(0){};
-  GameCommand(std::string name, const unsigned int keyCode,
-              const KeyState keyState)
+  GameCommand(std::string name, const uint32 keyCode, const KeyState keyState)
       : name(name)
   {
     chord.push_back(KeyBinding(keyCode, keyState));
@@ -141,7 +140,7 @@ public:
 
   // Keyboard
   void pollKeys();
-  const KeyState getKeyboardKeyState(const unsigned int keyCode) const;
+  const KeyState getKeyboardKeyState(const uint32 keyCode) const;
   std::vector<GameCommands> getActiveGameCommands();
 
   // Mouse

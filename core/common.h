@@ -55,6 +55,8 @@ const UINT GAME_HEIGHT = 480;  // height of game in pixels
   }
 #define TRANSCOLOR SETCOLOR_ARGB(0, 255, 0, 255) // transparent color (magenta)
 
+typedef unsigned int uint32;
+
 // image resources
 const char NEBULA_IMAGE[] =
     "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org

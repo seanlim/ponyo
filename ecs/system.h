@@ -10,8 +10,8 @@ public:
     FLAG_OPTIONAL = 1,
   };
   System() {}
-  const Array<unsigned int>& getComponentTypes() { return componentTypes; }
-  const Array<unsigned int>& getComponentFlags() { return componentFlags; }
+  const Array<uint32>& getComponentTypes() { return componentTypes; }
+  const Array<uint32>& getComponentFlags() { return componentFlags; }
   virtual void updateComponents(float delta, BaseComponent** components) {}
 
   bool isValid()
@@ -23,15 +23,15 @@ public:
   }
 
 protected:
-  void addComponentType(unsigned int componentID, unsigned int flag = 0)
+  void addComponentType(uint32 componentID, uint32 flag = 0)
   {
     componentTypes.push_back(componentID);
     componentFlags.push_back(flag);
   }
 
 private:
-  Array<unsigned int> componentTypes;
-  Array<unsigned int> componentFlags;
+  Array<uint32> componentTypes;
+  Array<uint32> componentFlags;
 };
 
 class SystemList
@@ -47,7 +47,7 @@ public:
 
   inline size_t size() { return systems.size(); }
 
-  inline System* operator[](unsigned int index) { return systems[index]; }
+  inline System* operator[](uint32 index) { return systems[index]; }
 
   bool removeSystem(System& system)
   {

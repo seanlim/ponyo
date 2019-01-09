@@ -79,7 +79,7 @@ void Input::pollKeys()
   }
 }
 
-const KeyState Input::getKeyboardKeyState(const unsigned int keyCode) const
+const KeyState Input::getKeyboardKeyState(const uint32 keyCode) const
 {
   const int curr = keyboardState[keyCode];
   const int prev = keyboardStateBuffer[keyCode];

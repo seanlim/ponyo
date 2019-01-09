@@ -3,8 +3,7 @@
 ECS::~ECS()
 {
   // Free components of all types
-  for (std::map<unsigned int, Array<unsigned int>>::iterator it =
-           components.begin();
+  for (std::map<uint32, Array<uint32>>::iterator it = components.begin();
        it != components.end(); ++it) {
     size_t typeSize = BaseComponent::getTypeSize(it->first);
     ComponentFreeFunction freefn =
@@ -18,8 +17,7 @@ ECS::~ECS()
 }
 
 EntityHook ECS::makeEntity(BaseComponent** entityComponents,
-                           const unsigned int* componentIDs,
-                           size_t numComponents)
+                           const uint32* componentIDs, size_t numComponents)
 {
   ECSEntity* newEntity = new ECSEntity();
   EntityHook hook = (EntityHook)newEntity;
@@ -55,8 +53,7 @@ void ECS::removeEntity(EntityHook hook)
 
 void ECS::addComponentInternal(EntityHook hook,
                                Array<ComponentReference>& entityComponents,
-                               unsigned int componentID,
-                               BaseComponent* component)
+                               uint32 componentID, BaseComponent* component)
 {
   ComponentCreateFunction createFn =
       BaseComponent::getTypeCreateFunction(componentID);
@@ -66,14 +63,14 @@ void ECS::addComponentInternal(EntityHook hook,
   entityComponents.push_back(newComponent);
 }
 
-void ECS::deleteComponent(unsigned int componentID, unsigned int index)
+void ECS::deleteComponent(uint32 componentID, uint32 index)
 {
-  Array<unsigned int>& componentInstances = components[componentID];
+  Array<uint32>& componentInstances = components[componentID];
   ComponentFreeFunction freeFn =
       BaseComponent::getTypeFreeFunction(componentID);
   size_t typeSize = BaseComponent::getTypeSize(componentID);
 
-  unsigned int srcIndex = componentInstances.size() - typeSize;
+  uint32 srcIndex = componentInstances.size() - typeSize;
 
   BaseComponent* destComponent = (BaseComponent*)&componentInstances[index];
   BaseComponent* sourceComponent =
@@ -108,14 +105,14 @@ void ECS::deleteComponent(unsigned int componentID, unsigned int index)
 }
 
 // Delete component in entity
-bool ECS::removeComponentInternal(EntityHook hook, unsigned int index)
+bool ECS::removeComponentInternal(EntityHook hook, uint32 index)
 {
   Array<ComponentReference>& entityComponents = componentsFrom(hook);
   for (int i = 0; i < entityComponents.size(); i++) {
     if (index == entityComponents[i].first) {
       deleteComponent(entityComponents[i].first, entityComponents[i].second);
-      unsigned int srcIndex = entityComponents.size() - 1;
-      unsigned int destIndex = i;
+      uint32 srcIndex = entityComponents.size() - 1;
+      uint32 destIndex = i;
       entityComponents[destIndex] = entityComponents[srcIndex];
       entityComponents.pop_back();
       return true;
@@ -126,7 +123,7 @@ bool ECS::removeComponentInternal(EntityHook hook, unsigned int index)
 
 BaseComponent*
 ECS::getComponentInternal(Array<ComponentReference>& entityComponents,
-                          unsigned int componentID)
+                          uint32 componentID)
 {
   for (int i = 0; i < entityComponents.size(); i++) {
     if (componentID == entityComponents[i].first) {
@@ -142,14 +139,14 @@ ECS::getComponentInternal(Array<ComponentReference>& entityComponents,
 void ECS::updateSystems(SystemList& systems, float delta)
 {
   Array<BaseComponent*> componentParam;
-  Array<Array<unsigned int>*> componentArrays;
+  Array<Array<uint32>*> componentArrays;
 
   // Iterate through all systems
-  for (int i = 0; i < systems.size(); i++) {
-    const Array<unsigned int>& componentTypes = systems[i]->getComponentTypes();
+  for (uint32 i = 0; i < systems.size(); i++) {
+    const Array<uint32>& componentTypes = systems[i]->getComponentTypes();
     if (componentTypes.size() == 1) {
       size_t typeSize = BaseComponent::getTypeSize(componentTypes[0]);
-      Array<unsigned int>& concreteComponents = components[componentTypes[0]];
+      Array<uint32>& concreteComponents = components[componentTypes[0]];
       for (int j = 0; j < concreteComponents.size(); j += typeSize) {
         BaseComponent* component = (BaseComponent*)&concreteComponents[j];
         systems[i]->updateComponents(delta, &component);
@@ -163,19 +160,18 @@ void ECS::updateSystems(SystemList& systems, float delta)
 }
 
 // Returns index of component type with the least instances
-unsigned int
-ECS::getLeastCommonComponentID(const Array<unsigned int>& componentTypes,
-                               const Array<unsigned int>& componentFlags)
+uint32 ECS::getLeastCommonComponentID(const Array<uint32>& componentTypes,
+                                      const Array<uint32>& componentFlags)
 {
-  unsigned int minSize = (unsigned int)-1;
-  unsigned int minIndex = (unsigned int)-1;
+  uint32 minSize = (uint32)-1;
+  uint32 minIndex = (uint32)-1;
 
   for (int i = 0; i < componentTypes.size(); i++) {
 
     if ((componentFlags[i] & System::FLAG_OPTIONAL) != 0) continue;
 
     size_t typeSize = BaseComponent::getTypeSize(componentTypes[i]);
-    unsigned int s = components[componentTypes[i]].size() / typeSize;
+    uint32 s = components[componentTypes[i]].size() / typeSize;
     if (s <= minSize) {
       minSize = s;
       minIndex = i;
@@ -185,16 +181,13 @@ ECS::getLeastCommonComponentID(const Array<unsigned int>& componentTypes,
   return minIndex;
 }
 
-void ECS::updateComplexSystem(unsigned int index, SystemList& system,
-                              float delta,
-                              const Array<unsigned int>& componentTypes,
+void ECS::updateComplexSystem(uint32 index, SystemList& system, float delta,
+                              const Array<uint32>& componentTypes,
                               Array<BaseComponent*>& componentParam,
-                              Array<Array<unsigned int>*>& componentArrays)
+                              Array<Array<uint32>*>& componentArrays)
 {
 
-  const Array<unsigned int>& componentFlags =
-      systems[index]->getComponentFlags();
-
+  const Array<uint32>& componentFlags = systems[index]->getComponentFlags();
   componentParam.resize(std::max(componentParam.size(), componentTypes.size()));
   componentArrays.resize(
       std::max(componentArrays.size(), componentTypes.size()));
@@ -204,11 +197,10 @@ void ECS::updateComplexSystem(unsigned int index, SystemList& system,
     componentArrays[i] = &components[componentTypes[i]];
 
   // Get index of component type that has the smallest colleciton of components
-  unsigned int minSizeIndex =
+  uint32 minSizeIndex =
       getLeastCommonComponentID(componentTypes, componentFlags);
   size_t typeSize = BaseComponent::getTypeSize(componentTypes[minSizeIndex]);
-  Array<unsigned int>& smallestComponentCollection =
-      *componentArrays[minSizeIndex];
+  Array<uint32>& smallestComponentCollection = *componentArrays[minSizeIndex];
 
   for (int i = 0; i < smallestComponentCollection.size(); i += typeSize) {
     componentParam[minSizeIndex] =

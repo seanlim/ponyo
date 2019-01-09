@@ -1,5 +1,6 @@
 #pragma once
 
+#include "common.h"
 #include "array.h"
 #include <tuple>
 
@@ -10,7 +11,7 @@ typedef void* EntityHook;
 struct BaseComponent; // Forward definition of BaseComponent
 
 // Create and free function pointers
-typedef unsigned int (*ComponentCreateFunction)(Array<unsigned int>& memory,
+typedef uint32 (*ComponentCreateFunction)(Array<uint32>& memory,
                                                 EntityHook entity,
                                                 BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
@@ -18,23 +19,23 @@ typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 struct BaseComponent {
 public:
   // Add component type
-  static unsigned int registerComponentType(ComponentCreateFunction createFn,
+  static uint32 registerComponentType(ComponentCreateFunction createFn,
                                             ComponentFreeFunction freeFn,
                                             size_t size);
 
   EntityHook entity = ENTITY_NULL_HANDLE; // Blind reference to attached entity
 
   // Sugar for getters
-  inline static ComponentCreateFunction getTypeCreateFunction(unsigned int id)
+  inline static ComponentCreateFunction getTypeCreateFunction(uint32 id)
   {
     return std::get<0>((*componentTypes)[id]);
   }
 
-  inline static ComponentFreeFunction getTypeFreeFunction(unsigned int id)
+  inline static ComponentFreeFunction getTypeFreeFunction(uint32 id)
   {
     return std::get<1>((*componentTypes)[id]);
   }
-  inline static size_t getTypeSize(unsigned int id)
+  inline static size_t getTypeSize(uint32 id)
   {
     return std::get<2>((*componentTypes)[id]);
   }
@@ -47,15 +48,15 @@ private:
 template <typename T> struct Component : BaseComponent {
   static const ComponentCreateFunction createFunction;
   static const ComponentFreeFunction freeFunction;
-  static const unsigned int id;
+  static const uint32 id;
   static const size_t size;
 };
 
 template <typename Component>
-unsigned int CreateComponent(Array<unsigned int>& memory, EntityHook entity,
+uint32 CreateComponent(Array<uint32>& memory, EntityHook entity,
                              BaseComponent* comp)
 {
-  unsigned int index = memory.size();
+  uint32 index = memory.size();
   memory.resize(index + Component::size);
   Component* component = new (&memory[index]) Component(*(Component*)comp);
   component->entity = entity;
@@ -76,7 +77,7 @@ const ComponentFreeFunction Component<T>::freeFunction(FreeComponent<T>);
 template <typename T> const size_t Component<T>::size(sizeof(T));
 
 template <typename T>
-const unsigned int Component<T>::id(BaseComponent::registerComponentType(
+const uint32 Component<T>::id(BaseComponent::registerComponentType(
     CreateComponent<T>, FreeComponent<T>, sizeof(T)));
 
 // struct ExampleComponent : public Component<ExampleComponent> {

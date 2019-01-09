@@ -1,25 +1,27 @@
 #pragma once
+#define NOMINMAX
 
 #include "array.h"
+#include "common.h"
 #include "component.h"
 #include "map.h"
 #include "system.h"
 #include <algorithm>
 
 // pair (Component id, Component index)
-typedef std::pair<unsigned int, unsigned int> ComponentReference;
+typedef std::pair<uint32, uint32> ComponentReference;
 // pair (ECSEntity id, components)
-typedef std::pair<unsigned int, Array<ComponentReference>> ECSEntity;
+typedef std::pair<uint32, Array<ComponentReference>> ECSEntity;
 
 class ECSListener
 {
 public:
   virtual void onMakeEntity(EntityHook hook) {}
   virtual void onRemoveEntity(EntityHook hook) {}
-  virtual void onAddComponent(EntityHook hook, unsigned int id) {}
-  virtual void onRemoveComponent(EntityHook hook, unsigned int id) {}
+  virtual void onAddComponent(EntityHook hook, uint32 id) {}
+  virtual void onRemoveComponent(EntityHook hook, uint32 id) {}
 
-  const Array<unsigned int>& getComponentIDs() { return componentIDs; }
+  const Array<uint32>& getComponentIDs() { return componentIDs; }
   inline bool shouldNotifyOnAllComponentOperations()
   {
     return notifyOnAllComponentOperations;
@@ -37,10 +39,10 @@ protected:
     notifyOnAllEntityOperations = shouldNotifyOnAllEntityOperations;
   }
 
-  void addComponentID(unsigned int id) { componentIDs.push_back(id); }
+  void addComponentID(uint32 id) { componentIDs.push_back(id); }
 
 private:
-  Array<unsigned int> componentIDs;
+  Array<uint32> componentIDs;
   bool notifyOnAllComponentOperations = false;
   bool notifyOnAllEntityOperations = false;
 };
@@ -52,12 +54,12 @@ public:
 
   // Entities
   EntityHook makeEntity(BaseComponent** entityComponents,
-                        const unsigned int* componentIDs, size_t numComponents);
+                        const uint32* componentIDs, size_t numComponents);
 
   template <class Component> EntityHook makeEntity(Component& c1)
   {
     BaseComponent* components[] = {(BaseComponent*)&c1};
-    unsigned int componentIDs[] = {Component::id};
+    uint32 componentIDs[] = {Component::id};
     return makeEntity(components, componentIDs, 1);
   }
 
@@ -84,7 +86,7 @@ public:
                                             Component::id);
   }
 
-  BaseComponent* getComponentByType(EntityHook hook, unsigned int componentID)
+  BaseComponent* getComponentByType(EntityHook hook, uint32 componentID)
   {
     return getComponentInternal(componentsFrom(hook), componentID);
   }
@@ -94,12 +96,12 @@ public:
 private:
   Array<System*> systems;
   // (Component id, concrete components)
-  Map<unsigned int, Array<unsigned int>> components;
+  Map<uint32, Array<uint32>> components;
   Array<ECSEntity*> entities;
 
   // Inline entity hook helpers
   inline ECSEntity* entityFrom(EntityHook hook) { return (ECSEntity*)hook; }
-  inline unsigned int entityIDFrom(EntityHook hook)
+  inline uint32 entityIDFrom(EntityHook hook)
   {
     return entityFrom(hook)->first;
   }
@@ -108,21 +110,19 @@ private:
     return entityFrom(hook)->second;
   }
 
-  void deleteComponent(unsigned int componentID, unsigned int index);
-  bool removeComponentInternal(EntityHook hook, unsigned int index);
+  void deleteComponent(uint32 componentID, uint32 index);
+  bool removeComponentInternal(EntityHook hook, uint32 index);
   void addComponentInternal(EntityHook hook,
                             Array<ComponentReference>& entityComponents,
-                            unsigned int componentID, BaseComponent* component);
+                            uint32 componentID, BaseComponent* component);
   BaseComponent*
   getComponentInternal(Array<ComponentReference>& entityComponents,
-                       unsigned int componentID);
+                       uint32 componentID);
 
-  void updateComplexSystem(unsigned int index, SystemList& system, float delta,
-                           const Array<unsigned int>& componentTypes,
+  void updateComplexSystem(uint32 index, SystemList& system, float delta,
+                           const Array<uint32>& componentTypes,
                            Array<BaseComponent*>& componentParam,
-                           Array<Array<unsigned int>*>& componentArrays);
-  unsigned int
-
-  getLeastCommonComponentID(const Array<unsigned int>& componentTypes,
-                            const Array<unsigned int>& componentFlags);
+                           Array<Array<uint32>*>& componentArrays);
+  uint32 getLeastCommonComponentID(const Array<uint32>& componentTypes,
+                                   const Array<uint32>& componentFlags);
 };
