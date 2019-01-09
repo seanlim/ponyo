@@ -29,6 +29,7 @@
     <ClInclude Include="src\planet.h" />
     <ClInclude Include="src\ship.h" />
     <ClInclude Include="src\spacewar.h" />
+    <ClInclude Include="src\systems\motion.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\entity.cpp" />
