@@ -12,13 +12,12 @@ struct CMotion : public Component<CMotion> {
 class SMotion : public System
 {
 public:
-  SMotion() : System() { addComponentType(CMotion::id); }
+  SMotion() : System() { System::addComponentType(CMotion::id); }
 
   virtual void updateComponents(float delta, BaseComponent** components)
   {
     CMotion* motion = (CMotion*)components[0];
-    motion->velocity = Vec2(10.0, 10.0);
-
-    OutputDebugString("updated motion component\n");
+    // Add gravity
+    motion->velocity.y += 10;
   }
 };

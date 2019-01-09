@@ -181,7 +181,7 @@ uint32 ECS::getLeastCommonComponentID(const Array<uint32>& componentTypes,
   return minIndex;
 }
 
-void ECS::updateComplexSystem(uint32 index, SystemList& system, float delta,
+void ECS::updateComplexSystem(uint32 index, SystemList& systems, float delta,
                               const Array<uint32>& componentTypes,
                               Array<BaseComponent*>& componentParam,
                               Array<Array<uint32>*>& componentArrays)

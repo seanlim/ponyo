@@ -59,7 +59,7 @@ public:
   template <class Component> EntityHook makeEntity(Component& c1)
   {
     BaseComponent* components[] = {(BaseComponent*)&c1};
-    uint32 componentIDs[] = {Component::id};
+    uint32 componentIDs[] = {c1->id};
     return makeEntity(components, componentIDs, 1);
   }
 
@@ -94,7 +94,6 @@ public:
   void updateSystems(SystemList& systems, float delta);
 
 private:
-  Array<System*> systems;
   // (Component id, concrete components)
   Map<uint32, Array<uint32>> components;
   Array<ECSEntity*> entities;
@@ -119,7 +118,7 @@ private:
   getComponentInternal(Array<ComponentReference>& entityComponents,
                        uint32 componentID);
 
-  void updateComplexSystem(uint32 index, SystemList& system, float delta,
+  void updateComplexSystem(uint32 index, SystemList& systems, float delta,
                            const Array<uint32>& componentTypes,
                            Array<BaseComponent*>& componentParam,
                            Array<Array<uint32>*>& componentArrays);
