@@ -44,6 +44,11 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setY(GAME_HEIGHT / 4);
   ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
 
+  CMotion* motionComponent = new CMotion;
+  SMotion* motionSystem = new SMotion();
+  ecs.makeEntity(motionComponent);
+  mainSystems.addSystem(*motionSystem);
+
   return;
 }
 
@@ -52,6 +57,10 @@ void SpaceWar::update()
   planet.update(frameTime);
   ship1.update(frameTime);
   ship2.update(frameTime);
+  //
+  /////
+  ///////
+  ecs.updateSystems(mainSystems, frameTime);
 }
 
 void SpaceWar::ai() {}
