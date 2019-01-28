@@ -12,15 +12,26 @@ void SpaceWar::initialise(HWND hwnd)
   if (!gameTexture.initialise(graphics, TEXTURES_IMAGE))
     throw(
         GameError(gameErrorNS::FATAL_ERROR, "Error initialising game texture"));
+
+  // Nebula
+  // Init texture
   if (!nebulaTexture.initialise(graphics, NEBULA_IMAGE))
     throw(GameError(gameErrorNS::FATAL_ERROR,
                     "Error initialising nebula texture"));
-  if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
-    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
-  nebulaImage.setX(0.0);
-  nebulaImage.setY(0.0);
 
-  if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture)) return;
+  // if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
+  //   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
+  // nebulaImage.setX(0.0);
+  // nebulaImage.setY(0.0);
+  CDrawable* nebulaImage = new CDrawable;
+  nebulaImage->initialise(0, 0, 1, &nebulaTexture);
+  SDrawable* drawSystem =
+      new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+  ecs.makeEntity(nebulaImage);
+
+  mainSystems.addSystem(*drawSystem);
+
+  // if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture)) return;
 
   if (!planet.initialise(this, planetNS::WIDTH, planetNS::HEIGHT, 2,
                          &gameTexture))
@@ -93,7 +104,7 @@ void SpaceWar::collisions()
 void SpaceWar::render()
 {
   this->graphics->spriteBegin();
-  this->nebulaImage.draw();
+  // this->nebulaImage.draw();
   this->planet.draw();
   this->ship1.draw();
   this->ship2.draw();
