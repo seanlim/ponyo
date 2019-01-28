@@ -15,11 +15,11 @@ struct CDrawable : public Component<CDrawable> {
   COLOR_ARGB colorFilter;
 
   bool loops;
-  bool visible = true;
+  bool visible;
 
   void initialise(int width, int height, int ncols, TextureManager* textureM)
   {
-    spriteData.width, this->spriteData.height = 2;
+    this->spriteData.width = 2, this->spriteData.height = 2;
     spriteData.x, this->spriteData.y = 0.0;
     spriteData.scale = 1.0;
     spriteData.angle = 0.0;
@@ -27,20 +27,24 @@ struct CDrawable : public Component<CDrawable> {
     spriteData.rect.right = this->spriteData.width;
     spriteData.rect.bottom = this->spriteData.height;
     spriteData.texture = NULL;
-    spriteData.flipHorizontal, this->spriteData.flipVertical = false;
+    spriteData.flipHorizontal = false, this->spriteData.flipVertical = false;
 
     startFrame = 0, endFrame = 0, currentFrame = 0;
     frameDelay = 1.0;
     animTimer = 0.0;
     visible = true;
+    loops = true;
     colorFilter = graphicsNS::WHITE;
     textureManager = NULL;
-    spriteData.texture = textureM->getTexture();
 
-    spriteData.width = width;
-    if (width == 0) spriteData.width = textureM->getWidth();
-    spriteData.height = height;
-    if (height == 0) spriteData.height = textureM->getHeight();
+    textureManager = textureM;
+    spriteData.texture = textureManager->getTexture();
+
+    this->spriteData.width = width;
+    if (width == 0) this->spriteData.width = this->textureManager->getWidth();
+    this->spriteData.height = height;
+    if (height == 0)
+      this->spriteData.height = this->textureManager->getHeight();
 
     int cols = ncols;
     if (ncols == 0) cols = 1;
@@ -71,7 +75,7 @@ public:
   {
     CDrawable* drawable = (CDrawable*)components[0];
 
-    if (drawable->visible == true) {
+    if (drawable->visible) {
       graphics->spriteBegin();
       drawable->spriteData.texture = drawable->textureManager->getTexture();
       graphics->drawSprite(drawable->spriteData);

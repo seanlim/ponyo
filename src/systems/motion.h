@@ -5,7 +5,7 @@
 #include "graphics.h"
 
 struct CMotion : public Component<CMotion> {
-  Vec2 velocity = Vec2(0.0, 0.0);
+  Vec2 velocity = Vec2(0.0, 20.0);
   Vec2 acceleration = Vec2(0.0, 0.0);
 };
 

@@ -23,13 +23,6 @@ void SpaceWar::initialise(HWND hwnd)
   //   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
   // nebulaImage.setX(0.0);
   // nebulaImage.setY(0.0);
-  CDrawable* nebulaImage = new CDrawable;
-  nebulaImage->initialise(0, 0, 1, &nebulaTexture);
-  SDrawable* drawSystem =
-      new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
-  ecs.makeEntity(nebulaImage);
-
-  mainSystems.addSystem(*drawSystem);
 
   // if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture)) return;
 
@@ -54,6 +47,13 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setX(GAME_WIDTH - GAME_WIDTH / 4);
   ship2.setY(GAME_HEIGHT / 4);
   ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
+
+  CDrawable* nebulaImage = new CDrawable;
+  nebulaImage->initialise(0, 0, 1, &nebulaTexture);
+  SDrawable* drawSystem =
+      new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+  ecs.makeEntity(nebulaImage);
+  mainSystems.addSystem(*drawSystem);
 
   CMotion* motionComponent = new CMotion;
   SMotion* motionSystem = new SMotion();
