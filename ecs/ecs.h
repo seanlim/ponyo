@@ -56,10 +56,10 @@ public:
   EntityHook makeEntity(BaseComponent** entityComponents,
                         const uint32* componentIDs, size_t numComponents);
 
-  template <class Component> EntityHook makeEntity(Component& c1)
+  template <class A> EntityHook makeEntity(A& c1)
   {
-    BaseComponent* components[] = {(BaseComponent*)&c1};
-    uint32 componentIDs[] = {c1->id};
+    BaseComponent* components[] = {&c1};
+    uint32 componentIDs[] = {A::id};
     return makeEntity(components, componentIDs, 1);
   }
 

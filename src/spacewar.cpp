@@ -48,14 +48,14 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setY(GAME_HEIGHT / 4);
   ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
 
-  CDrawable* nebulaImage = new CDrawable;
-  nebulaImage->initialise(0, 0, 1, &nebulaTexture);
-  SDrawable* drawSystem =
-      new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+  CDrawable nebulaImage;
+  nebulaImage.initialise(0, 0, 1, &nebulaTexture);
+  SDrawable* drawSystem = new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT,
+                                        FULLSCREEN, this->graphics);
   ecs.makeEntity(nebulaImage);
   mainSystems.addSystem(*drawSystem);
 
-  CMotion* motionComponent = new CMotion;
+  CMotion motionComponent;
   SMotion* motionSystem = new SMotion();
   ecs.makeEntity(motionComponent);
   mainSystems.addSystem(*motionSystem);
