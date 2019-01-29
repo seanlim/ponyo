@@ -64,12 +64,13 @@ class SDrawable : public System
   Graphics* graphics;
 
 public:
-  SDrawable(HWND _hwnd, uint32 width, uint32 height, bool fullscreen) : System()
+  SDrawable(HWND _hwnd, uint32 width, uint32 height, bool fullscreen,
+            Graphics* _graphics)
+      : System()
   {
     System::addComponentType(CDrawable::id);
 
-    graphics = new Graphics();
-    graphics->initialise(_hwnd, width, height, fullscreen);
+    this->graphics = _graphics;
   }
   virtual void updateComponents(float delta, BaseComponent** components)
   {
