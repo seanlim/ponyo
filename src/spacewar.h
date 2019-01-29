@@ -1,7 +1,6 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 
-#include "drawable.h"
 #include "ecs.h"
 #include "game.h"
 #include "image.h"
@@ -17,9 +16,6 @@ class SpaceWar : public Game
   Planet planet;
   Ship ship1, ship2;
   Image nebulaImage;
-
-  ECS ecs;
-  SystemList mainSystems;
 
 public:
   SpaceWar();

@@ -87,6 +87,11 @@ void Game::initialise(HWND _hwnd)
 
   gameText.setFontColor(gameNS::FONT_COLOR);
 
+  // Init graphics systems
+  SDrawable* drawSystem = new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT,
+                                        FULLSCREEN, this->graphics);
+  graphicsSystems.addSystem(*drawSystem);
+
   initialised = true;
   return;
 }
@@ -116,7 +121,8 @@ void Game::renderGame()
   static char buffer[BUF_SIZE];
 
   if (SUCCEEDED(this->graphics->beginScene())) {
-    this->render();
+    // this->render();
+    ecs.updateSystems(graphicsSystems, frameTime);
     graphics->spriteBegin();
     if (showFps) {
       _snprintf_s(buffer, BUF_SIZE, "%d FPS", (int)fps);

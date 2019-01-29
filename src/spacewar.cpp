@@ -50,15 +50,24 @@ void SpaceWar::initialise(HWND hwnd)
 
   CDrawable nebulaImage;
   nebulaImage.initialise(0, 0, 1, &nebulaTexture);
-  SDrawable* drawSystem = new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT,
-                                        FULLSCREEN, this->graphics);
   ecs.makeEntity(nebulaImage);
-  mainSystems.addSystem(*drawSystem);
+
+  CDrawable spaceShipTest;
+  spaceShipTest.initialise(shipNS::WIDTH, shipNS::HEIGHT, shipNS::TEXTURE_COLS,
+                           &gameTexture);
+  spaceShipTest.startFrame = shipNS::SHIP1_START_FRAME,
+  spaceShipTest.endFrame = shipNS::SHIP1_END_FRAME;
+  spaceShipTest.currentFrame = shipNS::SHIP1_START_FRAME;
+  spaceShipTest.spriteData.x = GAME_WIDTH / 2;
+  spaceShipTest.spriteData.y = GAME_HEIGHT / 2;
+
+  ecs.makeEntity(spaceShipTest);
+
+  SMotion* motionSystem = new SMotion();
+  gameSystems.addSystem(*motionSystem);
 
   CMotion motionComponent;
-  SMotion* motionSystem = new SMotion();
   ecs.makeEntity(motionComponent);
-  mainSystems.addSystem(*motionSystem);
 
   return;
 }
@@ -71,7 +80,6 @@ void SpaceWar::update()
   //
   /////
   ///////
-  ecs.updateSystems(mainSystems, frameTime);
 }
 
 void SpaceWar::ai() {}

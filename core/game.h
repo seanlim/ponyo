@@ -11,6 +11,9 @@
 #include "graphics.h"
 #include "input.h"
 #include "text.h"
+#include "ecs.h"
+#include "systems/motion.h"
+#include "systems/drawable.h"
 
 namespace gameNS
 {
@@ -39,6 +42,11 @@ protected:
   DWORD sleepTime; // Sleep in between frames
   bool paused;
   bool initialised;
+
+  // ECS
+  ECS ecs;
+  SystemList gameSystems;
+  SystemList graphicsSystems;
 
 public:
   Game();
