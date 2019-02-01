@@ -11,8 +11,8 @@ const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE;
 const char CLASS_NAME[] = "Spacewar";
 const char GAME_TITLE[] = "Game Engine";
 const bool FULLSCREEN = false; // windowed or fullscreen
-const UINT GAME_WIDTH = 640;   // width of game in pixels
-const UINT GAME_HEIGHT = 480;  // height of game in pixels
+const UINT GAME_WIDTH = 1280;  // width of game in pixels
+const UINT GAME_HEIGHT = 720;  // height of game in pixels
 
 // Safely delete pointer referenced item
 #define safeDelete(ptr)                                                        \
