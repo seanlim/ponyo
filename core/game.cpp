@@ -206,8 +206,6 @@ void Game::run(HWND hwnd)
 
   this->input->readControllers();
   this->input->pollKeys();
-
-  debugLog(frameTime);
 }
 
 void Game::releaseAll() {}
