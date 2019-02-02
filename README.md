@@ -2,36 +2,11 @@
 
 Ponyo is a 2D C++ game engine built on DirectX.
 
-## Core engine
+# Manual
 
 Main engine code resides in `core/`.
 
-## Input
-
-### Key State
-
-| Previous Frame | Current Frame | KeyState     |
-| -------------- | ------------- | ------------ |
-| 0              | 0             | Released     |
-| 0              | 1             | JustPressed  |
-| 1              | 0             | JustReleased |
-| 1              | 1             | Pressed      |
-
-### Polling for key state
-
-To get the key state in the current frame, use the `getKeyboardKeyState` getter of `Input`.
-
-### Game commands
-
-The input class keeps a map of `GameCommands` to `GameCommand` pointers. A game command can be created like such:
-
-```cpp
-// Assign GameCommands in the Input Constructor
-keyMap[GameCommands::showFPS] =
-      new GameCommand("Toggle FPS", VK_F2, KeyState::JustPressed);
-```
-
-### Default game commands
+## Default game commands
 
 `SHIFT` + `Q` to quit
 
@@ -39,19 +14,6 @@ keyMap[GameCommands::showFPS] =
 
 `F3` to toggle debugger
 
-### Poll for game commands
-
-The `getActiveGameCommands` getter of `Input` returns a vector of currently active GameCommands. From this, actions can be dispatched from a simple loop.
-
-## ECS Support
-
-ECS implementation in `ecs/`.
-
 ## Spacewar
 
 Driver game to test engine in `src/`
-
-## TODO
-
-- ECS
-- Event system adapter
