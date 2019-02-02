@@ -87,10 +87,14 @@ void Game::initialise(HWND _hwnd)
 
   gameText.setFontColor(gameNS::FONT_COLOR);
 
-  // Init graphics systems
+  // Init graphics
   SRenderable* renderSystem = new SRenderable(
       this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
   graphicsSystems.addSystem(*renderSystem);
+
+  // Init physics
+  SPhysics* physicsSystem = new SPhysics();
+  gameSystems.addSystem(*physicsSystem);
 
   initialised = true;
   return;
@@ -164,7 +168,7 @@ void Game::run(HWND hwnd)
 
   for (auto x : input->getActiveGameCommands()) {
     switch (x) {
-    case GameCommands::showFPS:
+    case GameCommands::toggleFPS:
       Game::showFps = !Game::showFps;
       break;
     case GameCommands::Quit:
@@ -174,6 +178,9 @@ void Game::run(HWND hwnd)
   }
 
   if (!paused) {
+    // TEMP UPDATE PHYSICS
+    // move this to somewhere more intentional
+    ecs.updateSystems(gameSystems, frameTime);
     this->update();
     this->ai();
     this->collisions();

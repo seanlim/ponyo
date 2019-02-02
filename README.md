@@ -37,7 +37,7 @@ keyMap[GameCommands::showFPS] =
 
 ### Default game commands
 
-`SHIFT` + `ESC` to quit
+`SHIFT` + `Q` to quit
 
 `F2` to toggle debug info
 

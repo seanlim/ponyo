@@ -62,6 +62,12 @@ public:
     uint32 componentIDs[] = {A::id};
     return makeEntity(components, componentIDs, 1);
   }
+  template <class A, class B> EntityHook makeEntity(A& c1, B& c2)
+  {
+    BaseComponent* components[] = {&c1, &c2};
+    uint32 componentIDs[] = {A::id, B::id};
+    return makeEntity(components, componentIDs, 2);
+  }
 
   void removeEntity(EntityHook hook);
 

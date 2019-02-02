@@ -62,6 +62,6 @@ const char NEBULA_IMAGE[] =
     "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org
 const char TEXTURES_IMAGE[] = "pictures\\textures.png";
 
-enum GameCommands { Quit, showFPS };
+enum GameCommands { Quit, toggleFPS, toggleDebug };
 
 enum WEAPON { TORPEDO, SHIP, PLANET };

@@ -52,22 +52,17 @@ void SpaceWar::initialise(HWND hwnd)
   nebulaImage.initialise(GAME_WIDTH, GAME_HEIGHT, 1, &nebulaTexture);
   ecs.makeEntity(nebulaImage);
 
-  CSprite spaceShipTest;
-  spaceShipTest.initialise(shipNS::WIDTH, shipNS::HEIGHT, shipNS::TEXTURE_COLS,
-                           &gameTexture);
-  spaceShipTest.startFrame = shipNS::SHIP1_START_FRAME,
-  spaceShipTest.endFrame = shipNS::SHIP1_END_FRAME;
-  spaceShipTest.currentFrame = shipNS::SHIP1_START_FRAME;
-  spaceShipTest.spriteData.x = GAME_WIDTH / 2;
-  spaceShipTest.spriteData.y = GAME_HEIGHT / 2;
+  CSprite spaceShipSprite;
+  spaceShipSprite.initialise(shipNS::WIDTH, shipNS::HEIGHT,
+                             shipNS::TEXTURE_COLS, &gameTexture);
+  spaceShipSprite.startFrame = shipNS::SHIP1_START_FRAME,
+  spaceShipSprite.endFrame = shipNS::SHIP1_END_FRAME;
+  spaceShipSprite.currentFrame = shipNS::SHIP1_START_FRAME;
+  spaceShipSprite.spriteData.x = GAME_WIDTH / 2;
+  spaceShipSprite.spriteData.y = GAME_HEIGHT / 2;
 
-  ecs.makeEntity(spaceShipTest);
-
-  SMotion* motionSystem = new SMotion();
-  gameSystems.addSystem(*motionSystem);
-
-  CMotion motionComponent;
-  ecs.makeEntity(motionComponent);
+  CMotion spaceShipMotion;
+  ecs.makeEntity(spaceShipSprite, spaceShipMotion);
 
   return;
 }

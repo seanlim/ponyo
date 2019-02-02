@@ -12,7 +12,7 @@
 #include "input.h"
 #include "text.h"
 #include "ecs.h"
-#include "systems/motion.h"
+#include "systems/physics.h"
 #include "systems/renderable.h"
 
 namespace gameNS
@@ -38,8 +38,9 @@ protected:
   float frameTime;
   float fps;
   Text gameText;
-  bool showFps = false;
   DWORD sleepTime; // Sleep in between frames
+  bool debug = false;
+  bool showFps = false;
   bool paused;
   bool initialised;
 

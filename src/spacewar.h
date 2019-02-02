@@ -6,7 +6,7 @@
 #include "image.h"
 #include "planet.h"
 #include "ship.h"
-#include "systems/motion.h"
+#include "systems/physics.h"
 #include "textureManager.h"
 
 class SpaceWar : public Game
