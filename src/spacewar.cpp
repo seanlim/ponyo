@@ -48,11 +48,11 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setY(GAME_HEIGHT / 4);
   ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
 
-  CDrawable nebulaImage;
+  CSprite nebulaImage;
   nebulaImage.initialise(GAME_WIDTH, GAME_HEIGHT, 1, &nebulaTexture);
   ecs.makeEntity(nebulaImage);
 
-  CDrawable spaceShipTest;
+  CSprite spaceShipTest;
   spaceShipTest.initialise(shipNS::WIDTH, shipNS::HEIGHT, shipNS::TEXTURE_COLS,
                            &gameTexture);
   spaceShipTest.startFrame = shipNS::SHIP1_START_FRAME,

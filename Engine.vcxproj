@@ -22,7 +22,7 @@
     <ClInclude Include="core\image.h" />
     <ClInclude Include="core\io\input.h" />
     <ClInclude Include="core\math\random.h" />
-    <ClInclude Include="core\systems\drawable.h" />
+    <ClInclude Include="core\systems\renderable.h" />
     <ClInclude Include="core\text.h" />
     <ClInclude Include="core\textureManager.h" />
     <ClInclude Include="ecs\component.h" />

@@ -88,9 +88,9 @@ void Game::initialise(HWND _hwnd)
   gameText.setFontColor(gameNS::FONT_COLOR);
 
   // Init graphics systems
-  SDrawable* drawSystem = new SDrawable(this->hwnd, GAME_WIDTH, GAME_HEIGHT,
-                                        FULLSCREEN, this->graphics);
-  graphicsSystems.addSystem(*drawSystem);
+  SRenderable* renderSystem = new SRenderable(
+      this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
+  graphicsSystems.addSystem(*renderSystem);
 
   initialised = true;
   return;

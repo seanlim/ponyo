@@ -5,7 +5,7 @@
 #include "graphics.h"
 #include "textureManager.h"
 
-struct CDrawable : public Component<CDrawable> {
+struct CSprite : public Component<CSprite> {
   SpriteData spriteData;
   TextureManager* textureManager;
 
@@ -59,27 +59,27 @@ struct CDrawable : public Component<CDrawable> {
   }
 };
 
-class SDrawable : public System
+class SRenderable : public System
 {
   Graphics* graphics;
 
 public:
-  SDrawable(HWND _hwnd, uint32 width, uint32 height, bool fullscreen,
-            Graphics* _graphics)
+  SRenderable(HWND _hwnd, uint32 width, uint32 height, bool fullscreen,
+              Graphics* _graphics)
       : System()
   {
-    System::addComponentType(CDrawable::id);
+    System::addComponentType(CSprite::id);
 
     this->graphics = _graphics;
   }
   virtual void updateComponents(float delta, BaseComponent** components)
   {
-    CDrawable* drawable = (CDrawable*)components[0];
+    CSprite* sprite = (CSprite*)components[0];
 
-    if (drawable->visible) {
+    if (sprite->visible) {
       graphics->spriteBegin();
-      drawable->spriteData.texture = drawable->textureManager->getTexture();
-      graphics->drawSprite(drawable->spriteData);
+      sprite->spriteData.texture = sprite->textureManager->getTexture();
+      graphics->drawSprite(sprite->spriteData);
       graphics->spriteEnd();
     }
   }

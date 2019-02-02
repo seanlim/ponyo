@@ -13,7 +13,7 @@
 #include "text.h"
 #include "ecs.h"
 #include "systems/motion.h"
-#include "systems/drawable.h"
+#include "systems/renderable.h"
 
 namespace gameNS
 {
