@@ -7,6 +7,8 @@ Game::Game()
   this->input = new Input();
   this->paused = false;
   fps = 100;
+
+  logBuffer << "Ponyo Engine 2019\n";
 }
 
 Game::~Game()
@@ -67,6 +69,8 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
 
 void Game::initialise(HWND _hwnd)
 {
+  debugLog("Setting up game...");
+
   this->hwnd = _hwnd;
 
   this->graphics = new Graphics();
@@ -79,11 +83,13 @@ void Game::initialise(HWND _hwnd)
                     "Error initialising high res timer"));
   QueryPerformanceCounter(&timeStart);
 
+  debugLog("Setting up font...");
+
   // Init font
   if (gameText.initialise(graphics, gameNS::POINT_SIZE, false, false,
                           gameNS::FONT) == false)
     throw(
-        GameError(gameErrorNS::FATAL_ERROR, "Failed to initialise fps font."));
+        GameError(gameErrorNS::FATAL_ERROR, "Failed to initialise game text"));
 
   gameText.setFontColor(gameNS::FONT_COLOR);
 
@@ -125,13 +131,18 @@ void Game::renderGame()
   static char buffer[BUF_SIZE];
 
   if (SUCCEEDED(this->graphics->beginScene())) {
-    // this->render();
+    // Call graphics system
     ecs.updateSystems(graphicsSystems, frameTime);
+
+    // Draw HUD
     graphics->spriteBegin();
     if (showFps) {
       _snprintf_s(buffer, BUF_SIZE, "%d FPS", (int)fps);
       gameText.print(buffer, GAME_WIDTH - 200, GAME_HEIGHT - gameNS::POINT_SIZE,
                      DT_RIGHT);
+    }
+    if (debug) {
+      gameText.print(logBuffer.str(), 0, 0, DT_LEFT);
     }
     graphics->spriteEnd();
     this->graphics->endScene();
@@ -170,6 +181,10 @@ void Game::run(HWND hwnd)
     switch (x) {
     case GameCommands::toggleFPS:
       Game::showFps = !Game::showFps;
+      debugLog("Toggle FPS");
+      break;
+    case GameCommands::toggleDebug:
+      Game::debug = !Game::debug;
       break;
     case GameCommands::Quit:
       ExitProcess(0);
@@ -191,6 +206,8 @@ void Game::run(HWND hwnd)
 
   this->input->readControllers();
   this->input->pollKeys();
+
+  debugLog(frameTime);
 }
 
 void Game::releaseAll() {}
