@@ -32,6 +32,8 @@ EntityHook ECS::makeEntity(BaseComponent** entityComponents,
   entities.push_back(newEntity);
 
   // TODO notify observers on entity construction
+  Logger::println("Created entity with " + std::to_string(numComponents) +
+                  " components");
 
   return hook;
 }
@@ -192,7 +194,7 @@ void ECS::updateComplexSystem(uint32 index, SystemList& systems, float delta,
   componentArrays.resize(
       std::max(componentArrays.size(), componentTypes.size()));
 
-  // Get collections of compnents
+  // Get collections of components
   for (int i = 0; i < componentTypes.size(); i++)
     componentArrays[i] = &components[componentTypes[i]];
 
@@ -202,6 +204,7 @@ void ECS::updateComplexSystem(uint32 index, SystemList& systems, float delta,
   size_t typeSize = BaseComponent::getTypeSize(componentTypes[minSizeIndex]);
   Array<uint32>& smallestComponentCollection = *componentArrays[minSizeIndex];
 
+  // Loop through each least occuring component
   for (int i = 0; i < smallestComponentCollection.size(); i += typeSize) {
     componentParam[minSizeIndex] =
         (BaseComponent*)&smallestComponentCollection[i];

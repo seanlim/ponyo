@@ -1,6 +1,7 @@
 #pragma once
 #define WIN_32_LEAN_AND_MEAN
 
+#include "logger.h"
 #include <windows.h>
 
 const double PI = 3.14159265;
@@ -11,8 +12,8 @@ const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE;
 const char CLASS_NAME[] = "Spacewar";
 const char GAME_TITLE[] = "Game Engine";
 const bool FULLSCREEN = false; // windowed or fullscreen
-const UINT GAME_WIDTH = 640;   // width of game in pixels
-const UINT GAME_HEIGHT = 480;  // height of game in pixels
+const UINT GAME_WIDTH = 1280;  // width of game in pixels
+const UINT GAME_HEIGHT = 720;  // height of game in pixels
 
 // Safely delete pointer referenced item
 #define safeDelete(ptr)                                                        \
@@ -62,6 +63,6 @@ const char NEBULA_IMAGE[] =
     "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org
 const char TEXTURES_IMAGE[] = "pictures\\textures.png";
 
-enum GameCommands { Quit, showFPS };
+enum GameCommands { Quit, toggleFPS, toggleDebug };
 
 enum WEAPON { TORPEDO, SHIP, PLANET };

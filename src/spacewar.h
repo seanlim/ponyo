@@ -6,7 +6,7 @@
 #include "image.h"
 #include "planet.h"
 #include "ship.h"
-#include "systems/motion.h"
+#include "systems/physics.h"
 #include "textureManager.h"
 
 class SpaceWar : public Game
@@ -16,9 +16,6 @@ class SpaceWar : public Game
   Planet planet;
   Ship ship1, ship2;
   Image nebulaImage;
-
-  ECS ecs;
-  SystemList mainSystems;
 
 public:
   SpaceWar();

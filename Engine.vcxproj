@@ -21,7 +21,10 @@
     <ClInclude Include="core\graphics.h" />
     <ClInclude Include="core\image.h" />
     <ClInclude Include="core\io\input.h" />
+    <ClInclude Include="core\logger.h" />
     <ClInclude Include="core\math\random.h" />
+    <ClInclude Include="core\systems\physics.h" />
+    <ClInclude Include="core\systems\renderable.h" />
     <ClInclude Include="core\text.h" />
     <ClInclude Include="core\textureManager.h" />
     <ClInclude Include="ecs\component.h" />
@@ -30,7 +33,6 @@
     <ClInclude Include="src\planet.h" />
     <ClInclude Include="src\ship.h" />
     <ClInclude Include="src\spacewar.h" />
-    <ClInclude Include="src\systems\motion.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\entity.cpp" />
@@ -38,6 +40,7 @@
     <ClCompile Include="core\graphics.cpp" />
     <ClCompile Include="core\image.cpp" />
     <ClCompile Include="core\io\input.cpp" />
+    <ClCompile Include="core\logger.cpp" />
     <ClCompile Include="core\math\random.cpp" />
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\text.cpp" />

@@ -7,45 +7,48 @@
 #include "map.h"
 #include "system.h"
 #include <algorithm>
+#include <string>
 
 // pair (Component id, Component index)
 typedef std::pair<uint32, uint32> ComponentReference;
 // pair (ECSEntity id, components)
 typedef std::pair<uint32, Array<ComponentReference>> ECSEntity;
 
-class ECSListener
-{
-public:
-  virtual void onMakeEntity(EntityHook hook) {}
-  virtual void onRemoveEntity(EntityHook hook) {}
-  virtual void onAddComponent(EntityHook hook, uint32 id) {}
-  virtual void onRemoveComponent(EntityHook hook, uint32 id) {}
+// TODO: Integrate ECS Listener w/ ECS class
+// class ECSListener
+// {
+// public:
+//   virtual void onMakeEntity(EntityHook hook) {}
+//   virtual void onRemoveEntity(EntityHook hook) {}
+//   virtual void onAddComponent(EntityHook hook, uint32 id) {}
+//   virtual void onRemoveComponent(EntityHook hook, uint32 id) {}
 
-  const Array<uint32>& getComponentIDs() { return componentIDs; }
-  inline bool shouldNotifyOnAllComponentOperations()
-  {
-    return notifyOnAllComponentOperations;
-  }
-  inline bool shouldNotifyOnAllEntityOperations()
-  {
-    return notifyOnAllEntityOperations;
-  }
+//   const Array<uint32>& getComponentIDs() { return componentIDs; }
+//   inline bool shouldNotifyOnAllComponentOperations()
+//   {
+//     return notifyOnAllComponentOperations;
+//   }
+//   inline bool shouldNotifyOnAllEntityOperations()
+//   {
+//     return notifyOnAllEntityOperations;
+//   }
 
-protected:
-  void setNotificationSettings(bool shouldNotifyOnAllComponentOperations,
-                               bool shouldNotifyOnAllEntityOperations)
-  {
-    notifyOnAllComponentOperations = shouldNotifyOnAllComponentOperations;
-    notifyOnAllEntityOperations = shouldNotifyOnAllEntityOperations;
-  }
+// protected:
+//   void setNotificationSettings(bool shouldNotifyOnAllComponentOperations,
+//                                bool shouldNotifyOnAllEntityOperations)
+//   {
+//     notifyOnAllComponentOperations = shouldNotifyOnAllComponentOperations;
+//     notifyOnAllEntityOperations = shouldNotifyOnAllEntityOperations;
+//   }
 
-  void addComponentID(uint32 id) { componentIDs.push_back(id); }
+//   void addComponentID(uint32 id) { componentIDs.push_back(id); }
 
-private:
-  Array<uint32> componentIDs;
-  bool notifyOnAllComponentOperations = false;
-  bool notifyOnAllEntityOperations = false;
-};
+// private:
+//   Array<uint32> componentIDs;
+//   bool notifyOnAllComponentOperations = false;
+//   bool notifyOnAllEntityOperations = false;
+// };
+
 class ECS
 {
 public:
@@ -56,11 +59,17 @@ public:
   EntityHook makeEntity(BaseComponent** entityComponents,
                         const uint32* componentIDs, size_t numComponents);
 
-  template <class Component> EntityHook makeEntity(Component& c1)
+  template <class A> EntityHook makeEntity(A& c1)
   {
-    BaseComponent* components[] = {(BaseComponent*)&c1};
-    uint32 componentIDs[] = {c1->id};
+    BaseComponent* components[] = {&c1};
+    uint32 componentIDs[] = {A::id};
     return makeEntity(components, componentIDs, 1);
+  }
+  template <class A, class B> EntityHook makeEntity(A& c1, B& c2)
+  {
+    BaseComponent* components[] = {&c1, &c2};
+    uint32 componentIDs[] = {A::id, B::id};
+    return makeEntity(components, componentIDs, 2);
   }
 
   void removeEntity(EntityHook hook);
@@ -90,6 +99,7 @@ public:
   {
     return getComponentInternal(componentsFrom(hook), componentID);
   }
+
   // Systems
   void updateSystems(SystemList& systems, float delta);
 

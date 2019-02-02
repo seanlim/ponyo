@@ -6,16 +6,21 @@
 #include <Mmsystem.h>
 // clang-format on
 
+#include <string>
+
 #include "common.h"
 #include "gameError.h"
 #include "graphics.h"
 #include "input.h"
 #include "text.h"
+#include "ecs.h"
+#include "systems/physics.h"
+#include "systems/renderable.h"
 
 namespace gameNS
 {
-const char FONT[] = "Arial";
-const int POINT_SIZE = 20;
+const char FONT[] = "Consolas";
+const int POINT_SIZE = 15;
 const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
 } // namespace gameNS
 
@@ -35,10 +40,18 @@ protected:
   float frameTime;
   float fps;
   Text gameText;
-  bool showFps = false;
   DWORD sleepTime; // Sleep in between frames
   bool paused;
   bool initialised;
+
+  // Debug
+  bool showFps = false;
+  bool debug = false;
+
+  // ECS
+  ECS ecs;
+  SystemList gameSystems;
+  SystemList graphicsSystems;
 
 public:
   Game();

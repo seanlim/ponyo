@@ -16,13 +16,15 @@ Input::Input()
   keyMap.clear();
 
   // Define chord for quit
-  std::vector<KeyBinding> quitChord;
+  Array<KeyBinding> quitChord;
   quitChord.push_back(KeyBinding(VK_SHIFT, KeyState::Pressed));
-  quitChord.push_back(KeyBinding(VK_ESCAPE, KeyState::JustPressed));
+  quitChord.push_back(KeyBinding(0x51, KeyState::JustPressed));
 
   keyMap[GameCommands::Quit] = new GameCommand("Quit", quitChord);
-  keyMap[GameCommands::showFPS] =
+  keyMap[GameCommands::toggleFPS] =
       new GameCommand("Toggle FPS", VK_F2, KeyState::JustPressed);
+  keyMap[GameCommands::toggleDebug] =
+      new GameCommand("Toggle debug", VK_F3, KeyState::JustPressed);
 }
 
 Input::~Input()

@@ -8,8 +8,8 @@
 #include <array>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
+#include "array.h"
 #include "common.h"
 #include "gameError.h"
 

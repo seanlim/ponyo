@@ -12,15 +12,19 @@ void SpaceWar::initialise(HWND hwnd)
   if (!gameTexture.initialise(graphics, TEXTURES_IMAGE))
     throw(
         GameError(gameErrorNS::FATAL_ERROR, "Error initialising game texture"));
+
+  // Nebula
+  // Init texture
   if (!nebulaTexture.initialise(graphics, NEBULA_IMAGE))
     throw(GameError(gameErrorNS::FATAL_ERROR,
                     "Error initialising nebula texture"));
-  if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
-    throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
-  nebulaImage.setX(0.0);
-  nebulaImage.setY(0.0);
 
-  if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture)) return;
+  // if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture))
+  //   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing nebula"));
+  // nebulaImage.setX(0.0);
+  // nebulaImage.setY(0.0);
+
+  // if (!nebulaImage.initialise(graphics, 0, 0, 0, &nebulaTexture)) return;
 
   if (!planet.initialise(this, planetNS::WIDTH, planetNS::HEIGHT, 2,
                          &gameTexture))
@@ -44,10 +48,21 @@ void SpaceWar::initialise(HWND hwnd)
   ship2.setY(GAME_HEIGHT / 4);
   ship2.setVelocity(Vec2(-shipNS::SPEED, -shipNS::SPEED)); // Vec2(X, Y)
 
-  CMotion* motionComponent = new CMotion;
-  SMotion* motionSystem = new SMotion();
-  ecs.makeEntity(motionComponent);
-  mainSystems.addSystem(*motionSystem);
+  CSprite nebulaImage;
+  nebulaImage.initialise(GAME_WIDTH, GAME_HEIGHT, 1, &nebulaTexture);
+  ecs.makeEntity(nebulaImage);
+
+  CSprite spaceShipSprite;
+  spaceShipSprite.initialise(shipNS::WIDTH, shipNS::HEIGHT,
+                             shipNS::TEXTURE_COLS, &gameTexture);
+  spaceShipSprite.startFrame = shipNS::SHIP1_START_FRAME,
+  spaceShipSprite.endFrame = shipNS::SHIP1_END_FRAME;
+  spaceShipSprite.currentFrame = shipNS::SHIP1_START_FRAME;
+  spaceShipSprite.spriteData.x = GAME_WIDTH / 2;
+  spaceShipSprite.spriteData.y = GAME_HEIGHT / 2;
+
+  CMotion spaceShipMotion;
+  ecs.makeEntity(spaceShipSprite, spaceShipMotion);
 
   return;
 }
@@ -60,7 +75,6 @@ void SpaceWar::update()
   //
   /////
   ///////
-  ecs.updateSystems(mainSystems, frameTime);
 }
 
 void SpaceWar::ai() {}
@@ -93,7 +107,7 @@ void SpaceWar::collisions()
 void SpaceWar::render()
 {
   this->graphics->spriteBegin();
-  this->nebulaImage.draw();
+  // this->nebulaImage.draw();
   this->planet.draw();
   this->ship1.draw();
   this->ship2.draw();
