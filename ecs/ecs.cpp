@@ -32,6 +32,8 @@ EntityHook ECS::makeEntity(BaseComponent** entityComponents,
   entities.push_back(newEntity);
 
   // TODO notify observers on entity construction
+  Logger::println("Created entity with " + std::to_string(numComponents) +
+                  " components");
 
   return hook;
 }

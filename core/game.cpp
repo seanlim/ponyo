@@ -7,8 +7,6 @@ Game::Game()
   this->input = new Input();
   this->paused = false;
   fps = 100;
-
-  logBuffer << "Ponyo Engine 2019\n";
 }
 
 Game::~Game()
@@ -69,13 +67,13 @@ void Game::handleInput(WPARAM wParam, LPARAM lParam, UINT msg)
 
 void Game::initialise(HWND _hwnd)
 {
-  debugLog("Setting up game...");
-
   this->hwnd = _hwnd;
 
+  Logger::println("Initialise graphics...");
   this->graphics = new Graphics();
   this->graphics->initialise(this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
 
+  Logger::println("Initialise input...");
   this->input->initialise(hwnd, false);
 
   if (!QueryPerformanceFrequency(&timeFreq))
@@ -83,8 +81,7 @@ void Game::initialise(HWND _hwnd)
                     "Error initialising high res timer"));
   QueryPerformanceCounter(&timeStart);
 
-  debugLog("Setting up font...");
-
+  Logger::println("Initialise font...");
   // Init font
   if (gameText.initialise(graphics, gameNS::POINT_SIZE, false, false,
                           gameNS::FONT) == false)
@@ -93,16 +90,24 @@ void Game::initialise(HWND _hwnd)
 
   gameText.setFontColor(gameNS::FONT_COLOR);
 
+  // Attach game to ECS (for logging)
+
+  Logger::println("Initialise graphics system...");
   // Init graphics
   SRenderable* renderSystem = new SRenderable(
       this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
   graphicsSystems.addSystem(*renderSystem);
 
+  Logger::println("Initialise game systems...");
   // Init physics
   SPhysics* physicsSystem = new SPhysics();
   gameSystems.addSystem(*physicsSystem);
 
   initialised = true;
+  Logger::println((std::to_string(graphicsSystems.size()) +
+                   " graphics systems initialised"));
+  Logger::println(
+      (std::to_string(gameSystems.size()) + " game systems initialised"));
   return;
 }
 
@@ -142,7 +147,7 @@ void Game::renderGame()
                      DT_RIGHT);
     }
     if (debug) {
-      gameText.print(logBuffer.str(), 0, 0, DT_LEFT);
+      gameText.print(Logger::logBuffer.str(), 0, 0, DT_LEFT);
     }
     graphics->spriteEnd();
     this->graphics->endScene();
@@ -181,7 +186,6 @@ void Game::run(HWND hwnd)
     switch (x) {
     case GameCommands::toggleFPS:
       Game::showFps = !Game::showFps;
-      debugLog("Toggle FPS");
       break;
     case GameCommands::toggleDebug:
       Game::debug = !Game::debug;

@@ -6,7 +6,6 @@
 #include <Mmsystem.h>
 // clang-format on
 
-#include <sstream>
 #include <string>
 
 #include "common.h"
@@ -23,7 +22,6 @@ namespace gameNS
 const char FONT[] = "Consolas";
 const int POINT_SIZE = 15;
 const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
-const int LOG_HEIGHT = 47;
 } // namespace gameNS
 
 class Game
@@ -49,7 +47,6 @@ protected:
   // Debug
   bool showFps = false;
   bool debug = false;
-  std::stringstream logBuffer;
 
   // ECS
   ECS ecs;
@@ -66,12 +63,6 @@ public:
   // Handle input
   void handleInput(WPARAM, LPARAM, UINT);
 
-  template <typename T> inline void debugLog(T content)
-  {
-    logBuffer << content << "\n";
-    updateLog();
-  }
-
   virtual void initialise(HWND hwnd);
   virtual void run(HWND);
   virtual void releaseAll();
@@ -86,26 +77,4 @@ public:
   virtual void collisions() = 0;
 
   void exitGame();
-
-private:
-  void updateLog()
-  {
-    // Count lines in buffer
-    std::string countString = logBuffer.str();
-    std::string delimiter = "\n";
-    size_t pos = 0;
-    int lineCount = 0;
-
-    while ((pos = countString.find(delimiter)) != -1) {
-      lineCount++;
-      countString.erase(0, pos + delimiter.length());
-    }
-
-    // Scroll buffer
-    if (lineCount >= gameNS::LOG_HEIGHT) {
-      std::string tempBuffer = logBuffer.str();
-      tempBuffer.erase(0, tempBuffer.find(delimiter) + delimiter.length());
-      logBuffer.str(tempBuffer);
-    }
-  }
 };

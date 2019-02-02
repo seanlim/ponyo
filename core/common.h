@@ -1,6 +1,7 @@
 #pragma once
 #define WIN_32_LEAN_AND_MEAN
 
+#include "logger.h"
 #include <windows.h>
 
 const double PI = 3.14159265;
