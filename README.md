@@ -8,10 +8,6 @@ Main engine code resides in `core/`.
 
 ## Input
 
-**Gamepad Controller** input is done with `XInput`, bits corresponding to their respective gamepad buttons are mapped, use the getter methods of `Input` to poll for gamepad state.
-
-**Keyboard Input** key polling is done with the default Win32 `GetAsyncKeyState` function. Game commands are mapped with `GameCommand` objects that can be assigned a chord of `KeyBinding`s.
-
 ### Key State
 
 | Previous Frame | Current Frame | KeyState     |
@@ -39,7 +35,9 @@ keyMap[GameCommands::showFPS] =
 
 `SHIFT` + `Q` to quit
 
-`F2` to toggle debug info
+`F2` to toggle FPS
+
+`F3` to toggle debugger
 
 ### Poll for game commands
 
