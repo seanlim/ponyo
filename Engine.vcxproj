@@ -22,6 +22,7 @@
     <ClInclude Include="core\logger.h" />
     <ClInclude Include="core\math\lerp.h" />
     <ClInclude Include="core\math\random.h" />
+    <ClInclude Include="core\systems\collision.h" />
     <ClInclude Include="core\systems\physics.h" />
     <ClInclude Include="core\systems\renderable.h" />
     <ClInclude Include="core\text.h" />

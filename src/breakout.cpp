@@ -39,6 +39,7 @@ void Breakout::initialise(HWND hwnd)
   ballSprite.startFrame = 0, ballSprite.endFrame = 7,
   ballSprite.currentFrame = 0;
   ballSprite.initialise(32, 32, 4, &paddleBallTexture);
+  ballSprite.setScale(0.6);
   ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   CMotion ballMotion;
 
@@ -47,7 +48,7 @@ void Breakout::initialise(HWND hwnd)
   // Init paddle
   CSprite paddleSprite;
   paddleSprite.startFrame = 7, paddleSprite.endFrame = 11,
-  paddleSprite.currentFrame = 7;
+  paddleSprite.currentFrame = 8;
   paddleSprite.initialise(128, 32, 1, &paddleBallTexture);
   paddleSprite.setScale(0.6);
   paddleSprite.setPosition(marginX, GAME_HEIGHT - paddleSprite.getHeight());

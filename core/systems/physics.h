@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "ecs.h"
-#include "graphics.h"
 #include "math/lerp.h"
 #include "systems/renderable.h"
 

@@ -16,6 +16,7 @@
 #include "ecs.h"
 #include "systems/physics.h"
 #include "systems/renderable.h"
+#include "systems/collision.h"
 
 namespace gameNS
 {
