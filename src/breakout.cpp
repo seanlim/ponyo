@@ -21,9 +21,9 @@ void Breakout::initialise(HWND hwnd)
 
   // Init tile sprite
   CSprite tileSprite;
-  tileSprite.initialise(64, 64, 1, &tileTexture);
   tileSprite.startFrame = 0, tileSprite.endFrame = 0,
   tileSprite.currentFrame = 0;
+  tileSprite.initialise(64, 64, 1, &tileTexture);
   tileSprite.spriteData.scale = 0.5;
   CBreakOutTile breakOutTileComponent;
   breakOutTileComponent.sprite = tileSprite;
@@ -32,15 +32,24 @@ void Breakout::initialise(HWND hwnd)
 
   // Init ball
   CSprite ballSprite;
-  ballSprite.initialise(32, 32, 4, &paddleBallTexture);
   ballSprite.startFrame = 0, ballSprite.endFrame = 7,
   ballSprite.currentFrame = 0;
+  ballSprite.initialise(32, 32, 4, &paddleBallTexture);
   ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   CMotion ballMotion;
   ballMotion.setGravity(0.0);
   ballMotion.acceleration = Vec2(1, -2);
 
   ecs.makeEntity(ballSprite, ballMotion);
+
+  // Init paddle
+  CSprite paddleSprite;
+  paddleSprite.startFrame = 7, paddleSprite.endFrame = 11,
+  paddleSprite.currentFrame = 7;
+  paddleSprite.initialise(128, 32, 1, &paddleBallTexture);
+  paddleSprite.setPosition(marginX,
+                           GAME_HEIGHT - paddleSprite.spriteData.height);
+  ecs.makeEntity(paddleSprite);
 
   return;
 }

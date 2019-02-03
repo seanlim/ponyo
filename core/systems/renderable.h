@@ -10,12 +10,14 @@ struct CSprite : public Component<CSprite> {
   TextureManager* textureManager;
 
   int startFrame, endFrame, currentFrame;
+  int cols;
   float frameDelay;
-  float animTimer;
   COLOR_ARGB colorFilter;
 
+  bool animates;
   bool loops;
   bool visible;
+  bool animComplete;
 
   void initialise(int width, int height, int ncols, TextureManager* textureM)
   {
@@ -29,9 +31,10 @@ struct CSprite : public Component<CSprite> {
     spriteData.texture = NULL;
     spriteData.flipHorizontal = false, this->spriteData.flipVertical = false;
 
-    startFrame = 0, endFrame = 0, currentFrame = 0;
-    frameDelay = 1.0;
+    // startFrame = 0, endFrame = 0, currentFrame = 0;
+    cols = ncols;
     animTimer = 0.0;
+    frameDelay = 0.05;
     visible = true;
     loops = true;
     colorFilter = graphicsNS::WHITE;
@@ -49,7 +52,32 @@ struct CSprite : public Component<CSprite> {
     int cols = ncols;
     if (ncols == 0) cols = 1;
 
-    // configure spriteData.rect to draw currentFrame
+    setRect();
+  }
+
+  void setPosition(float _x, float _y) { spriteData.x = _x, spriteData.y = _y; }
+  void updateCurrentFrame(float delta)
+  {
+    if (this->endFrame - this->startFrame > 0) {
+      this->animTimer += delta;
+      if (this->animTimer > this->frameDelay) {
+        this->animTimer -= this->frameDelay;
+        this->currentFrame++;
+        if (this->currentFrame < this->startFrame ||
+            this->currentFrame > this->endFrame) {
+          if (loops) {
+            this->currentFrame = this->startFrame;
+          } else {
+            this->currentFrame = this->endFrame;
+            this->animComplete = true;
+          }
+        }
+        setRect();
+      }
+    }
+  }
+  void setRect()
+  {
     spriteData.rect.left = (currentFrame % cols) * spriteData.width;
     // right edge + 1
     spriteData.rect.right = spriteData.rect.left + spriteData.width;
@@ -58,7 +86,8 @@ struct CSprite : public Component<CSprite> {
     spriteData.rect.bottom = spriteData.rect.top + spriteData.height;
   }
 
-  void setPosition(float _x, float _y) { spriteData.x = _x, spriteData.y = _y; }
+private:
+  float animTimer;
 };
 
 class SRenderable : public System
@@ -85,5 +114,7 @@ public:
       graphics->drawSprite(sprite->spriteData);
       graphics->spriteEnd();
     }
+
+    if (sprite->animates) sprite->updateCurrentFrame(delta);
   }
 };
