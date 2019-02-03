@@ -28,7 +28,7 @@ void Breakout::initialise(HWND hwnd)
   tileSprite.startFrame = 0, tileSprite.endFrame = 0,
   tileSprite.currentFrame = 0;
   tileSprite.initialise(64, 64, 1, &tileTexture);
-  tileSprite.spriteData.scale = 0.5;
+  tileSprite.setScale(0.5);
   CBreakOutTile breakOutTileComponent;
   breakOutTileComponent.sprite = tileSprite;
 
@@ -49,8 +49,8 @@ void Breakout::initialise(HWND hwnd)
   paddleSprite.startFrame = 7, paddleSprite.endFrame = 11,
   paddleSprite.currentFrame = 7;
   paddleSprite.initialise(128, 32, 1, &paddleBallTexture);
-  paddleSprite.setPosition(marginX,
-                           GAME_HEIGHT - paddleSprite.spriteData.height);
+  paddleSprite.setScale(0.6);
+  paddleSprite.setPosition(marginX, GAME_HEIGHT - paddleSprite.getHeight());
   CMotion paddleMotion;
   CPlayerControlled paddleControls;
   ecs.makeEntity(paddleSprite, paddleControls, paddleMotion);
