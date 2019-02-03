@@ -3,12 +3,15 @@
 #include "common.h"
 #include "ecs.h"
 #include "graphics.h"
+#include "math/lerp.h"
 #include "systems/renderable.h"
 
 struct CMotion : public Component<CMotion> {
   Vec2 velocity = Vec2(0.0, 0.0);
   Vec2 acceleration = Vec2(0.0, 0.0);
   Vec2 gravity = Vec2(0.0, 0.0);
+  float friction = 0.3;
+  float frictionSmoothness = 0.7;
 
   void setGravity(float acc) { gravity.y = acc; }
 };
@@ -33,11 +36,18 @@ public:
     // Apply forces
     motion->velocity += motion->acceleration * (delta * 100);
 
-    // TODO: Friction lerp
-    motion->acceleration = Vec2(0.0, 0.0);
-
     // Move sprite
     sprite->spriteData.x += motion->velocity.x * delta;
     sprite->spriteData.y += motion->velocity.y * delta;
+
+    if (motion->acceleration.x == 0)
+      motion->velocity.x = lerp(
+          motion->velocity.x, motion->velocity.x * (motion->frictionSmoothness),
+          motion->friction);
+    if (motion->acceleration.y == 0)
+      motion->velocity.y = lerp(
+          motion->velocity.y, motion->velocity.y * (motion->frictionSmoothness),
+          motion->friction);
+    motion->acceleration = Vec2(0.0, 0.0);
   }
 };

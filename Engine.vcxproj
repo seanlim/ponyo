@@ -20,6 +20,7 @@
     <ClInclude Include="core\graphics.h" />
     <ClInclude Include="core\io\input.h" />
     <ClInclude Include="core\logger.h" />
+    <ClInclude Include="core\math\lerp.h" />
     <ClInclude Include="core\math\random.h" />
     <ClInclude Include="core\systems\physics.h" />
     <ClInclude Include="core\systems\renderable.h" />
@@ -37,6 +38,7 @@
     <ClCompile Include="core\graphics.cpp" />
     <ClCompile Include="core\io\input.cpp" />
     <ClCompile Include="core\logger.cpp" />
+    <ClCompile Include="core\math\lerp.cpp" />
     <ClCompile Include="core\math\random.cpp" />
     <ClCompile Include="core\os\winmain.cpp" />
     <ClCompile Include="core\text.cpp" />
