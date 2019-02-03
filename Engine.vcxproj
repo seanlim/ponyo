@@ -15,11 +15,9 @@
     <ClInclude Include="core\data-structures\array.h" />
     <ClInclude Include="core\data-structures\map.h" />
     <ClInclude Include="core\data-structures\stack.h" />
-    <ClInclude Include="core\entity.h" />
     <ClInclude Include="core\game.h" />
     <ClInclude Include="core\gameError.h" />
     <ClInclude Include="core\graphics.h" />
-    <ClInclude Include="core\image.h" />
     <ClInclude Include="core\io\input.h" />
     <ClInclude Include="core\logger.h" />
     <ClInclude Include="core\math\random.h" />
@@ -34,10 +32,8 @@
     <ClInclude Include="src\tileMap.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\entity.cpp" />
     <ClCompile Include="core\game.cpp" />
     <ClCompile Include="core\graphics.cpp" />
-    <ClCompile Include="core\image.cpp" />
     <ClCompile Include="core\io\input.cpp" />
     <ClCompile Include="core\logger.cpp" />
     <ClCompile Include="core\math\random.cpp" />
