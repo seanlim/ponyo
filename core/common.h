@@ -58,10 +58,8 @@ const UINT GAME_HEIGHT = 720;  // height of game in pixels
 
 typedef unsigned int uint32;
 
-// image resources
-const char NEBULA_IMAGE[] =
-    "pictures\\orion.jpg"; // photo source NASA/courtesy of nasaimages.org
-const char TEXTURES_IMAGE[] = "pictures\\textures.png";
+// Image resources
+const char TILE_IMAGE[] = "assets\\tile.png";
 
 enum GameCommands { Quit, toggleFPS, toggleDebug };
 

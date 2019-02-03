@@ -35,4 +35,9 @@ public:
     logBuffer << content << "\n";
     updateLog();
   }
+
+  static void error(std::string errorMessage)
+  {
+    println(("ERR: " + errorMessage));
+  }
 };

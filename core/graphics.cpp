@@ -6,7 +6,7 @@ Graphics::Graphics()
   this->fullscreen = false;
   this->width = GAME_WIDTH;
   this->height = GAME_HEIGHT;
-  this->setBackColor(SETCOLOR_ARGB(255, 0, 0, 128));
+  this->setBackColor(graphicsNS::BACK_COLOR);
 }
 
 void Graphics::initD3Dpp()

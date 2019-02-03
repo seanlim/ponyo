@@ -139,6 +139,9 @@ void Game::renderGame()
     // Call graphics system
     ecs.updateSystems(graphicsSystems, frameTime);
 
+    // ENABLE THIS if a custom graphical SystemList is needed...
+    // this->render();
+
     // Draw HUD
     graphics->spriteBegin();
     if (showFps) {

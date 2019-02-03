@@ -61,6 +61,7 @@ struct CSprite : public Component<CSprite> {
 
 class SRenderable : public System
 {
+protected:
   Graphics* graphics;
 
 public:

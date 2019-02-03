@@ -14,6 +14,6 @@ Main engine code resides in `core/`.
 
 `F3` to toggle debugger
 
-## Spacewar
+## BREAKOUT!
 
 Driver game to test engine in `src/`

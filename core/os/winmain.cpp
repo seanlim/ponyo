@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <windows.h>
 
+#include "breakout.h"
 #include "common.h"
 #include "game.h"
 #include "graphics.h"
 #include "random.h"
-#include "spacewar.h"
 
 bool AnotherInstance()
 {
@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
   MSG msg;
 
-  game = new SpaceWar();
+  game = new Breakout();
 
   if (AnotherInstance()) return false;
   if (!CreateMainWindow(hwnd, hInstance, nCmdShow)) return false;
