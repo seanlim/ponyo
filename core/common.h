@@ -56,6 +56,14 @@ const UINT GAME_HEIGHT = 720;  // height of game in pixels
   }
 #define TRANSCOLOR SETCOLOR_ARGB(0, 255, 0, 255) // transparent color (magenta)
 
+// DirectX
+#define LP_3DDEVICE LPDIRECT3DDEVICE9
+#define LP_3D LPDIRECT3D9
+#define LP_TEXTURE LPDIRECT3DTEXTURE9
+#define LP_SPRITE LPD3DXSPRITE
+#define LP_DXFONT LPD3DXFONT
+#define Vec2 D3DXVECTOR2
+
 typedef unsigned int uint32;
 
 // Image resources

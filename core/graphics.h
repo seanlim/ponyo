@@ -8,14 +8,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-// DirectX
-#define LP_3DDEVICE LPDIRECT3DDEVICE9
-#define LP_3D LPDIRECT3D9
-#define LP_TEXTURE LPDIRECT3DTEXTURE9
-#define LP_SPRITE LPD3DXSPRITE
-#define LP_DXFONT LPD3DXFONT
-#define Vec2 D3DXVECTOR2
-
 // Colors
 #define COLOR_ARGB DWORD
 #define SETCOLOR_ARGB(a, r, g, b)                                              \
