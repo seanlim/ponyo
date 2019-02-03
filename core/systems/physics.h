@@ -8,7 +8,7 @@
 struct CMotion : public Component<CMotion> {
   Vec2 velocity = Vec2(0.0, 0.0);
   Vec2 acceleration = Vec2(0.0, 0.0);
-  Vec2 gravity = Vec2(0.0, 9.81);
+  Vec2 gravity = Vec2(0.0, 0.0);
 
   void setGravity(float acc) { gravity.y = acc; }
 };
@@ -31,10 +31,10 @@ public:
     motion->acceleration += motion->gravity;
 
     // Apply forces
-    motion->velocity += motion->acceleration * delta;
+    motion->velocity += motion->acceleration * (delta * 100);
 
-    // Friction?
-    // motion->acceleration = Vec2(0.0, 0.0);
+    // TODO: Friction lerp
+    motion->acceleration = Vec2(0.0, 0.0);
 
     // Move sprite
     sprite->spriteData.x += motion->velocity.x * delta;

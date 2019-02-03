@@ -4,6 +4,7 @@
 #include "common.h"
 #include "ecs.h"
 #include "game.h"
+#include "playerControls.h"
 #include "textureManager.h"
 #include "tileMap.h"
 

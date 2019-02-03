@@ -13,6 +13,10 @@ void Breakout::initialise(HWND hwnd)
       this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
   graphicsSystems.addSystem(*tileMapSystem);
 
+  // Player controls
+  SPlayerControlled* playerControlSystem = new SPlayerControlled(input);
+  gameSystems.addSystem(*playerControlSystem);
+
   // Load textures
   if (!tileTexture.initialise(graphics, TILE_IMAGE))
     Logger::error("Failed to load tile textures");
@@ -37,8 +41,6 @@ void Breakout::initialise(HWND hwnd)
   ballSprite.initialise(32, 32, 4, &paddleBallTexture);
   ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   CMotion ballMotion;
-  ballMotion.setGravity(0.0);
-  ballMotion.acceleration = Vec2(1, -2);
 
   ecs.makeEntity(ballSprite, ballMotion);
 
@@ -49,7 +51,9 @@ void Breakout::initialise(HWND hwnd)
   paddleSprite.initialise(128, 32, 1, &paddleBallTexture);
   paddleSprite.setPosition(marginX,
                            GAME_HEIGHT - paddleSprite.spriteData.height);
-  ecs.makeEntity(paddleSprite);
+  CMotion paddleMotion;
+  CPlayerControlled paddleControls;
+  ecs.makeEntity(paddleSprite, paddleControls, paddleMotion);
 
   return;
 }
