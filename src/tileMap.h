@@ -10,17 +10,22 @@
 #define columns 10
 #define tileSize 32
 
-struct CBreakOutTile : public CSprite {
-  bool enabled;
+// Initialising CBreakOutTile as a CSprite and registering its id
+// under SBreakOutTileMap causes double draws
+// TODO: find a more elegant way around this
+struct CBreakOutTile : public Component<CBreakOutTile> {
+public:
+  CSprite sprite;
 };
-class SBreakOutTileMap : public SRenderable
+class SBreakOutTileMap : public System
 {
 private:
+  Graphics* graphics;
   int tileMap[columns][rows]; // row, column
 public:
   SBreakOutTileMap(HWND _hwnd, uint32 width, uint32 height, bool fullscreen,
                    Graphics* _graphics)
-      : SRenderable(_hwnd, width, height, fullscreen, _graphics)
+      : System()
   {
     System::addComponentType(CBreakOutTile::id);
     this->graphics = _graphics;
@@ -42,14 +47,14 @@ public:
     for (int column = 0; column < columns; column++) {
       for (int row = 0; row < rows; row++) {
 
-        breakoutTile->setPosition((marginX + (column * tileSize)),
-                                  (row * tileSize));
+        breakoutTile->sprite.setPosition((marginX + (column * tileSize)),
+                                         (row * tileSize));
 
         if (tileMap[row][column] == 1) {
           graphics->spriteBegin();
-          breakoutTile->spriteData.texture =
-              breakoutTile->textureManager->getTexture();
-          graphics->drawSprite(breakoutTile->spriteData);
+          breakoutTile->sprite.spriteData.texture =
+              breakoutTile->sprite.textureManager->getTexture();
+          graphics->drawSprite(breakoutTile->sprite.spriteData);
           graphics->spriteEnd();
         }
       }
