@@ -60,6 +60,7 @@ typedef unsigned int uint32;
 
 // Image resources
 const char TILE_IMAGE[] = "assets\\tile.png";
+const char PADDLE_BALL[] = "assets\\paddle_ball.png";
 
 enum GameCommands { Quit, toggleFPS, toggleDebug };
 

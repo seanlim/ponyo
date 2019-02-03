@@ -9,6 +9,8 @@ struct CMotion : public Component<CMotion> {
   Vec2 velocity = Vec2(0.0, 0.0);
   Vec2 acceleration = Vec2(0.0, 0.0);
   Vec2 gravity = Vec2(0.0, 9.81);
+
+  void setGravity(float acc) { gravity.y = acc; }
 };
 
 class SPhysics : public System
@@ -31,7 +33,8 @@ public:
     // Apply forces
     motion->velocity += motion->acceleration * delta;
 
-    motion->acceleration = Vec2(0.0, 0.0);
+    // Friction?
+    // motion->acceleration = Vec2(0.0, 0.0);
 
     // Move sprite
     sprite->spriteData.x += motion->velocity.x * delta;

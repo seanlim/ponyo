@@ -9,7 +9,7 @@
 
 class Breakout : public Game
 {
-  TextureManager tileTexture;
+  TextureManager tileTexture, paddleBallTexture;
 
 public:
   Breakout();

@@ -16,16 +16,31 @@ void Breakout::initialise(HWND hwnd)
   // Load textures
   if (!tileTexture.initialise(graphics, TILE_IMAGE))
     Logger::error("Failed to load tile textures");
+  if (!paddleBallTexture.initialise(graphics, PADDLE_BALL))
+    Logger::error("Failed to load paddle and ball textures");
 
   // Init tile sprite
-  CBreakOutTile tileSprite;
+  CSprite tileSprite;
   tileSprite.initialise(64, 64, 1, &tileTexture);
-  tileSprite.startFrame = 0;
-  tileSprite.endFrame = 0;
+  tileSprite.startFrame = 0, tileSprite.endFrame = 0,
   tileSprite.currentFrame = 0;
   tileSprite.spriteData.scale = 0.5;
+  CBreakOutTile breakOutTileComponent;
+  breakOutTileComponent.sprite = tileSprite;
 
-  ecs.makeEntity(tileSprite);
+  ecs.makeEntity(breakOutTileComponent);
+
+  // Init ball
+  CSprite ballSprite;
+  ballSprite.initialise(32, 32, 4, &paddleBallTexture);
+  ballSprite.startFrame = 0, ballSprite.endFrame = 7,
+  ballSprite.currentFrame = 0;
+  ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+  CMotion ballMotion;
+  ballMotion.setGravity(0.0);
+  ballMotion.acceleration = Vec2(1, -2);
+
+  ecs.makeEntity(ballSprite, ballMotion);
 
   return;
 }
