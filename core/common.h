@@ -2,6 +2,8 @@
 #define WIN_32_LEAN_AND_MEAN
 
 #include "logger.h"
+#include <d3d9.h>
+#include <d3dx9.h>
 #include <windows.h>
 
 const double PI = 3.14159265;
@@ -63,6 +65,23 @@ const UINT GAME_HEIGHT = 720;  // height of game in pixels
 #define LP_SPRITE LPD3DXSPRITE
 #define LP_DXFONT LPD3DXFONT
 #define Vec2 D3DXVECTOR2
+
+namespace Vec2NS
+{
+static float Vector2Length(const Vec2* v) { return D3DXVec2Length(v); }
+
+static float Vector2Dot(const Vec2* v1, const Vec2* v2)
+{
+  return D3DXVec2Dot(v1, v2);
+}
+
+static void Vector2Normalize(Vec2* v) { D3DXVec2Normalize(v, v); }
+
+static Vec2* Vector2Transform(Vec2* v, D3DXMATRIX* m)
+{
+  return D3DXVec2TransformCoord(v, v, m);
+}
+} // namespace Vec2NS
 
 typedef unsigned int uint32;
 

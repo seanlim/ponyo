@@ -5,8 +5,6 @@
 
 #include "common.h"
 #include "gameError.h"
-#include <d3d9.h>
-#include <d3dx9.h>
 
 // Colors
 #define COLOR_ARGB DWORD
@@ -99,20 +97,6 @@ public:
   HRESULT loadTexture(const char*, COLOR_ARGB, UINT&, UINT&, LP_TEXTURE&);
   void Graphics::drawSprite(const SpriteData&,
                             COLOR_ARGB color = graphicsNS::WHITE);
-
-  static float Vector2Length(const Vec2* v) { return D3DXVec2Length(v); }
-
-  static float Vector2Dot(const Vec2* v1, const Vec2* v2)
-  {
-    return D3DXVec2Dot(v1, v2);
-  }
-
-  static void Vector2Normalize(Vec2* v) { D3DXVec2Normalize(v, v); }
-
-  static Vec2* Vector2Transform(Vec2* v, D3DXMATRIX* m)
-  {
-    return D3DXVec2TransformCoord(v, v, m);
-  }
 
   void spriteBegin() { sprite->Begin(D3DXSPRITE_ALPHABLEND); }
 

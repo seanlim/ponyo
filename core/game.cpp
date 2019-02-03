@@ -98,10 +98,15 @@ void Game::initialise(HWND _hwnd)
       this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
   graphicsSystems.addSystem(*renderSystem);
 
-  Logger::println("Initialise game systems...");
+  Logger::println("Initialise physics system ...");
   // Init physics
   SPhysics* physicsSystem = new SPhysics();
   gameSystems.addSystem(*physicsSystem);
+
+  Logger::println("Initialise collision system ...");
+  // Init collision
+  SCollision* collisionSystem = new SCollision();
+  gameSystems.addSystem(*collisionSystem);
 
   initialised = true;
   Logger::println((std::to_string(graphicsSystems.size()) +
@@ -200,14 +205,15 @@ void Game::run(HWND hwnd)
   }
 
   if (!paused) {
-    // TEMP UPDATE PHYSICS
-    // move this to somewhere more intentional
-    ecs.updateSystems(gameSystems, frameTime);
     this->update();
     this->ai();
     this->collisions();
     this->input->vibrateControllers(frameTime);
   }
+
+  // TEMP
+  // move this to somewhere more intentional
+  ecs.updateSystems(gameSystems, frameTime);
 
   this->renderGame();
 

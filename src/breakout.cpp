@@ -42,8 +42,15 @@ void Breakout::initialise(HWND hwnd)
   ballSprite.setScale(0.6);
   ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   CMotion ballMotion;
+  ballMotion.velocity = Vec2(0.0, 100);
+  ballMotion.friction = 0.0;
+  CCollidable ballCollision;
+  ballCollision.collisionType = BOX;
+  ballCollision.collisionResponse = BOUNCE;
+  ballCollision.radius = ballSprite.getHeight();
+  ballCollision.collisionId = "ball";
 
-  ecs.makeEntity(ballSprite, ballMotion);
+  ecs.makeEntity(ballSprite, ballMotion, ballCollision);
 
   // Init paddle
   CSprite paddleSprite;
@@ -54,7 +61,11 @@ void Breakout::initialise(HWND hwnd)
   paddleSprite.setPosition(marginX, GAME_HEIGHT - paddleSprite.getHeight());
   CMotion paddleMotion;
   CPlayerControlled paddleControls;
-  ecs.makeEntity(paddleSprite, paddleControls, paddleMotion);
+  CCollidable paddleCollision;
+  paddleCollision.collisionType = BOX;
+  paddleCollision.collisionResponse = NONE;
+  paddleCollision.collisionId = "paddle";
+  ecs.makeEntity(paddleControls, paddleSprite, paddleMotion, paddleCollision);
 
   return;
 }
