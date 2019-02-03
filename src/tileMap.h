@@ -42,8 +42,8 @@ public:
     for (int column = 0; column < columns; column++) {
       for (int row = 0; row < rows; row++) {
 
-        breakoutTile->spriteData.x = marginX + (column * tileSize);
-        breakoutTile->spriteData.y = row * tileSize;
+        breakoutTile->setPosition((marginX + (column * tileSize)),
+                                  (row * tileSize));
 
         if (tileMap[row][column] == 1) {
           graphics->spriteBegin();

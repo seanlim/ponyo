@@ -57,6 +57,8 @@ struct CSprite : public Component<CSprite> {
     // bottom edge + 1
     spriteData.rect.bottom = spriteData.rect.top + spriteData.height;
   }
+
+  void setPosition(float _x, float _y) { spriteData.x = _x, spriteData.y = _y; }
 };
 
 class SRenderable : public System
