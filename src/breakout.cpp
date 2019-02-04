@@ -29,10 +29,7 @@ void Breakout::initialise(HWND hwnd)
   tileSprite.currentFrame = 0;
   tileSprite.initialise(64, 64, 1, &tileTexture);
   tileSprite.setScale(0.5);
-  CBreakOutTile breakOutTileComponent;
-  breakOutTileComponent.sprite = tileSprite;
-
-  ecs.makeEntity(breakOutTileComponent);
+  tileMapSystem->tileSprite = tileSprite;
 
   // Init ball
   CSprite ballSprite;
@@ -47,8 +44,9 @@ void Breakout::initialise(HWND hwnd)
   CCollidable ballCollision;
   ballCollision.collisionType = BOX;
   ballCollision.collisionResponse = BOUNCE;
+  CTileMapCollider tileMapCollider;
 
-  ecs.makeEntity(ballSprite, ballMotion, ballCollision);
+  ecs.makeEntity(ballSprite, ballMotion, ballCollision, tileMapCollider);
 
   // Init paddle
   CSprite paddleSprite;

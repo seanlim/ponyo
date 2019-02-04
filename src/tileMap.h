@@ -10,24 +10,24 @@
 #define columns 10
 #define tileSize 32
 
-// Initialising CBreakOutTile as a CSprite and registering its id
-// under SBreakOutTileMap causes double draws
-// TODO: find a more elegant way around this
-struct CBreakOutTile : public Component<CBreakOutTile> {
+struct CTileMapCollider : public Component<CTileMapCollider> {
 public:
-  CSprite sprite;
 };
+
 class SBreakOutTileMap : public System
 {
 private:
   Graphics* graphics;
   int tileMap[columns][rows]; // row, column
 public:
+  CSprite tileSprite;
   SBreakOutTileMap(HWND _hwnd, uint32 width, uint32 height, bool fullscreen,
                    Graphics* _graphics)
       : System()
   {
-    System::addComponentType(CBreakOutTile::id);
+    System::addComponentType(CMotion::id);
+    System::addComponentType(CCollidable::id);
+    System::addComponentType(CTileMapCollider::id);
     this->graphics = _graphics;
     setTileMap(1);
   }
@@ -43,19 +43,42 @@ public:
 
   virtual void updateComponents(float delta, BaseComponent** components)
   {
-    CBreakOutTile* breakoutTile = (CBreakOutTile*)components[0];
+    CMotion* motion = (CMotion*)components[0];
+    CCollidable* collider = (CCollidable*)components[1];
+    CTileMapCollider* tileMapCollider = (CTileMapCollider*)components[2];
+
+    // Draw tilemap
     for (int column = 0; column < columns; column++) {
       for (int row = 0; row < rows; row++) {
 
-        breakoutTile->sprite.setPosition((marginX + (column * tileSize)),
-                                         (row * tileSize));
+        tileSprite.setPosition((marginX + (column * tileSize)),
+                               (row * tileSize));
 
         if (tileMap[row][column] == 1) {
           graphics->spriteBegin();
-          breakoutTile->sprite.spriteData.texture =
-              breakoutTile->sprite.textureManager->getTexture();
-          graphics->drawSprite(breakoutTile->sprite.spriteData);
+          tileSprite.spriteData.texture =
+              tileSprite.textureManager->getTexture();
+          graphics->drawSprite(tileSprite.spriteData);
           graphics->spriteEnd();
+        }
+
+        // Check collision
+        CCollidable
+            mapCollider; // We implicity know that this is a box collider, don't
+                         // need to specify since this collidable component is
+                         // not actually registered
+        mapCollider.angle = tileSprite.getAngle();
+        mapCollider.center = *tileSprite.getCenter();
+        mapCollider.scale = tileSprite.getScale();
+        mapCollider.edge = {-(tileSprite.spriteData.width / 2),
+                            -(tileSprite.spriteData.height / 2),
+                            (tileSprite.spriteData.width / 2),
+                            (tileSprite.spriteData.height / 2)};
+        Vec2 collisionVector = Vec2(0, 0);
+        if (collider->collideBox(mapCollider, collisionVector) == true) {
+          motion->collidedDelta =
+              collider->bounce(mapCollider, collisionVector);
+          motion->colliding = true;
         }
       }
     }
