@@ -5,16 +5,7 @@
 
 #include "common.h"
 #include "gameError.h"
-#include <d3d9.h>
-#include <d3dx9.h>
-
-// DirectX
-#define LP_3DDEVICE LPDIRECT3DDEVICE9
-#define LP_3D LPDIRECT3D9
-#define LP_TEXTURE LPDIRECT3DTEXTURE9
-#define LP_SPRITE LPD3DXSPRITE
-#define LP_DXFONT LPD3DXFONT
-#define Vec2 D3DXVECTOR2
+#include "math/vector2.h"
 
 // Colors
 #define COLOR_ARGB DWORD
@@ -48,7 +39,7 @@ const COLOR_ARGB ALPHA25 =
     D3DCOLOR_ARGB(64, 255, 255, 255); // AND with color to get 25% alpha
 const COLOR_ARGB ALPHA50 =
     D3DCOLOR_ARGB(128, 255, 255, 255); // AND with color to get 50% alpha
-const COLOR_ARGB BACK_COLOR = NAVY;    // background color of game
+const COLOR_ARGB BACK_COLOR = BLACK;   // background color of game
 
 enum DISPLAY_MODE { TOGGLE, FULLSCREEN, WINDOW };
 } // namespace graphicsNS
@@ -107,20 +98,6 @@ public:
   HRESULT loadTexture(const char*, COLOR_ARGB, UINT&, UINT&, LP_TEXTURE&);
   void Graphics::drawSprite(const SpriteData&,
                             COLOR_ARGB color = graphicsNS::WHITE);
-
-  static float Vector2Length(const Vec2* v) { return D3DXVec2Length(v); }
-
-  static float Vector2Dot(const Vec2* v1, const Vec2* v2)
-  {
-    return D3DXVec2Dot(v1, v2);
-  }
-
-  static void Vector2Normalize(Vec2* v) { D3DXVec2Normalize(v, v); }
-
-  static Vec2* Vector2Transform(Vec2* v, D3DXMATRIX* m)
-  {
-    return D3DXVec2TransformCoord(v, v, m);
-  }
 
   void spriteBegin() { sprite->Begin(D3DXSPRITE_ALPHABLEND); }
 
