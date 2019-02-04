@@ -40,7 +40,6 @@ public:
     // Handle collision
     if (motion->colliding) {
       Logger::println("Will handle collision");
-      motion->velocity = Vec2(0.0, 0.0);
     }
 
     // Move sprite

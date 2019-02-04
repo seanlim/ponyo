@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "gameError.h"
+#include "math/vector2.h"
 
 // Colors
 #define COLOR_ARGB DWORD
