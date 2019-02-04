@@ -47,8 +47,6 @@ void Breakout::initialise(HWND hwnd)
   CCollidable ballCollision;
   ballCollision.collisionType = BOX;
   ballCollision.collisionResponse = BOUNCE;
-  ballCollision.radius = ballSprite.getHeight();
-  ballCollision.collisionId = "ball";
 
   ecs.makeEntity(ballSprite, ballMotion, ballCollision);
 
@@ -64,7 +62,6 @@ void Breakout::initialise(HWND hwnd)
   CCollidable paddleCollision;
   paddleCollision.collisionType = BOX;
   paddleCollision.collisionResponse = NONE;
-  paddleCollision.collisionId = "paddle";
   ecs.makeEntity(paddleControls, paddleSprite, paddleMotion, paddleCollision);
 
   return;

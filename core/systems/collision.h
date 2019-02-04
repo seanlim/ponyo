@@ -10,21 +10,19 @@
 enum CollisionResponse { BOUNCE, NONE };
 enum CollisionType { BOX, CIRCLE, ORIENTED_BOX };
 struct CCollidable : public Component<CCollidable> {
-protected:
+public:
   Vec2 corners[4];
   Vec2 edge01, edge03;
   float edge01Min, edge01Max, edge03Min, edge03Max;
   Vec2 distSquared;
   float sumRadiiSquared;
-  bool rotatedBoxReady;
-
-public:
+  bool rotatedBoxReady = false;
   CollisionType collisionType;
   CollisionResponse collisionResponse;
   CSprite sprite;
   RECT edge = {-1, -1, 1, 1};
   float radius;
-  char* collisionId;
+  uint32 collisionId;
 
   bool equals(CCollidable cmp) { return (collisionId == cmp.collisionId); }
 
@@ -34,52 +32,6 @@ public:
     return &corners[c];
   }
 
-  bool collideCircle(CCollidable& c, Vec2& collisionVector)
-  {
-    distSquared = sprite.getCenter() - c.sprite.getCenter();
-    distSquared.x = distSquared.x * distSquared.x;
-    distSquared.y = distSquared.y * distSquared.y;
-
-    sumRadiiSquared =
-        (radius * sprite.getScale()) + (c.radius * c.sprite.getScale());
-    sumRadiiSquared *= sumRadiiSquared;
-
-    if (distSquared.x + distSquared.y <= sumRadiiSquared) {
-      collisionVector = c.sprite.getCenter() - sprite.getCenter();
-      return true;
-    }
-    return false;
-  }
-
-  bool collideBox(CCollidable& c, Vec2& collisionVector)
-  {
-
-    if ((sprite.getCenterX() + edge.right * sprite.getScale() <
-         c.sprite.getCenterX() + c.edge.left * c.sprite.getScale()) ||
-        (sprite.getCenterX() + edge.left * sprite.getScale() >
-         c.sprite.getCenterX() + c.edge.right * c.sprite.getScale()) ||
-        (sprite.getCenterY() + edge.bottom * sprite.getScale() <
-         c.sprite.getCenterY() + c.edge.top * c.sprite.getScale()) ||
-        (sprite.getCenterY() + edge.top * sprite.getScale() >
-         c.sprite.getCenterY() + c.edge.bottom * c.sprite.getScale())) {
-
-      return false;
-    }
-
-    collisionVector = c.sprite.getCenter() - sprite.getCenter();
-    return true;
-  }
-
-  bool collideRotatedBox(CCollidable& c, Vec2& collisionVector)
-  {
-    computeRotatedBox();
-    c.computeRotatedBox();
-    if (projectionsOverlap(c) && c.projectionsOverlap(*this)) {
-      collisionVector = c.sprite.getCenter() - sprite.getCenter();
-      return true;
-    }
-    return false;
-  }
   bool projectionsOverlap(CCollidable& c)
   {
     float projection, min01, max01, min03, max03;
@@ -110,38 +62,9 @@ public:
 
     return true;
   }
-  bool collideRotatedBoxCircle(CCollidable& c, Vec2& collisionVector)
-  {
-    Logger::println("Checking for collision");
-    float min01, min03, max01, max03, center01, center03;
-
-    computeRotatedBox();
-
-    center01 = Vec2NS::Vector2Dot(&edge01, &c.sprite.getCenter());
-    min01 = center01 - c.radius * c.sprite.getScale();
-    max01 = center01 + c.radius * c.sprite.getScale();
-    if (min01 > edge01Max || max01 < edge01Min) return false;
-
-    center03 = Vec2NS::Vector2Dot(&edge03, &c.sprite.getCenter());
-    min03 = center03 - c.radius * c.sprite.getScale();
-    max03 = center03 + c.radius * c.sprite.getScale();
-    if (min03 > edge03Max || max03 < edge03Min) return false;
-
-    if (center01 < edge01Min && center03 < edge03Min)
-      return collideCornerCircle(corners[0], c, collisionVector);
-    if (center01 > edge01Max && center03 < edge03Min)
-      return collideCornerCircle(corners[1], c, collisionVector);
-    if (center01 > edge01Max && center03 > edge03Max)
-      return collideCornerCircle(corners[2], c, collisionVector);
-    if (center01 < edge01Min && center03 > edge03Max)
-      return collideCornerCircle(corners[3], c, collisionVector);
-
-    collisionVector = c.sprite.getCenter() - sprite.getCenter();
-    return true;
-  }
   bool collideCornerCircle(Vec2 corner, CCollidable& c, Vec2& collisionVector)
   {
-    distSquared = corner - c.sprite.getCenter();
+    distSquared = corner - *c.sprite.getCenter();
     distSquared.x = distSquared.x * distSquared.x;
     distSquared.y = distSquared.y * distSquared.y;
 
@@ -149,7 +72,7 @@ public:
     sumRadiiSquared *= sumRadiiSquared;
 
     if (distSquared.x + distSquared.y <= sumRadiiSquared) {
-      collisionVector = c.sprite.getCenter() - corner;
+      collisionVector = *c.sprite.getCenter() - corner;
       return true;
     }
     return false;
@@ -162,7 +85,7 @@ public:
     Vec2 rotatedX(cos(sprite.spriteData.angle), sin(sprite.spriteData.angle));
     Vec2 rotatedY(-sin(sprite.spriteData.angle), cos(sprite.spriteData.angle));
 
-    const Vec2 center = sprite.getCenter();
+    const Vec2 center = *sprite.getCenter();
     corners[0] = center + rotatedX * ((float)edge.left * sprite.getScale()) +
                  rotatedY * ((float)edge.top * sprite.getScale());
     corners[1] = center + rotatedX * ((float)edge.right * sprite.getScale()) +
@@ -225,12 +148,15 @@ public:
 
     if (collisionComponents.size() > 0) {
       for (int i = 0; i < collisionComponents.size(); i++) {
-        if (collisionComponents.at(i).equals(*collidable)) componentIndex = i;
+        if (collisionComponents.at(i).equals(*collidable)) {
+          componentIndex = i;
+          collisionComponents[i] = *collidable;
+        }
       }
     }
 
     if (componentIndex == -1) {
-      Logger::println("Added collision component");
+      collidable->collisionId = collisionComponents.size() + 1;
       collisionComponents.push_back(*collidable);
     } else {
       for (int i = 0; i < collisionComponents.size(); i++) {
@@ -241,28 +167,108 @@ public:
         CCollidable collidable2 = collisionComponents.at(i);
 
         if (collidable->collisionType == CollisionType::CIRCLE &&
-            collidable2.collisionType == CollisionType::CIRCLE)
-          didCollide = collidable->collideCircle(collidable2, collisionVector);
+            collidable2.collisionType == CollisionType::CIRCLE) {
+          didCollide = collideCircle(*collidable, collidable2, collisionVector);
+        }
 
-        if (collidable->collisionType == CollisionType::BOX &&
-            collidable2.collisionType == CollisionType::BOX)
-          didCollide = collidable->collideBox(collidable2, collisionVector);
+        else if (collidable->collisionType == CollisionType::BOX &&
+                 collidable2.collisionType == CollisionType::BOX) {
+          didCollide = collideBox(*collidable, collidable2, collisionVector);
+        }
 
-        if (collidable->collisionType != CollisionType::CIRCLE &&
-            collidable2.collisionType != CollisionType::CIRCLE)
+        else if (collidable->collisionType != CollisionType::CIRCLE &&
+                 collidable2.collisionType != CollisionType::CIRCLE)
           didCollide =
-              collidable->collideRotatedBox(collidable2, collisionVector);
+              collideRotatedBox(*collidable, collidable2, collisionVector);
 
         else if (collidable->collisionType == CollisionType::CIRCLE) {
-          didCollide =
-              collidable2.collideRotatedBoxCircle(*collidable, collisionVector);
+          didCollide = collideRotatedBoxCircle(collidable2, *collidable,
+                                               collisionVector);
           collisionVector *= -1;
-        } else
-          didCollide =
-              collidable->collideRotatedBoxCircle(collidable2, collisionVector);
+        } else {
+          didCollide = collideRotatedBoxCircle(*collidable, collidable2,
+                                               collisionVector);
+        }
 
-        if (didCollide) Logger::println("Collision detected");
+        if (didCollide) Logger::println("Collision Detected!");
       }
     }
+  }
+
+protected:
+  bool collideCircle(CCollidable& c1, CCollidable& c2, Vec2& collisionVector)
+  {
+    c1.distSquared = *c1.sprite.getCenter() - *c2.sprite.getCenter();
+    c1.distSquared.x = c1.distSquared.x * c1.distSquared.x;
+    c1.distSquared.y = c1.distSquared.y * c1.distSquared.y;
+
+    c1.sumRadiiSquared =
+        (c1.radius * c1.sprite.getScale()) + (c2.radius * c2.sprite.getScale());
+    c1.sumRadiiSquared *= c1.sumRadiiSquared;
+
+    if (c1.distSquared.x + c1.distSquared.y <= c1.sumRadiiSquared) {
+      collisionVector = *c2.sprite.getCenter() - *c1.sprite.getCenter();
+      return true;
+    }
+    return false;
+  }
+
+  bool collideBox(CCollidable& c1, CCollidable& c2, Vec2& collisionVector)
+  {
+    if ((c1.sprite.getCenterX() + c1.edge.right * c1.sprite.getScale() <
+         c2.sprite.getCenterX() + c2.edge.left * c2.sprite.getScale()) ||
+        (c1.sprite.getCenterX() + c1.edge.left * c1.sprite.getScale() >
+         c2.sprite.getCenterX() + c2.edge.right * c2.sprite.getScale()) ||
+        (c1.sprite.getCenterY() + c1.edge.bottom * c1.sprite.getScale() <
+         c2.sprite.getCenterY() + c2.edge.top * c2.sprite.getScale()) ||
+        (c1.sprite.getCenterY() + c1.edge.top * c1.sprite.getScale() >
+         c2.sprite.getCenterY() + c2.edge.bottom * c2.sprite.getScale())) {
+
+      return false;
+    }
+
+    collisionVector = *c2.sprite.getCenter() - *c1.sprite.getCenter();
+    return true;
+  }
+
+  bool collideRotatedBox(CCollidable& c1, CCollidable& c2,
+                         Vec2& collisionVector)
+  {
+    c1.computeRotatedBox(), c2.computeRotatedBox();
+    if (c1.projectionsOverlap(c2) && c2.projectionsOverlap(c1)) {
+      collisionVector = *c2.sprite.getCenter() - *c1.sprite.getCenter();
+      return true;
+    }
+    return false;
+  }
+
+  bool collideRotatedBoxCircle(CCollidable& c1, CCollidable& c2,
+                               Vec2& collisionVector)
+  {
+    float min01, min03, max01, max03, center01, center03;
+
+    c1.computeRotatedBox();
+
+    center01 = Vec2NS::Vector2Dot(&c1.edge01, c2.sprite.getCenter());
+    min01 = center01 - c1.radius * c2.sprite.getScale();
+    max01 = center01 + c1.radius * c2.sprite.getScale();
+    if (min01 > c1.edge01Max || max01 < c1.edge01Min) return false;
+
+    center03 = Vec2NS::Vector2Dot(&c1.edge03, c2.sprite.getCenter());
+    min03 = center03 - c1.radius * c2.sprite.getScale();
+    max03 = center03 + c1.radius * c2.sprite.getScale();
+    if (min03 > c1.edge03Max || max03 < c1.edge03Min) return false;
+
+    if (center01 < c1.edge01Min && center03 < c1.edge03Min)
+      return c1.collideCornerCircle(c1.corners[0], c2, collisionVector);
+    if (center01 > c1.edge01Max && center03 < c1.edge03Min)
+      return c1.collideCornerCircle(c1.corners[1], c2, collisionVector);
+    if (center01 > c1.edge01Max && center03 > c1.edge03Max)
+      return c1.collideCornerCircle(c1.corners[2], c1, collisionVector);
+    if (center01 < c1.edge01Min && center03 > c1.edge03Max)
+      return c1.collideCornerCircle(c1.corners[3], c2, collisionVector);
+
+    collisionVector = *c2.sprite.getCenter() - *c1.sprite.getCenter();
+    return true;
   }
 };

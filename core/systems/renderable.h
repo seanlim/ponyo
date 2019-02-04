@@ -56,7 +56,7 @@ struct CSprite : public Component<CSprite> {
   }
 
   float getScale() { return spriteData.scale; }
-  Vec2 getCenter() { return Vec2(getCenterX(), getCenterY()); }
+  const Vec2* getCenter() { return &Vec2(getCenterX(), getCenterY()); }
   float getCenterX()
   {
     return spriteData.x + spriteData.width / 2 * getScale();
