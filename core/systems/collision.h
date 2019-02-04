@@ -16,7 +16,7 @@ public:
   bool rotatedBoxReady = false;
   CollisionType collisionType;
   CollisionResponse collisionResponse;
-  RECT edge = {-1, -1, 1, 1};
+  Rect edge = {-1, -1, 1, 1};
   uint32 collisionId;
   float radius;
   float angle;
@@ -223,6 +223,8 @@ class SCollision : public System
   Array<CCollidable> collisionComponents; // Keep local cache of collision
                                           // components for random access in
                                           // collision detection
+  Rect collisionBounds{0, 0, GAME_WIDTH,
+                       GAME_HEIGHT}; // Bounds that desribe the simulation area
 
 public:
   SCollision() : System()
@@ -231,6 +233,9 @@ public:
     System::addComponentType(CMotion::id);
     System::addComponentType(CCollidable::id);
   }
+
+  void setBounds(Rect _collisionBounds) { collisionBounds = _collisionBounds; }
+
   virtual void updateComponents(float delta, BaseComponent** components)
   {
     CSprite* sprite = (CSprite*)components[0];
@@ -299,8 +304,6 @@ public:
               collidable->collideRotatedBoxCircle(collidable2, collisionVector);
         }
 
-        if (didCollide) Logger::println("Collision fired");
-
         ///////////////////////
         // Collision Response//
         ///////////////////////
@@ -310,6 +313,21 @@ public:
         } else if (collidable->collisionResponse == NONE) {
           motion->collidedDelta = Vec2(0.0, 0.0);
         }
+
+        /////////////////////////////////
+        // Edge Detection (Bounds)//
+        /////////////////////////////////
+        if (sprite->getX() >= collisionBounds.right - sprite->getWidth() ||
+            sprite->getX() <= collisionBounds.left) {
+          didCollide = true;
+          motion->collidedDelta.x = -2 * collidable->velocity.x;
+        }
+        if (sprite->getY() >= collisionBounds.bottom - sprite->getHeight() ||
+            sprite->getY() <= collisionBounds.top) {
+          didCollide = true;
+          motion->collidedDelta.y = -2 * collidable->velocity.y;
+        }
+
         motion->colliding =
             didCollide; // Signal to motion system to apply simulated force
       }

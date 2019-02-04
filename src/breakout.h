@@ -2,6 +2,7 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include "common.h"
+#include "constants.h"
 #include "ecs.h"
 #include "game.h"
 #include "playerControls.h"

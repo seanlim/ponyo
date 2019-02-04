@@ -8,6 +8,9 @@ void Breakout::initialise(HWND hwnd)
 {
   Game::initialise(hwnd);
 
+  // Set collision system bounds
+  collisionSystem->setBounds({marginX, 0, GAME_WIDTH - marginX, GAME_HEIGHT});
+
   // Tile map system
   SBreakOutTileMap* tileMapSystem = new SBreakOutTileMap(
       this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);

@@ -51,8 +51,15 @@ protected:
 
   // ECS
   ECS ecs;
+
+  // System lists
   SystemList gameSystems;
   SystemList graphicsSystems;
+
+  // Core systems
+  SRenderable* renderSystem;
+  SPhysics* physicsSystem;
+  SCollision* collisionSystem;
 
 public:
   Game();

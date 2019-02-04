@@ -94,18 +94,18 @@ void Game::initialise(HWND _hwnd)
 
   Logger::println("Initialise graphics system...");
   // Init graphics
-  SRenderable* renderSystem = new SRenderable(
-      this->hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN, this->graphics);
+  renderSystem = new SRenderable(this->hwnd, GAME_WIDTH, GAME_HEIGHT,
+                                 FULLSCREEN, this->graphics);
   graphicsSystems.addSystem(*renderSystem);
 
   Logger::println("Initialise physics system ...");
   // Init physics
-  SPhysics* physicsSystem = new SPhysics();
+  physicsSystem = new SPhysics();
   gameSystems.addSystem(*physicsSystem);
 
   Logger::println("Initialise collision system ...");
   // Init collision
-  SCollision* collisionSystem = new SCollision();
+  collisionSystem = new SCollision();
   gameSystems.addSystem(*collisionSystem);
 
   initialised = true;
