@@ -23,6 +23,8 @@ public:
   bool colliding;
   Vec2 center;
   float scale;
+  Vec2 velocity;
+  float mass;
 
   bool equals(CCollidable cmp) { return (collisionId == cmp.collisionId); }
 
@@ -125,7 +127,9 @@ public:
 class SCollision : public System
 {
 
-  Array<CCollidable> collisionComponents;
+  Array<CCollidable> collisionComponents; // Keep local cache of collision
+                                          // components for random access in
+                                          // collision detection
 
 public:
   SCollision() : System()
@@ -140,15 +144,19 @@ public:
     CMotion* motion = (CMotion*)components[1];
     CCollidable* collidable = (CCollidable*)components[2];
 
-    // Inform collision component about sprite
+    // Inform CComponent about sprite
     collidable->angle = sprite->getAngle();
     collidable->center = *sprite->getCenter();
     collidable->scale = sprite->getScale();
-
     collidable->edge = {
         -(sprite->spriteData.width / 2), -(sprite->spriteData.height / 2),
         (sprite->spriteData.width / 2), (sprite->spriteData.height / 2)};
+    // Inform CComponent about motion
+    collidable->velocity = motion->velocity;
 
+    ////////////////////////////
+    // Update CCollision cache//
+    ////////////////////////////
     int componentIndex = -1;
 
     if (collisionComponents.size() > 0) {
@@ -164,6 +172,9 @@ public:
       collidable->collisionId = collisionComponents.size();
       collisionComponents.push_back(*collidable);
     } else {
+      ////////////////////////
+      // Collision Detection//
+      ////////////////////////
       for (int i = 0; i < collisionComponents.size(); i++) {
         if (i == componentIndex) continue;
 
@@ -178,8 +189,7 @@ public:
 
         else if (collidable->collisionType == CollisionType::BOX &&
                  collidable2.collisionType == CollisionType::BOX) {
-          didCollide =
-              this->collideBox(*collidable, collidable2, collisionVector);
+          didCollide = collideBox(*collidable, collidable2, collisionVector);
         }
 
         else if (collidable->collisionType != CollisionType::CIRCLE &&
@@ -198,13 +208,36 @@ public:
 
         if (didCollide) Logger::println("Collision fired");
 
-        motion->colliding = didCollide;
-        motion->collisionVector = collisionVector;
+        ///////////////////////
+        // Collision Response//
+        ///////////////////////
+        if (collidable->collisionResponse == BOUNCE) {
+          motion->collidedDelta =
+              bounce(*collidable, collidable2, collisionVector);
+        } else if (collidable->collisionResponse == NONE) {
+          motion->collidedDelta = Vec2(0.0, 0.0);
+        }
+        motion->colliding =
+            didCollide; // Signal to motion system to apply simulated force
       }
     }
   }
 
 protected:
+  // Collision response
+  Vec2 bounce(CCollidable& c1, CCollidable& c2, Vec2 collisionVector)
+  {
+    Vec2 Vdiff = c2.velocity - c1.velocity;
+    Vec2 cUV = collisionVector;
+    Vec2NS::Vector2Normalize(&cUV);
+    float cUVdotVdiff = Vec2NS::Vector2Dot(&cUV, &Vdiff);
+    float massRatio = 2.0f;
+    // if (c1.mass != 0) massRatio *= (c2.mass / (c.mass + c2.mass));
+
+    return ((massRatio * cUVdotVdiff) * cUV);
+  }
+
+  // Collision helpers
   bool collideCircle(CCollidable& c1, CCollidable& c2, Vec2& collisionVector)
   {
     c1.distSquared = c1.center - c2.center;

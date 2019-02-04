@@ -12,7 +12,7 @@ struct CMotion : public Component<CMotion> {
   float friction = 0.3;
   float frictionSmoothness = 0.7;
   bool colliding = false;
-  Vec2 collisionVector;
+  Vec2 collidedDelta; // Delta after physics simulation
 
   void setGravity(float acc) { gravity.y = acc; }
 };
@@ -39,7 +39,7 @@ public:
 
     // Handle collision
     if (motion->colliding) {
-      Logger::println("Will handle collision");
+      motion->velocity += motion->collidedDelta;
     }
 
     // Move sprite
