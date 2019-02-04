@@ -6,6 +6,7 @@
 #include <d3dx9.h>
 #include <windows.h>
 
+// Constants
 const double PI = 3.14159265;
 const float FRAME_RATE = 200.0f;
 const float MIN_FRAME_RATE = 10.0f;
@@ -16,6 +17,9 @@ const char GAME_TITLE[] = "Game Engine";
 const bool FULLSCREEN = false; // windowed or fullscreen
 const UINT GAME_WIDTH = 1280;  // width of game in pixels
 const UINT GAME_HEIGHT = 720;  // height of game in pixels
+
+// Typedefs
+typedef unsigned int uint32;
 
 // Safely delete pointer referenced item
 #define safeDelete(ptr)                                                        \
@@ -66,29 +70,14 @@ const UINT GAME_HEIGHT = 720;  // height of game in pixels
 #define LP_DXFONT LPD3DXFONT
 #define Vec2 D3DXVECTOR2
 
-namespace Vec2NS
-{
-static float Vector2Length(const Vec2* v) { return D3DXVec2Length(v); }
-
-static float Vector2Dot(const Vec2* v1, const Vec2* v2)
-{
-  return D3DXVec2Dot(v1, v2);
-}
-
-static void Vector2Normalize(Vec2* v) { D3DXVec2Normalize(v, v); }
-
-static Vec2* Vector2Transform(Vec2* v, D3DXMATRIX* m)
-{
-  return D3DXVec2TransformCoord(v, v, m);
-}
-} // namespace Vec2NS
-
-typedef unsigned int uint32;
-
+// TODO: move to src/
 // Image resources
 const char TILE_IMAGE[] = "assets\\tile.png";
 const char PADDLE_BALL[] = "assets\\paddle_ball.png";
 
+// Game keyboard commands
 enum GameCommands { Quit, toggleFPS, toggleDebug };
 
-enum WEAPON { TORPEDO, SHIP, PLANET };
+// Collision
+enum CollisionResponse { BOUNCE, NONE };
+enum CollisionType { BOX, CIRCLE, ORIENTED_BOX };

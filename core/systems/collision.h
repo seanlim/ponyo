@@ -23,6 +23,7 @@ public:
   RECT edge = {-1, -1, 1, 1};
   float radius;
   uint32 collisionId;
+  bool colliding;
 
   bool equals(CCollidable cmp) { return (collisionId == cmp.collisionId); }
 
@@ -190,7 +191,8 @@ public:
                                                collisionVector);
         }
 
-        if (didCollide) Logger::println("Collision Detected!");
+        motion->colliding = didCollide;
+        motion->collisionVector = collisionVector;
       }
     }
   }
