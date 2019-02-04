@@ -6,6 +6,7 @@
 #include "systems/renderable.h"
 
 struct CMotion : public Component<CMotion> {
+  float maxVelocity = 200;
   Vec2 velocity = Vec2(0.0, 0.0);
   Vec2 acceleration = Vec2(0.0, 0.0);
   Vec2 gravity = Vec2(0.0, 0.0);
@@ -35,11 +36,23 @@ public:
     motion->acceleration += motion->gravity;
 
     // Apply forces
-    motion->velocity += motion->acceleration * (delta * 100);
+    motion->velocity += motion->acceleration * delta;
 
     // Handle collision
     if (motion->colliding) {
       motion->velocity += motion->collidedDelta;
+    }
+
+    if (motion->velocity.x > 0) {
+      motion->velocity.x = min(motion->velocity.x, motion->maxVelocity);
+    } else {
+      motion->velocity.x = max(motion->velocity.x, -motion->maxVelocity);
+    }
+
+    if (motion->velocity.y > 0) {
+      motion->velocity.y = min(motion->velocity.y, motion->maxVelocity);
+    } else {
+      motion->velocity.y = max(motion->velocity.y, -motion->maxVelocity);
     }
 
     // Move sprite

@@ -317,15 +317,23 @@ public:
         /////////////////////////////////
         // Edge Detection (Bounds)//
         /////////////////////////////////
-        if (sprite->getX() >= collisionBounds.right - sprite->getWidth() ||
-            sprite->getX() <= collisionBounds.left) {
+        if (sprite->getX() >= collisionBounds.right - sprite->getWidth()) {
           didCollide = true;
           motion->collidedDelta.x = -2 * collidable->velocity.x;
+          sprite->spriteData.x = collisionBounds.right - sprite->getWidth();
+        } else if (sprite->getX() <= collisionBounds.left) {
+          didCollide = true;
+          motion->collidedDelta.x = -2 * collidable->velocity.x;
+          sprite->spriteData.x = collisionBounds.left;
         }
-        if (sprite->getY() >= collisionBounds.bottom - sprite->getHeight() ||
-            sprite->getY() <= collisionBounds.top) {
+        if (sprite->getY() >= collisionBounds.bottom - sprite->getHeight()) {
           didCollide = true;
           motion->collidedDelta.y = -2 * collidable->velocity.y;
+          sprite->spriteData.y = collisionBounds.bottom - sprite->getHeight();
+        } else if (sprite->getY() <= collisionBounds.top) {
+          didCollide = true;
+          motion->collidedDelta.y = -2 * collidable->velocity.y;
+          sprite->spriteData.y = collisionBounds.top;
         }
 
         motion->colliding =

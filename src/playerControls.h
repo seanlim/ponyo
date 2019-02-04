@@ -30,10 +30,10 @@ public:
 
     if (playerControlledEntity->enabled) {
       if (input->getKeyboardKeyState(VK_LEFT)) {
-        motion->acceleration = Vec2(-10.0, 0.0);
+        motion->velocity.x += -50.0;
       }
       if (input->getKeyboardKeyState(VK_RIGHT)) {
-        motion->acceleration = Vec2(10.0, 0.0);
+        motion->velocity.x += 50.0;
       }
     }
   }

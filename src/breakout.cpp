@@ -42,7 +42,7 @@ void Breakout::initialise(HWND hwnd)
   ballSprite.setScale(0.6);
   ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   CMotion ballMotion;
-  ballMotion.velocity = Vec2(0.0, 100);
+  ballMotion.velocity = Vec2(0.0, 200);
   ballMotion.friction = 0.0;
   CCollidable ballCollision;
   ballCollision.collisionType = BOX;
