@@ -7,8 +7,8 @@
 
 #include "breakout.h"
 #include "common.h"
-#include "game.h"
 #include "graphics.h"
+#include "main.h"
 #include "random.h"
 
 bool AnotherInstance()
@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
 bool CreateMainWindow(HWND&, HINSTANCE, int);
 LRESULT WINAPI WinProc(HWND, UINT, WPARAM, LPARAM);
 
-Game* game = NULL;
+Game* game;
 HWND hwnd = NULL;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
   MSG msg;
 
-  game = new Breakout();
+  game = new Main();
 
   if (AnotherInstance()) return false;
   if (!CreateMainWindow(hwnd, hInstance, nCmdShow)) return false;

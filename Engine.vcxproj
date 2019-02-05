@@ -23,7 +23,9 @@
     <ClInclude Include="core\math\lerp.h" />
     <ClInclude Include="core\math\random.h" />
     <ClInclude Include="core\math\vector2.h" />
+    <ClInclude Include="core\scene.h" />
     <ClInclude Include="core\systems\collision.h" />
+    <ClInclude Include="core\systems\particle.h" />
     <ClInclude Include="core\systems\physics.h" />
     <ClInclude Include="core\systems\renderable.h" />
     <ClInclude Include="core\text.h" />
@@ -33,6 +35,7 @@
     <ClInclude Include="ecs\system.h" />
     <ClInclude Include="src\breakout.h" />
     <ClInclude Include="src\constants.h" />
+    <ClInclude Include="src\main.h" />
     <ClInclude Include="src\playerControls.h" />
     <ClInclude Include="src\tileMap.h" />
   </ItemGroup>
