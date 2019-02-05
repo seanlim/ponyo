@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-#include "breakout.h"
 #include "common.h"
 #include "graphics.h"
 #include "main.h"
