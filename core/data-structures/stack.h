@@ -49,5 +49,14 @@ public:
     }
   }
 
+  T top()
+  {
+    if (!isEmpty()) {
+      return top.item;
+    } else {
+      return 0;
+    }
+  }
+
   bool isEmpty() { return size == 0; }
 };
