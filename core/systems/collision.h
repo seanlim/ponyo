@@ -13,7 +13,6 @@ public:
   float edge01Min, edge01Max, edge03Min, edge03Max;
   Vec2 distSquared;
   float sumRadiiSquared;
-  bool rotatedBoxReady = false;
   CollisionType collisionType;
   CollisionResponse collisionResponse;
   Rect edge = {-1, -1, 1, 1};
@@ -96,13 +95,13 @@ public:
     computeRotatedBox();
 
     center01 = Vec2NS::Vector2Dot(&edge01, &c2.center);
-    min01 = center01 - radius * c2.scale;
-    max01 = center01 + radius * c2.scale;
+    min01 = center01 - c2.radius * c2.scale;
+    max01 = center01 + c2.radius * c2.scale;
     if (min01 > edge01Max || max01 < edge01Min) return false;
 
     center03 = Vec2NS::Vector2Dot(&edge03, &c2.center);
-    min03 = center03 - radius * c2.scale;
-    max03 = center03 + radius * c2.scale;
+    min03 = center03 - c2.radius * c2.scale;
+    max03 = center03 + c2.radius * c2.scale;
     if (min03 > edge03Max || max03 < edge03Min) return false;
 
     if (center01 < edge01Min && center03 < edge03Min)
@@ -110,7 +109,7 @@ public:
     if (center01 > edge01Max && center03 < edge03Min)
       return collideCornerCircle(corners[1], c2, collisionVector);
     if (center01 > edge01Max && center03 > edge03Max)
-      return collideCornerCircle(corners[2], *this, collisionVector);
+      return collideCornerCircle(corners[2], c2, collisionVector);
     if (center01 < edge01Min && center03 > edge03Max)
       return collideCornerCircle(corners[3], c2, collisionVector);
 
@@ -174,7 +173,6 @@ public:
   }
   void computeRotatedBox()
   {
-    if (rotatedBoxReady) return;
     float projection;
 
     Vec2 rotatedX(cos(angle), sin(angle));
@@ -212,8 +210,6 @@ public:
       edge03Min = projection;
     else if (projection > edge03Max)
       edge03Max = projection;
-
-    rotatedBoxReady = true;
   }
 };
 
@@ -243,6 +239,7 @@ public:
     CCollidable* collidable = (CCollidable*)components[2];
 
     // Inform CComponent about sprite
+    collidable->radius = sprite->getWidth() / 2;
     collidable->angle = sprite->getAngle();
     collidable->center = *sprite->getCenter();
     collidable->scale = sprite->getScale();

@@ -45,7 +45,7 @@ void Breakout::initialise(HWND hwnd)
   ballMotion.velocity = Vec2(0.0, 200);
   ballMotion.friction = 0.0;
   CCollidable ballCollision;
-  ballCollision.collisionType = BOX;
+  ballCollision.collisionType = CIRCLE;
   ballCollision.collisionResponse = BOUNCE;
   CTileMapCollider tileMapCollider;
 
@@ -61,7 +61,7 @@ void Breakout::initialise(HWND hwnd)
   CMotion paddleMotion;
   CPlayerControlled paddleControls;
   CCollidable paddleCollision;
-  paddleCollision.collisionType = BOX;
+  paddleCollision.collisionType = ORIENTED_BOX;
   paddleCollision.collisionResponse = NONE;
   ecs.makeEntity(paddleControls, paddleSprite, paddleMotion, paddleCollision);
 
