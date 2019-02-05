@@ -2,6 +2,11 @@
 
 Ponyo is a 2D C++ game engine built on DirectX.
 
+# Requirements
+
+- Visual Studio (Windows)
+- DirectX 9
+
 # Manual
 
 Main engine code resides in `core/`.
