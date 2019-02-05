@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common.h"
 #include "array.h"
+#include "common.h"
 #include <tuple>
 
 #define ENTITY_NULL_HANDLE nullptr;
@@ -12,16 +12,16 @@ struct BaseComponent; // Forward definition of BaseComponent
 
 // Create and free function pointers
 typedef uint32 (*ComponentCreateFunction)(Array<uint32>& memory,
-                                                EntityHook entity,
-                                                BaseComponent* comp);
+                                          EntityHook entity,
+                                          BaseComponent* comp);
 typedef void (*ComponentFreeFunction)(BaseComponent* comp);
 
 struct BaseComponent {
 public:
   // Add component type
   static uint32 registerComponentType(ComponentCreateFunction createFn,
-                                            ComponentFreeFunction freeFn,
-                                            size_t size);
+                                      ComponentFreeFunction freeFn,
+                                      size_t size);
 
   EntityHook entity = ENTITY_NULL_HANDLE; // Blind reference to attached entity
 
@@ -54,7 +54,7 @@ template <typename T> struct Component : BaseComponent {
 
 template <typename Component>
 uint32 CreateComponent(Array<uint32>& memory, EntityHook entity,
-                             BaseComponent* comp)
+                       BaseComponent* comp)
 {
   uint32 index = memory.size();
   memory.resize(index + Component::size);
@@ -79,7 +79,3 @@ template <typename T> const size_t Component<T>::size(sizeof(T));
 template <typename T>
 const uint32 Component<T>::id(BaseComponent::registerComponentType(
     CreateComponent<T>, FreeComponent<T>, sizeof(T)));
-
-// struct ExampleComponent : public Component<ExampleComponent> {
-//   float x, y;
-// };
