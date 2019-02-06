@@ -24,6 +24,7 @@
     <ClInclude Include="core\math\random.h" />
     <ClInclude Include="core\math\vector2.h" />
     <ClInclude Include="core\scene.h" />
+    <ClInclude Include="core\systems\animation.h" />
     <ClInclude Include="core\systems\collision.h" />
     <ClInclude Include="core\systems\particle.h" />
     <ClInclude Include="core\systems\physics.h" />
