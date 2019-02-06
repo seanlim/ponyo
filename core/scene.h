@@ -5,6 +5,7 @@
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
+#include "stack.h"
 #include "systems/collision.h"
 #include "systems/physics.h"
 #include "systems/renderable.h"
@@ -25,10 +26,7 @@ protected:
   SystemList* gameSystems;
   SystemList* graphicsSystems;
 
-  // Core systems
-  SRenderable* renderSystem;
-  SPhysics* physicsSystem;
-  SCollision* collisionSystem;
+  Stack<EntityHook> entities;
 
 public:
   float delta;
@@ -46,43 +44,31 @@ public:
     this->gameSystems = _gameSystems;
     this->graphicsSystems = _graphicsSystems;
 
-    Logger::println("Initialise graphics system...");
-    renderSystem = new SRenderable(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN,
-                                   this->graphics);
-    Logger::println("Initialise physics system ...");
-    physicsSystem = new SPhysics();
-    Logger::println("Initialise collision system ...");
-    collisionSystem = new SCollision();
-
-    attach();
-
     setupSystems();
     setupTextures();
     setupEntities();
 
+    attach(); // Attach scene entities
+
   } // Initialise core systems
 
-  virtual void setupSystems() = 0; // Any custom system setup
+  virtual void setupSystems() = 0; // Custom system setup
   virtual void setupTextures() = 0;
   virtual void setupEntities() = 0;
 
-  virtual void render() = 0; // In-game rendering
+  virtual void render() = 0; // In-game draw calls
 
+  // Attach all components and custom systems
   virtual void attach()
   {
-    Logger::println("Attaching scene...");
-    graphicsSystems->addSystem(*renderSystem);
-    gameSystems->addSystem(*physicsSystem);
-    gameSystems->addSystem(*collisionSystem);
+    Logger::println("Attached scene...");
     attached = true;
   } // Scene running and detached hooks
 
+  // Detach all components and systems
   virtual void detach()
   {
-    Logger::println("Deattached from scene...");
-    graphicsSystems->removeSystem(*renderSystem);
-    gameSystems->removeSystem(*physicsSystem);
-    gameSystems->removeSystem(*collisionSystem);
+    Logger::println("Detaching from scene...");
     attached = false;
   };
 };

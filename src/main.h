@@ -8,5 +8,9 @@ class Main : public Game
   Breakout* breakout = new Breakout();
 
 public:
-  void setupRootScene() { this->setScene(breakout); }
+  void setupRootScene()
+  {
+    breakout->collisionSystem = collisionSystem;
+    this->setScene(breakout);
+  }
 };

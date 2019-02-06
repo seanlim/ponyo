@@ -17,6 +17,7 @@ class Breakout : public Scene
   SPlayerControlled* playerControlSystem;
 
 public:
+  SCollision* collisionSystem;
   Breakout();
   virtual ~Breakout();
 

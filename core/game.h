@@ -59,6 +59,11 @@ protected:
   SystemList gameSystems;
   SystemList graphicsSystems;
 
+  // Core Systems
+  SRenderable* renderSystem;
+  SPhysics* physicsSystem;
+  SCollision* collisionSystem;
+
   Stack<Scene*> navigationStack;
 
 public:

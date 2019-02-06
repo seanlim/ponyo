@@ -62,6 +62,7 @@ void Breakout::setupEntities()
   CSprite paddleSprite;
   paddleSprite.startFrame = 7, paddleSprite.endFrame = 11,
   paddleSprite.currentFrame = 8;
+  paddleSprite.animates = false;
   paddleSprite.initialise(128, 32, 1, &paddleBallTexture);
   paddleSprite.setScale(0.6);
   paddleSprite.setPosition(marginX, GAME_HEIGHT - paddleSprite.getHeight());
