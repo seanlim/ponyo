@@ -209,7 +209,7 @@ void Game::setScene(Scene* scene)
 {
   if (navigationStack.top() != 0) navigationStack.top()->detach();
 
-  scene->initialise(hwnd, graphics, input, &ecs, &gameSystems,
+  scene->initialise(hwnd, this, graphics, input, &ecs, &gameSystems,
                     &graphicsSystems);
 
   navigationStack.push(scene);

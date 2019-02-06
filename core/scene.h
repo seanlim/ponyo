@@ -2,12 +2,14 @@
 
 #include "common.h"
 #include "ecs.h "
+#include "game.h"
 #include "graphics.h"
 #include "input.h"
 #include "systems/collision.h"
 #include "systems/physics.h"
 #include "systems/renderable.h"
 
+class Game;
 class Scene
 {
 protected:
@@ -17,6 +19,7 @@ protected:
   ECS* ecs;
   Graphics* graphics;
   Input* input;
+  Game* game;
 
   // Pointers to main system lists
   SystemList* gameSystems;
@@ -31,11 +34,12 @@ public:
   float delta;
   Scene() {}
   ~Scene() {}
-  virtual void initialise(HWND _hwnd, Graphics* _graphics, Input* _input,
-                          ECS* _ecs, SystemList* _gameSystems,
+  virtual void initialise(HWND _hwnd, Game* _game, Graphics* _graphics,
+                          Input* _input, ECS* _ecs, SystemList* _gameSystems,
                           SystemList* _graphicsSystems)
   {
     this->hwnd = _hwnd;
+    this->game = _game;
     this->graphics = _graphics;
     this->ecs = _ecs;
     this->input = _input;

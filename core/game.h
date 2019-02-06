@@ -27,6 +27,7 @@ const int POINT_SIZE = 15;
 const COLOR_ARGB FONT_COLOR = graphicsNS::WHITE;
 } // namespace gameNS
 
+class Scene;
 class Game
 {
 protected:
