@@ -38,6 +38,7 @@
     <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\playerControls.h" />
+    <ClInclude Include="src\splash.h" />
     <ClInclude Include="src\tileMap.h" />
   </ItemGroup>
   <ItemGroup>

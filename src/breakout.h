@@ -26,4 +26,5 @@ public:
   void setupEntities();
 
   void render();
+  void update(float delta) {}
 };

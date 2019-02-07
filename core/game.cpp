@@ -216,6 +216,8 @@ void Game::run(HWND hwnd)
   // move this to somewhere more intentional
   ecs.updateSystems(gameSystems, frameTime);
 
+  navigationStack.top()->update(frameTime);
+
   this->renderGame();
 
   this->input->readControllers();
