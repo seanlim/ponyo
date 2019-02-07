@@ -59,6 +59,8 @@ struct CSprite : public Component<CSprite> {
 
   float getX() { return spriteData.x; }
   float getY() { return spriteData.y; }
+  float getCenterX() { return getX() + (getWidth() / 2); }
+  float getCenterY() { return getY() + (getHeight() / 2); }
   float getAngle() { return spriteData.angle; }
   float getScale() { return spriteData.scale; }
   const Vec2* getCenter() { return &Vec2(getCenterX(), getCenterY()); }
@@ -99,14 +101,6 @@ struct CSprite : public Component<CSprite> {
 
 private:
   float animTimer;
-  inline float getCenterX()
-  {
-    return spriteData.x + (spriteData.width / 2) * getScale();
-  }
-  inline float getCenterY()
-  {
-    return spriteData.y + (spriteData.height / 2) * getScale();
-  }
 };
 
 class SRenderable : public System
