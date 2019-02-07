@@ -12,6 +12,7 @@ struct CSprite : public Component<CSprite> {
   int startFrame, endFrame, currentFrame;
   int cols;
   float frameDelay;
+  float alpha;
   COLOR_ARGB colorFilter;
 
   bool animates;
@@ -32,6 +33,7 @@ struct CSprite : public Component<CSprite> {
     spriteData.flipHorizontal = false, this->spriteData.flipVertical = false;
 
     // startFrame = 0, endFrame = 0, currentFrame = 0;
+    alpha = 1.0;
     cols = ncols;
     animTimer = 0.0;
     frameDelay = 0.05;
@@ -125,10 +127,12 @@ public:
   {
     CSprite* sprite = (CSprite*)components[0];
 
+    uint32 alpha = 255 * sprite->alpha;
+    COLOR_ARGB color = D3DCOLOR_ARGB(alpha, 255, 255, 255);
     if (sprite->visible) {
       graphics->spriteBegin();
       sprite->spriteData.texture = sprite->textureManager->getTexture();
-      graphics->drawSprite(sprite->spriteData);
+      graphics->drawSprite(sprite->spriteData, color);
       graphics->spriteEnd();
     }
 
