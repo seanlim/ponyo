@@ -31,7 +31,7 @@ void Breakout::setupTextures()
     Logger::error("Failed to load paddle and ball textures");
 }
 
-void Breakout::setupEntities()
+void Breakout::setupComponents()
 {
   // Init tile sprite
   CSprite tileSprite;

@@ -23,7 +23,7 @@ public:
 
   void setupSystems();
   void setupTextures();
-  void setupEntities();
+  void setupComponents();
 
   void render();
   void update(float delta) {}
