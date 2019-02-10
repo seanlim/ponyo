@@ -13,7 +13,11 @@ public:
   void setupRootScene()
   {
     breakout->collisionSystem = collisionSystem;
-    splash->breakout = breakout;
     this->setScene(splash);
+  }
+
+  void nextScene(Scene* currentScene)
+  {
+    if (currentScene == splash) this->setScene(breakout);
   }
 };

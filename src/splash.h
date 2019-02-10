@@ -1,6 +1,5 @@
 #pragma once
 
-#include "breakout.h"
 #include "common.h"
 #include "ecs.h"
 #include "scene.h"
@@ -16,7 +15,6 @@ class SplashScreen : public Scene
   CAnimated logoAnimation;
 
 public:
-  Breakout* breakout;
   SplashScreen() : Scene() {}
   ~SplashScreen() {}
   void setupSystems() {}
@@ -35,8 +33,8 @@ public:
     logoSprite.setPosition(GAME_WIDTH / 2 - (logoSprite.getWidth() / 2),
                            GAME_HEIGHT / 2 - (logoSprite.getHeight() / 2));
 
-    Animation fadeAnimation = {ALPHA, 0, 1, 0.01, false, false, false};
-    Animation scaleAnimation = {SCALE, 1.0, 1.3, 0.02, true, false, true};
+    Animation fadeAnimation = {ALPHA, 0, 1, 0.08, true, false, false};
+    Animation scaleAnimation = {SCALE, 1.0, 1.3, 0.03, true, false, true};
     logoAnimation.animations.push_back(fadeAnimation);
     logoAnimation.animations.push_back(scaleAnimation);
   }
@@ -44,7 +42,7 @@ public:
   {
     timer += 0.01f / delta;
 
-    if (timer >= 800) game->setScene(breakout);
+    if (timer >= 450) game->nextScene(this);
   }
   void render() {}
   void attach()
