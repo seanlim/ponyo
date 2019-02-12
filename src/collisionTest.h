@@ -28,7 +28,13 @@ public:
     CSprite* sprite = (CSprite*)components[1];
     CCollisionTest* collisionTest = (CCollisionTest*)components[2];
 
-    sprite->animates = collider->colliding;
+    if (collider->colliding) {
+      sprite->currentFrame = 1;
+    } else {
+      sprite->currentFrame = 0;
+    }
+
+    sprite->setRect();
   }
 };
 
@@ -68,7 +74,7 @@ public:
     ballSprite.startFrame = 0, ballSprite.endFrame = 7,
     ballSprite.currentFrame = 0;
     ballSprite.initialise(32, 32, 4, &ballTexture);
-    ballSprite.setScale(0.6);
+    ballSprite.setScale(1);
     ballSprite.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
     ballSprite.animates = false;
     ballMotion.velocity = Vec2(0.0, 200);
@@ -84,7 +90,7 @@ public:
     timer += 0.01f / delta;
     if (timer >= 450) {
       timer = 0;
-      ballMotion.velocity = Vec2(randInt(100, 200), randInt(100, 200));
+      ballMotion.velocity = Vec2(randInt(-200, 200), randInt(-200, 200));
       ballEntities.push_back(ecs->makeEntity(ballSprite, ballMotion,
                                              ballCollider, ballCollisionTest));
     }

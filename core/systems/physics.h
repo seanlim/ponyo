@@ -40,6 +40,7 @@ public:
 
     // Handle collision
     if (motion->colliding) {
+      motion->velocity = -motion->velocity;
       motion->velocity += motion->collidedDelta;
     }
 

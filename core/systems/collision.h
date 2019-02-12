@@ -36,8 +36,7 @@ public:
     Vec2 cUV = collisionVector;
     Vec2NS::Vector2Normalize(&cUV);
     float cUVdotVdiff = Vec2NS::Vector2Dot(&cUV, &Vdiff);
-    float massRatio = 2.0f;
-    // if (c1.mass != 0) massRatio *= (c2.mass / (c.mass + c2.mass));
+    float massRatio = 4.0;
 
     return ((massRatio * cUVdotVdiff) * cUV);
   }
@@ -65,10 +64,10 @@ public:
   bool collideCircle(CCollidable& c2, Vec2& collisionVector)
   {
     distSquared = center - c2.center;
-    distSquared.x = distSquared.x * distSquared.x;
-    distSquared.y = distSquared.y * distSquared.y;
+    distSquared.x *= distSquared.x;
+    distSquared.y *= distSquared.y;
 
-    sumRadiiSquared = (radius * scale) + (c2.radius * c2.scale);
+    sumRadiiSquared = radius + c2.radius;
     sumRadiiSquared *= sumRadiiSquared;
 
     if (distSquared.x + distSquared.y <= sumRadiiSquared) {
@@ -285,6 +284,7 @@ public:
         else if (collidable->collisionType == CollisionType::BOX &&
                  collidable2.collisionType == CollisionType::BOX) {
           didCollide = collidable->collideBox(collidable2, collisionVector);
+
         }
 
         else if (collidable->collisionType != CollisionType::CIRCLE &&
@@ -304,11 +304,11 @@ public:
         ///////////////////////
         // Collision Response//
         ///////////////////////
-        if (collidable->collisionResponse == BOUNCE) {
+        if (collidable->collisionResponse == BOUNCE && didCollide) {
           motion->collidedDelta =
-              collidable->bounce(collidable2, collisionVector);
+              -collidable->bounce(collidable2, collisionVector);
         } else if (collidable->collisionResponse == NONE) {
-          motion->collidedDelta = Vec2(0.0, 0.0);
+          motion->collidedDelta = motion->velocity;
         }
 
         /////////////////////////////////
@@ -333,6 +333,7 @@ public:
           sprite->spriteData.y = collisionBounds.top;
         }
 
+        collidable->colliding = didCollide;
         motion->colliding =
             didCollide; // Signal to motion system to apply simulated force
       }
