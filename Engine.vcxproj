@@ -35,6 +35,7 @@
     <ClInclude Include="ecs\ecs.h" />
     <ClInclude Include="ecs\system.h" />
     <ClInclude Include="src\breakout.h" />
+    <ClInclude Include="src\collisionTest.h" />
     <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\playerControls.h" />
