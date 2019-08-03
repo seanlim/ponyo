@@ -38,12 +38,6 @@ public:
     // Apply forces
     motion->velocity += motion->acceleration * delta;
 
-    // Handle collision
-    if (motion->colliding) {
-      motion->velocity = -motion->velocity;
-      motion->velocity += motion->collidedDelta;
-    }
-
     if (motion->velocity.x > 0) {
       motion->velocity.x = min(motion->velocity.x, motion->maxVelocity);
     } else {

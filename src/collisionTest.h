@@ -8,6 +8,8 @@
 #include "scene.h"
 #include "textureManager.h"
 
+const int NUM_BALLS = 100;
+
 // Collision stress test
 struct CCollisionTest : public Component<CCollisionTest> {
 };
@@ -81,18 +83,21 @@ public:
     ballMotion.friction = 0.0;
     ballCollider.collisionType = CIRCLE;
     ballCollider.collisionResponse = BOUNCE;
+    ballCollider.radius = ballSprite.getWidth();
   }
 
   void render() {}
 
   void update(float delta)
   {
-    timer += 0.01f / delta;
-    if (timer >= 450) {
-      timer = 0;
-      ballMotion.velocity = Vec2(randInt(-200, 200), randInt(-200, 200));
-      ballEntities.push_back(ecs->makeEntity(ballSprite, ballMotion,
-                                             ballCollider, ballCollisionTest));
+    if (ballEntities.size() < NUM_BALLS) {
+      timer += 0.01f / delta;
+      if (timer >= 450) {
+        timer = 0;
+        ballMotion.velocity = Vec2(randInt(-200, 200), randInt(-200, 200));
+        ballEntities.push_back(ecs->makeEntity(
+            ballSprite, ballMotion, ballCollider, ballCollisionTest));
+      }
     }
   }
 

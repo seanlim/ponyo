@@ -70,8 +70,8 @@ public:
                               (tileSprite.spriteData.height / 2)};
           Vec2 collisionVector = Vec2(0, 0);
           if (collider->collideBox(mapCollider, collisionVector) == true) {
-            motion->collidedDelta =
-                collider->bounce(mapCollider, collisionVector);
+            motion->velocity =
+                collider->collideResult(mapCollider, collisionVector);
             motion->colliding = true;
 
             // Disable tile
