@@ -36,7 +36,7 @@ public:
     motion->acceleration += motion->gravity;
 
     // Apply forces
-    motion->velocity += motion->acceleration * delta;
+    // motion->velocity += motion->acceleration * delta;
 
     if (motion->velocity.x > 0) {
       motion->velocity.x = min(motion->velocity.x, motion->maxVelocity);

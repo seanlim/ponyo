@@ -16,6 +16,7 @@ public:
   CollisionType collisionType;
   CollisionResponse collisionResponse;
   Rect edge = {-1, -1, 1, 1};
+  SpriteData spriteData;
   uint32 collisionId = -1;
   float radius;
   float angle;
@@ -36,7 +37,7 @@ public:
     Vec2 unitVector = collisionVector;
     Vec2NS::Vector2Normalize(&unitVector);
     float cUVdotVdiff = Vec2NS::Vector2Dot(&unitVector, &Vdiff);
-    float massRatio = 1.0;
+    float massRatio = 2.0;
 
     return ((massRatio * cUVdotVdiff) * unitVector);
   }
@@ -244,6 +245,7 @@ public:
     collidable->edge = {
         -(sprite->spriteData.width / 2), -(sprite->spriteData.height / 2),
         (sprite->spriteData.width / 2), (sprite->spriteData.height / 2)};
+    collidable->spriteData = sprite->spriteData;
     // Inform collider about motion
     collidable->velocity = motion->velocity;
 
@@ -256,9 +258,10 @@ public:
 
     // Collision Detection
     bool didCollide = false;
-    // Only check for collision from index of curren collider
-    for (int i = collidable->collisionId + 1;
-         i < collisionComponents.size() - 1; i++) {
+    for (int i = 0; i < collisionComponents.size() - 1; i++) {
+
+      if (i == collidable->collisionId) continue;
+
       Vec2 collisionVector = Vec2(0.0, 0.0);
       CCollidable collidable2 = *(collisionComponents[i]);
 
@@ -290,7 +293,6 @@ public:
         // collisionComponents[i]->colliding = true;
         motion->velocity =
             collidable->collideResult(collidable2, collisionVector);
-        break;
       }
     }
 
