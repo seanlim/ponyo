@@ -124,10 +124,9 @@ private:
   Vec2 calculateResultVector(CCollidable c1, CCollidable c2,
                              Vec2 collisionVector)
   {
-    using namespace Vec2NS;
     Vec2 unitVector = collisionVector;
     Vec2NS::Vector2Normalize(&unitVector);
-    Vec2 velocityDifference = Vector2Difference(c2.velocity, c1.velocity);
+    Vec2 velocityDifference = c2.velocity - c1.velocity;
     float magnitude = Vec2NS::Vector2Dot(&unitVector, &velocityDifference);
     float massRatio = c1.mass / c2.mass;
     return ((massRatio * magnitude) * unitVector);
@@ -145,13 +144,13 @@ private:
             (c2.center.y + c2.edge.bottom) * c2.scale) {
       return false;
     }
-    collisionVector = Vec2NS::Vector2Difference(c2.center, c1.center);
+    collisionVector = c2.center - c1.center;
     return true;
   }
 
   bool isCollidingCircle(CCollidable c1, CCollidable c2, Vec2& collisionVector)
   {
-    Vec2 distSquared = Vec2NS::Vector2Difference(c1.center, c2.center);
+    Vec2 distSquared = c1.center - c2.center;
     distSquared.x *= distSquared.x;
     distSquared.y *= distSquared.y;
 
@@ -159,7 +158,18 @@ private:
     sumRadiiSquared *= sumRadiiSquared;
 
     if (distSquared.x + distSquared.y <= sumRadiiSquared) {
-      collisionVector = Vec2NS::Vector2Difference(c2.center, c1.center);
+      collisionVector = c2.center - c1.center;
+      return true;
+    }
+    return false;
+  }
+
+  bool collideRotatedBox(CCollidable c1, CCollidable c2, Vec2& collisionVector)
+  {
+    c1.computeRotatedBox();
+    c2.computeRotatedBox();
+    if (c1.projectionsOverlap(c2) && c2.projectionsOverlap(c1)) {
+      collisionVector = c2.center - c1.center;
       return true;
     }
     return false;
