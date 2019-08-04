@@ -69,14 +69,14 @@ public:
                               (tileSprite.spriteData.width / 2),
                               (tileSprite.spriteData.height / 2)};
           Vec2 collisionVector = Vec2(0, 0);
-          if (collider->collideBox(mapCollider, collisionVector) == true) {
-            motion->velocity =
-                collider->collideResult(mapCollider, collisionVector);
-            motion->colliding = true;
+          // if (collider->collideBox(mapCollider, collisionVector) == true) {
+          //   motion->velocity =
+          //       collider->collideResult(mapCollider, collisionVector);
+          //   motion->colliding = true;
 
-            // Disable tile
-            tileMap[row][column] = 0;
-          }
+          //   // Disable tile
+          //   tileMap[row][column] = 0;
+          // }
         }
       }
     }

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\common.h" />
+    <ClInclude Include="core\components\collidable.h" />
     <ClInclude Include="core\data-structures\array.h" />
     <ClInclude Include="core\data-structures\map.h" />
     <ClInclude Include="core\data-structures\stack.h" />

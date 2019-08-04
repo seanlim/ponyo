@@ -33,10 +33,7 @@ public:
     CSprite* sprite = (CSprite*)components[1];
 
     // Physics execution
-    motion->acceleration += motion->gravity;
-
-    // Apply forces
-    // motion->velocity += motion->acceleration * delta;
+    motion->velocity += motion->gravity;
 
     if (motion->velocity.x > 0) {
       motion->velocity.x = min(motion->velocity.x, motion->maxVelocity);
