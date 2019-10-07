@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\common.h" />
+    <ClInclude Include="core\components\collidable.h" />
     <ClInclude Include="core\data-structures\array.h" />
     <ClInclude Include="core\data-structures\map.h" />
     <ClInclude Include="core\data-structures\stack.h" />
@@ -35,6 +36,7 @@
     <ClInclude Include="ecs\ecs.h" />
     <ClInclude Include="ecs\system.h" />
     <ClInclude Include="src\breakout.h" />
+    <ClInclude Include="src\collisionTest.h" />
     <ClInclude Include="src\constants.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\playerControls.h" />
@@ -58,7 +60,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33E73CAB-07ED-4935-94E8-EBA94E8DEDC1}</ProjectGuid>
     <RootNamespace>HelloWorld</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>Engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -66,14 +68,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
